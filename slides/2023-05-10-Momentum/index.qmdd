@@ -1,0 +1,28 @@
+---
+title: Gradient Descent and Momentum
+date: 2023-05-10
+date-modified: last-modified
+image: featured.png
+author:
+  - name: ChoCho
+    affiliations:
+      - NCU
+# institute: NCU
+abstract: |
+  I would like to introduce the article of the site [https://distill.pub/2017/momentum/](https://distill.pub/2017/momentum/).
+  This article describes some of the properties and disadvantages of gradient descent. 
+  The main part of this article is to introduce how to use momentum to improve the above disadvantages.
+---
+
+
+### Slides: [2023-05-10-Momentum](2023-05-10-Momentum.qmd)
+
+### MODIFIED {-}
+
+- 2023-05-11 
+  
+  - 修正一些數學錯誤以及補充一些細節.
+
+- 2023-05-26
+
+  - 修正 question 格式以及增加圖解.

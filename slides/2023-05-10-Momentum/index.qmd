@@ -1,0 +1,913 @@
+---
+title: "Gradient Descent and Momentum"
+date-format: iso
+date: 2023-05-10
+author:
+  - name: ChoCho
+    # orcid: 0000-0000-0000-0000
+    email: kycho@math.ncu.edu.tw
+    affiliations: NCU Math
+revealjs-plugins:
+  - my-revealjs
+bibliography: [book.bib]
+callout-icon: false
+html-math-method: mathjax
+---
+
+## MODIFIED {-}
+
+- 2023-05-11 
+  
+  - 修正一些數學錯誤以及補充一些細節.
+
+- 2023-05-26
+
+  - 修正 question 格式以及增加圖解.
+
+{{< include js-html/_begin.html >}}
+
+## Abstract
+
+- I would like to introduce the article of the site [https://distill.pub/2017/momentum/](https://distill.pub/2017/momentum/).
+
+- This article describes some of the properties and disadvantages of gradient descent. 
+
+- The main part of this article is to introduce how to use momentum to improve the above disadvantages.
+
+<!-- - This article teaches us how to analyze a problem. -->
+
+<!-- 
+## Notation
+
+- $w\in\mathbb R^n$ 表示成行向量
+
+- vector 的次方：代表迭代
+
+- matrix 的次方：代表乘的次方
+
+- $w$ 代表 標準座標
+
+- $x$ 在 eigenvector 的座標體系
+-->
+
+# GD and Momentum
+
+## Recall GD
+
+- Let $f:\mathbb R^n \longrightarrow \mathbb R$ be a differentiable function.
+
+- Given a random point $w^0 \in \mathbb R^n.$
+
+- Given any $\alpha\in (0,\infty)$ which we call it the step size.
+
+- We iterate $w^{k}$ by
+  $$
+  \begin{aligned}
+    w^{k+1} = w^k - \alpha \nabla f(w^k).
+  \end{aligned}
+  $$
+
+  <hr style='height:2px;border-width:0;color:gray;background-color:gray'>
+
+  - Note that for each fixed $w\in \mathbb R^n,$ 
+    $$
+    \begin{aligned}
+      f(w+h) = f(w)+ \nabla f(w)^{\mathtt T}\cdot h + o(\left\lVert h \right\rVert)
+    \end{aligned}
+    $$
+    for $\left\lVert h \right\rVert \rightarrow 0.$
+  
+    - We choose $h=-\alpha \nabla f(w).$
+  
+    - Since $\color{blue}{\nabla f(w)^{\mathtt{T}}\cdot h < 0},$
+      we have
+      $$
+      \begin{aligned}
+        f\bigl( \underbrace{w-\alpha \nabla f(w)}_{w^{k+1}} \bigr) = f(w+h) < f(\underbrace{w}_{w^k})
+      \end{aligned}
+      $$     
+      for $\alpha>0$ small enough.
+
+      ::: {.callout-note}
+      ## Question
+      What is the range of $\alpha$?
+      :::
+
+
+## Disadvantages of GD
+
+- GD often gets stuck in local minima.
+
+  - We don't pay attention to this at this time.
+
+- GD will be very slow if the function is in the following cases.
+    
+![https://paperswithcode.com/method/sgd-with-momentum](images/gd_too_slow.png)
+
+- How to fix this condition?
+
+  - We may need something like momentum.
+
+## Momentum 
+
+- Momentum was proposed by @POLYAK19641.
+
+- The idea of ​​GD is the method of steepest descent.
+  But we do not need every step to be the steepest.
+
+- We may consider how a ball descends to its lowest point.
+  
+![https://www.youtube.com/watch?v=oiXWerMTcNE](images/T8U7PX.gif)
+
+## Momentum in math
+
+:::: {.columns}
+::: {.column width="40%"}
+
+![https://youtu.be/xki61j7z-30](images/momentum_graph.png)
+
+- Given a random point $w^0 \in \mathbb R^n.$
+
+- Set $z^0=\mathbf{0}\in \mathbb R^n.$
+
+- Given any $\alpha,\beta\in (0,\infty).$
+
+- We give gradient descent a short-term memory:
+
+  <!-- Define $\lbrace z^i,w^i: i\in \mathbb N \rbrace$ by -->
+  We iterate $z^k,w^k$ by
+  $$
+  \begin{aligned}
+    z^{k+1} &= \beta z^k + \nabla f(w^k), \cr 
+    w^{k+1} &= w^k - \alpha z^{k+1}.
+  \end{aligned}
+  $$
+
+:::
+
+::: {.column width="50%"}
+
+- Note that
+  $$
+  \begin{aligned}
+    f(w^k)^{\mathtt{T}} \cdot (-1)\bigl( \underbrace{\beta z^k + \nabla f(w^k)}_{z^{k+1}} \bigr) < 0
+  \end{aligned}
+  $$
+  for $\beta$ small enough.
+
+- This shows that
+  $$
+  \begin{aligned}
+    f\bigl( \underbrace{w^k-\alpha z^{k+1}}_{w^{k+1}} \bigr) < f(w^k)
+  \end{aligned}
+  $$     
+  for $\alpha,\beta>0$ small enough.
+
+  ::: {.callout-note}
+  ## Question
+  What is the range of $\alpha,\beta$?
+  :::
+
+:::
+::::
+
+## Momentum's improvements
+
+<!-- - See gif  -->
+  
+  <!-- - https://gbhat.com/machine_learning/gradient_descent_with_momentum.html -->
+  
+<!-- - ![https://gbhat.com/machine_learning/gradient_descent_with_momentum.html](https://gbhat.com/assets/gifs/sgd_with_momentum.gif) -->
+
+- Momentum can make GD better escape the local minimum.
+  We do not discuss this here.
+  
+![https://gbhat.com/machine_learning/gradient_descent_with_momentum.html](images/sgd_with_momentum2.gif)
+
+  <!-- - ![https://gbhat.com/machine_learning/gradient_descent_with_momentum.html](https://gbhat.com/assets/gifs/sgd_momentum_nesterov.gif) -->
+
+  <!-- - 不要只看當下的 gradient -->
+
+## Momentum's improvements
+
+- Momentum can speed up GD in some cases.
+
+![https://paperswithcode.com/method/sgd-with-momentum](images/gd_with_momentum.png)
+
+- But this is too simplistic and we do not explain many things.
+  We need more mathematical analysis.
+
+---
+
+- 按 f 可進入全螢幕模式, 互動式網頁才不會跑版 (後面的也一樣).
+
+{{< include js-html/_banana.html >}}
+
+::: {.notes}
+1. pass
+2. $\alpha$ 太小則太慢收斂, 太大則發散
+3. pass
+4. pass
+5. $\alpha$ 太大時，會發散。但增加 $\beta$ 可以解決這問題。
+:::
+
+<br>
+
+- By looking at this example, we naturally have the following questions:
+
+  ::: {.callout-note icon=false}
+  ## Question
+  How slowly does GD converge?
+  
+  To measure "how slowly", we need to introduce the convergence speed.
+  :::
+
+  ::: {.callout-note}
+  ## Question
+  In GD, what's the range of $\alpha$?
+  :::
+
+  <!-- - In GD, lr 越小可以保證 $f(w^k)$ 是遞減，但太小的話則收斂有可能太慢，該怎麼衡量？ -->
+  
+  <!-- - lr 超過多少時 $f(w^k)$ 會沒法收斂？ -->
+
+  ::: {.callout-note}
+  ## Question
+  In Momentum, what's the range of $\alpha,\beta$?
+  :::
+
+  ::: {.callout-note}
+  ## Question
+  How much does Momentum accelerate?
+  :::
+
+  <!-- - Momentum 的工作原理是超過目標，並依靠梯度的校正力將其設置回正軌。但這些浪費的迭代真的值得嗎？如果是這樣，可以期望有多少加速？ -->
+
+  <!-- - Question
+    :
+  - Momentum 還具有增加允許步長范圍的效果。但是這種擴展的限制是什麼，為什麼會發生？ -->
+
+  ::: {.callout-note}
+  ## Question
+  Momentum has the effect of increasing the range of allowed step sizes. Why? How much is the increase?
+  :::
+
+  <!-- - 但是這種擴展的限制是什麼，為什麼會發生？ -->
+
+
+## Converge rate
+
+- A sequence $\lbrace x_k \rbrace_k$ that converges to $x^*$ (in a norm $\left\lVert \cdot \right\rVert$) is said to have convergence rate $\mu$ (order $1$) if
+  $$
+  \begin{aligned}
+    \lim_{n\rightarrow\infty} \frac{\left\lVert x_{n+1} - x^* \right\rVert}{\left\lVert x_{n} -x^* \right\rVert} = \mu.
+  \end{aligned}
+  $$
+
+- For example: 
+
+  - If $x_k = (1/3)^kc_0,$ then the convergence rate of $\lbrace x_k \rbrace_k$ is $1/3.$
+
+  - If $x_k = (1/2)^kc_1 + (-1/3)^k c_2,$
+    then the convergence rate of $\lbrace x_k \rbrace$ is $1/2.$
+
+- Roughly speaking, if $\lbrace x_k \rbrace,\lbrace y_k \rbrace$ have convergence rates $\mu_1,\mu_2$ respectively
+  and $0<\mu_1<\mu_2<1,$
+  then $\lbrace x_k \rbrace_k$ converges faster than $\lbrace y_k \rbrace_k.$
+
+
+# More analysis of GD
+
+## Settings
+
+- From now on, we consider the convex quadratic:
+
+  Assume $A$ is symmetric, positive definite and invertible.
+  Let
+  $$
+  \begin{aligned}
+    f(w) = \frac{1}{2} w^{\mathtt{T}} A w - b^{\mathtt{T}}w, \quad w \in \mathbb R^n.
+  \end{aligned}
+  $$
+
+- $\nabla f(w) = Aw-b.$
+
+- $w^* := \arg \min\limits_{w\in \mathbb R^n} \,f(w)= A^{-1}b .$
+
+## GD
+
+- We can observe GD from the normal form of the ellipse.
+
+{{< include js-html/_mom.html >}}
+
+- $A$ has an eigenvalue decomposition:
+  There exists $\lambda_1,\cdots,\lambda_n\in (0,\infty)$ and $q_1,\cdots,q_n\in \mathbb R^n$ such that
+  $$
+  \begin{aligned}
+    A q_i = \lambda_i q_i,\quad \forall i =1\sim n.
+  \end{aligned}
+  $$
+  Or,
+  $$
+  \begin{aligned}
+    A = Q \mathtt{diag}(\lambda_1,\lambda_2,\cdots,\lambda_n) Q^{\mathtt{T}}, \quad Q = \begin{bmatrix}  &  &  \\ q_1 & \cdots & q_n \\  &  &  \\\end{bmatrix}.
+  \end{aligned}
+  $$
+
+- WLOG, we may assume $\lambda_1 \leq \cdots \leq \lambda_n.$
+
+- If we change a basis $x=Q^{\mathtt{T}}(w-w^*),$ then the iterations break apart:
+  For each $i = 1,\cdots, n,$
+  $$
+  \begin{aligned}
+    x_i^{k+1} 
+    &= x_i^k - \alpha \lambda_i x_i^k \cr
+    &= (1 - \alpha \lambda_i) x_i^k
+    = \cdots =(1-\alpha \lambda_i)^{k+1} x_i^0, \quad k\in \mathbb N.
+  \end{aligned}
+  $$
+
+
+## Decomposing the Error of GD
+
+<!-- 
+- Note that if $w-w^*=\sum_{i=1}^nc_i q_i$ for $c_i\in \mathbb R,$
+  then 
+  $$
+  \begin{aligned}
+    f(w) - f(w^*) = \sum_{i=1}^n c_i^2 \lambda_i.
+  \end{aligned}
+  $$ 
+-->
+
+- Recall that $x_i^{k} = (1- \alpha\lambda_i)^k x_i^0.$
+  So we have
+  $$
+  \begin{aligned}
+    w^k-w^* = Qx^k 
+    &=\sum_{i=1}^n (1- \alpha\lambda_i)^k x_i^0 q_i.
+  \end{aligned}
+  $$
+
+- Hence,
+  $$
+  \begin{aligned}
+    f(w^k) - f(w^*) 
+    &= \sum_{i=1}^n (1-\alpha \lambda_i)^{2k} (x_i^0)^2 \lambda_i.
+  \end{aligned}
+  $$
+
+- The decomposition above gives us immediate guidance that how to set a step-size $\alpha.$
+
+<!-- - We need to choose $\alpha$ such that $w^k\longrightarrow w^*$ and $f(w^k)\longrightarrow f(w^*)$ as $k\rightarrow\infty.$ -->
+
+
+- For the convergence of $\lbrace w^k \rbrace_k$ and $\lbrace f(w^k) \rbrace_k,$
+  all workable step-sizes $\alpha,$ in each $i$-th component, is
+  $$
+  \begin{aligned}
+    \left\lvert 1-\alpha \lambda_i\right\rvert < 1.
+  \end{aligned}
+  $$
+
+- The equation above is equivalent to
+  $$
+  \begin{aligned}
+    \color{red}{{0 < \alpha \lambda_i < 2.}}
+  \end{aligned}
+  $$
+
+## Choosing a step-size $\alpha$ (GD)
+
+- The convergence rate of $w^k$ to $w^*$ is
+  $$
+  \begin{aligned}
+  \text{rate}(\alpha) 
+  &= \max_{i=1,\cdots,n} \left\lvert 1-\alpha \lambda_i \right\rvert \cr 
+  &= \max \bigl\lbrace \left\lvert 1-\alpha \lambda_1 \right\rvert , \left\lvert 1-\alpha \lambda_n \right\rvert \bigr\rbrace.
+  \end{aligned}
+  $$
+
+- Note that
+  $$
+  \begin{aligned}
+    \text{rate}(\alpha) < 1  &\iff \left\lvert 1-\alpha \lambda_1 \right\rvert < 1, \, \left\lvert 1-\alpha \lambda_n \right\rvert < 1 \cr 
+    &\iff 0 < \alpha < 2 / \lambda_n
+  \end{aligned}
+  $$
+  and
+  $$
+  \begin{aligned}
+    \arg\min_{\alpha}\, \text{rate}(\alpha) &= \frac{2}{\lambda_1+\lambda_n}, \cr 
+  \min_{\alpha} \text{rate} (\alpha) &= {\color{red}{\frac{\lambda_n/\lambda_1-1}{\lambda_n/\lambda_1+1}}}.
+  \end{aligned}
+  $$
+  
+- Notice the ratio $\kappa := \lambda_n/\lambda_1$ determines the convergence rate of the problem.
+  
+  - This is the condition number of $A.$
+
+  - If $\kappa$ is larger, then the convergence rate will be slower.
+
+{{< include js-html/_milestones_gd.html >}}
+
+
+# More analysis of Momentum
+
+## Momentum
+
+:::: {.columns}
+::: {.column width="35%"}
+
+- Recall the momentum:
+
+  - Given a random point $w^0 \in \mathbb R^n.$
+
+  - Set $z^0=\mathbf{0}\in \mathbb R^n.$
+
+  - Given any $\alpha,\beta\in (0,\infty).$
+
+  <!-- Define $\lbrace z^i,w^i: i\in \mathbb N \rbrace$ by -->
+  - We iterate $z^k,w^k$ by
+    $$
+    \begin{aligned}
+      z^{k+1} &= \beta z^k + \nabla f(w^k), \cr 
+      w^{k+1} &= w^k - \alpha z^{k+1}.
+    \end{aligned}
+    $$ {#eq-Momentumeq1}
+
+:::
+
+::: {.column width="55%"}
+
+- Similarly, with the change of basis
+  $$
+  \begin{aligned}
+    x^k = Q(w^k-w^*), \quad y^k = Q z^k,
+  \end{aligned}
+  $$
+  the iterations break apart again.
+  @eq-Momentumeq1 becomes
+  $$
+  \begin{aligned}
+    y_i^{k+1} &= \beta y_i^k + \lambda_i x_i^k, \cr 
+    x_i^{k+1} &= x_i^k - \alpha y_i^{k+1}
+  \end{aligned}
+  $$ {#eq-MomentumQ}
+  in each $i$-th component.
+
+- For each $i,$ we rewrite @eq-MomentumQ as
+  $$
+  \begin{aligned}
+    \begin{bmatrix} y_i^k \\ x_i^k \\\end{bmatrix} = R_i^k \begin{bmatrix} y_i^0 \\ x_i^0 \\\end{bmatrix}, \quad R_i = \begin{bmatrix} \beta & -\alpha \beta \\ \lambda_i & 1-\alpha \lambda_i \\\end{bmatrix}.
+  \end{aligned}
+  $$
+
+:::
+::::
+
+
+## To get $R_i^k$
+
+- For convenience, 
+  we omit $i$ here.
+
+- Let $\sigma_1,\sigma_2$ be two eigenvalues of $R= R_i = \begin{bmatrix} \beta & -\alpha \beta \\ \lambda & 1-\alpha \lambda \\\end{bmatrix}.$
+ 
+- By @williamsnthpower,
+  $$
+  \begin{aligned}
+    R^k = 
+    \begin{cases}
+      \sigma_1^k R(1) - \sigma_2^k R(2) , & \sigma_1 \neq \sigma_2 ; \cr 
+      \sigma_1^k \bigl( k R / \sigma_1 - (k-1)I_2 \bigr) , & \sigma_1 = \sigma_2,
+    \end{cases}
+    \qquad R(j) = \frac{R - \sigma_j I_2}{\sigma_1 - \sigma_2}.
+  \end{aligned}
+  $$
+  Thus, the convergence rate of $\lbrace x_i^k \rbrace_k$ is $\max\lbrace \left\lvert \sigma_1 \right\rvert , \left\lvert \sigma_2 \right\rvert \rbrace.$
+
+<!-- -  determined by $\left\lvert \sigma_1 \right\rvert$ and $\left\lvert \sigma_2 \right\rvert.$ -->
+
+- For the values of $\sigma_1,\sigma_2$:
+  
+  - By some calculating, we have
+    $$
+    \begin{aligned}
+      \sigma_1 &= \frac{1}{2} \bigl( 1-\alpha \lambda + \beta + \sqrt{( -\alpha \lambda + \beta + 1 )^2 - 4\beta } \bigr), \cr 
+      \sigma_2 &= \frac{1}{2} \bigl( 1-\alpha \lambda + \beta - \sqrt{( -\alpha \lambda + \beta + 1 )^2 - 4\beta } \bigr).
+    \end{aligned}
+    $$
+  
+  - When $( -\alpha \lambda + \beta + 1 )^2 - 4\beta < 0,$ we have $\sigma_1,\sigma_2\in \mathbb C\backslash \mathbb R$
+    and
+    $$
+    \begin{aligned}
+      \left\lvert \sigma_1 \right\rvert = \left\lvert \sigma_2 \right\rvert = \frac{1}{2}\sqrt{ (1-\alpha\lambda+\beta)^2 + \left\lvert ( -\alpha \lambda + \beta + 1 )^2 - 4\beta \right\rvert } = \sqrt \beta.
+    \end{aligned}
+    $$
+    
+    - In this case, the convergence rate of $\lbrace x_i^k \rbrace_k$ is independent of $\alpha,\lambda.$
+
+<!--   
+  - When the roots are real, the convergence rate is
+    $$
+    \begin{aligned}
+      \max \lbrace \left\lvert \sigma_1 \right\rvert , \left\lvert \sigma_2 \right\rvert \rbrace = 
+    \end{aligned}
+    $$ -->
+
+## Explanation of the plot of convergence rate in each $i$ (Momentum)
+
+![](images/plot_of_convergence_rate.png)
+
+
+## A plot of convergence rate in each $i$ (Momentum)
+
+<!-- - [:Explanation of the following](#x-Explanation) -->
+
+- Here we show the case $\lambda_i = 1.$
+
+{{< include js-html/_momentum2D.html >}}
+<!-- --- -->
+
+<!-- ###### :x Explanation -->
+
+
+---
+
+- Combining the above five situations, we can conclude that
+  the range of available step-sizes works out to be
+  $$
+  \begin{aligned}
+    {\color{red}{0<\alpha \lambda_i < 2+2\beta , \quad 0 \leq \beta < 1.}}
+  \end{aligned}
+  $$
+
+<!-- - Momentum allows us to crank up the step-size up by a factor of 2 before diverging. -->
+
+<!-- - After adding momentum, the range of $\alpha$ changes from $0<\alpha \lambda_i < 2$ to $0<\alpha\lambda_i<2+2\beta.$ -->
+
+- The range of $\alpha$ gets bigger when we add momentum:
+  $$
+  \begin{aligned}
+    0<\alpha \lambda_i < 2 \stackrel{\text{with momentum}}{\Longrightarrow} 0<\alpha\lambda_i<2+2\beta.
+  \end{aligned}
+  $$
+
+- What is the best choice between $\alpha,\beta$?
+
+
+## Optimal parameters
+
+- Recall that in GD without momentum:
+
+  - The convergence rate of $w^k_i$ to $w^*_i$ ($i$-th component) is $\left\lvert 1-\alpha \lambda_i \right\rvert;$
+  
+  - The convergence rate of $w^k$ to $w^*$ is
+    $$
+    \begin{aligned}
+    \text{rate}(\alpha) 
+    = \max \bigl\lbrace \left\lvert 1-\alpha \lambda_1 \right\rvert , \left\lvert 1-\alpha \lambda_n \right\rvert \bigr\rbrace;
+    \end{aligned}
+    $$
+  - 
+  $$
+  \begin{aligned}
+    \arg \min_{\alpha} \, \text{rate}(\alpha) &= \frac{2}{\lambda_1+\lambda_n}, \cr 
+  \min_{\alpha} \text{rate} (\alpha) &= \frac{\lambda_n/\lambda_1-1}{\lambda_n/\lambda_1+1}.
+  \end{aligned}
+  $$
+
+- With Momentum?
+
+- We first analyze $i$-th component with $\alpha$ fixed.
+
+
+## Optimal parameters ($i$-th component)
+
+- We see the $i$-th component with $\alpha$ fixed.
+
+- Recall that
+  $$
+  \begin{aligned}
+    y_i^{k+1} &= \beta y_i^k + \lambda_i x_i^k, \cr 
+    x_i^{k+1} &= x_i^k - \alpha y_i^{k+1},
+  \end{aligned}
+  $$
+  in each $i$-th component.
+
+- Or,
+  $$
+  \begin{aligned}
+    \begin{bmatrix} y_i^k \\ x_i^k \\\end{bmatrix} = R_i^k \begin{bmatrix} y_i^0 \\ x_i^0 \\\end{bmatrix}, \qquad R_i = \begin{bmatrix} \beta & -\alpha \beta \\ \lambda_i & 1-\alpha \lambda_i \\\end{bmatrix}.
+  \end{aligned}
+  $$
+
+- The convergence rate of $\lbrace x_i^k \rbrace_k$ is $\max\lbrace \left\lvert \sigma_1(i) \right\rvert , \left\lvert \sigma_2(i) \right\rvert \rbrace,$ where $\sigma_1(i),\sigma_2(i)$ are two eigenvalues of $R_i.$
+
+<!-- - Through mathematical calculations, it can be obtained that the minimum convergence rate occurs  -->
+
+- Here we can use the physical point of view.
+
+  - It is a discretization of a damped harmonic oscillator.
+
+
+::: {#fig-damped layout-ncol=3}
+![](images/Fig-2-Damped-Swinging-Doors-Animation.gif)
+
+![OverDamping](images/OverDamping.gif)
+
+![CriticalDamping](images/Critically_Damping.gif)
+
+These gifs are from [https://highscope.ch.ntu.edu.tw/wordpress/?p=59534](https://highscope.ch.ntu.edu.tw/wordpress/?p=59534) and
+[https://youtu.be/99ZE2RGwqSM](https://youtu.be/99ZE2RGwqSM).
+:::
+
+<!-- - https://youtu.be/99ZE2RGwqSM  Critical Damping -- xmdemo 068 -->
+
+
+---
+
+{{< include js-html/_phasediagram0.html >}}
+
+---
+
+{{< include js-html/_phasediagram1.html >}}
+
+- The critical case happens when $\sigma_1(i)=\sigma_2(i).$ 
+  
+  - That is, $\beta=(1-\sqrt{\alpha \lambda_i})^2.$
+
+- The minimum convergence rate is $\color{red}{1-\sqrt{\alpha \lambda_i}}.$
+
+- The minimum convergence rate of  $w^k_i$ to $w^*_i$ ($i$-th component) varies as follows:
+  $$
+  \begin{aligned}
+    1-\alpha\lambda_i \stackrel{\text{with momentum}}{\Longrightarrow} 1-\sqrt{\alpha \lambda_i}.
+  \end{aligned}
+  $$
+  But this only applies to the error in the $i$-th component with $\alpha$ fixed.
+
+
+## Optimal parameters 
+
+- To get a global convergence rate, 
+  we must optimize over both $\alpha,\beta.$
+
+- The convergence rate of $w^k$ to $w^*$ is
+  $$
+  \begin{aligned}
+    \text{rate}(\alpha,\beta) = \max_{i=1,\cdots,n} \Bigl\lbrace \max\bigl\lbrace \big\lvert \sigma_1(i) \big\rvert , \left\lvert \sigma_2(i) \right\rvert \bigr\rbrace \Bigr\rbrace.
+  \end{aligned}
+  $$
+
+- The solutions of $\arg\min\limits_{\alpha,\beta}\text{ rate}(\alpha,\beta)$
+  are
+  $$
+  \begin{aligned}
+    \alpha = \biggl( \frac{2}{\sqrt{\lambda_1}+ \sqrt{\lambda_2}} \biggr)^2, \quad \beta = \biggl( \frac{\sqrt{\lambda_n}-\sqrt{\lambda_1}}{\sqrt{\lambda_n}+ \sqrt{\lambda_1}} \biggr)^2.
+  \end{aligned}
+  $$
+  Plug this into $\text{rate}(\alpha,\beta),$ 
+  and we get
+  $$ 
+  \begin{aligned}
+    {\color{red}{\frac{\sqrt{\kappa}-1}{\sqrt{\kappa}+1}.}}
+  \end{aligned}
+  $$
+
+- So we get how much momentum accelerates the convergence rate:
+  $$
+  \begin{aligned}
+    \frac{\kappa-1}{\kappa +1}\stackrel{\text{with momentum}}{\Longrightarrow} \frac{\sqrt{\kappa}-1}{\sqrt{\kappa}+1}.
+  \end{aligned}
+  $$
+
+- Let's look at the following example to see that momentum really has the effect of accelerating:
+
+{{< include js-html/_milestonesMomentumFig.html >}}
+
+## Conclusions
+
+::: {.callout-note}
+## Question
+How slowly does GD converge?
+
+Ans:
+: The convergence rate of $w^k$ to $w^*$ is $\dfrac{\kappa-1}{\kappa+1}.$
+:::
+
+::: {.callout-note}
+## Question
+In GD, what's the range of $\alpha$?
+
+Ans:
+: $0< \alpha \lambda_i<2$ for each $i.$
+:::
+
+::: {.callout-note}
+## Question
+In Momentum, what's the range of $\alpha,\beta$?
+
+Ans:
+: $0<\alpha \lambda_i < 2+2\beta , \quad 0 \leq \beta < 1$ for each $i.$
+:::
+
+::: {.callout-note}
+## Question
+How much does Momentum accelerate?
+
+Ans:
+: $$
+  \begin{aligned}
+    \frac{\kappa-1}{\kappa +1}\stackrel{\text{with momentum}}{\Longrightarrow} \frac{\sqrt{\kappa}-1}{\sqrt{\kappa}+1}.
+  \end{aligned}
+  $$
+:::
+
+::: {.callout-note}
+## Question
+Momentum has the effect of increasing the range of allowed step sizes. Why? How much is the increase?
+
+Ans:
+: $$
+  \begin{aligned}
+    0<\alpha \lambda_i < 2 \stackrel{\text{with momentum}}{\Longrightarrow} 0<\alpha\lambda_i<2+2\beta.
+  \end{aligned}
+  $$
+:::
+
+
+# Other
+
+## The Limits of Descent
+
+::: {.callout-note}
+## Question
+Can it be corrected on the momentum method to make the result better?
+:::
+
+::: {.callout-note}
+## Question
+Is there some kind of descent method that allows our $\lbrace w^m \rbrace_m$ to converge faster than momentum?
+:::
+
+  <!-- 
+  有以下性質
+  $$
+  \begin{aligned}
+    \left\lVert w^k - w^* \right\rVert 
+  \end{aligned}
+  $$
+  -->
+
+- By giving a lower bound,
+  @nesterov2013introductory states that momentum is optimal in a certain very narrow and technical sense.
+
+- In GD,
+  $$
+  \begin{aligned}
+    w^1 &= w^0 - \alpha \nabla f(w^0), \cr 
+    w^2 &= w^1 - \alpha \nabla f(w^1) \cr 
+        &= w^1 - \alpha \nabla f(w^0) - \alpha \nabla f(w^1), \cr 
+        &\quad\vdots
+  \end{aligned}
+  $$
+  we can write GD as
+  $$
+  \begin{aligned}
+    w^{m+1} = w^0 - \alpha \sum_{i=0}^m \nabla f(w^i).
+  \end{aligned}
+  $$
+  
+
+## The Limits of Descent
+
+- Similar to momentum,
+  $$
+  \begin{aligned}
+    w^{m+1} = w^0 + \alpha \sum_{i=0}^m \frac{1-\beta^{m+1-i}}{1-\beta} \nabla f(w^i).
+  \end{aligned}
+  $$
+  
+<!-- - Conjugate Gradient algorithm, AdaMax, Averaged Gradient and more, can be written in this unrolled form. -->
+
+- Now we consider our descent method is **Linear First Order** Methods:
+  $$
+  \begin{aligned}
+    w^{m+1} = w^0 + \sum_{i=0}^m \Gamma_i^m \nabla f(w^i)
+  \end{aligned}
+  $$
+  for some diagonal $n$ by $n$ matrix $\Gamma_i^m.$
+
+  - For GD, $\Gamma_i^m = \alpha I_n.$
+
+  - For momentum, $\Gamma_i^m = \alpha \Bigl( \frac{1-\beta^{m+1-i}}{1-\beta} \Bigr) I_n.$
+
+  - This class of methods covers most of the popular algorithms for training neural networks, including ADAM and AdaGrad. 
+
+---
+
+- We will show a single function all these methods ultimately fail on.
+
+- Fix some $\kappa\in (0,\infty).$
+  We consider the Convex Rosenbrock function:
+  $$
+  \begin{aligned}
+    f=f_n&:\mathbb R^n \longrightarrow \mathbb R\cr 
+    f(w) &= \frac{1}{2}(w_1-1)^2 + \frac{1}{2}\sum_{i=1}^n(w_i-w_{i+1})^2 + \frac{2}{\kappa-1} \left\lVert w \right\rVert_2^2.
+  \end{aligned}
+  $$
+  
+  - The problem $f$ is convex quadratic.
+
+  - Nesterov called it "the worst function in the world". 
+  
+  - Let $\kappa_n$ be the condition number of the problem $f.$
+  Then $\lim_{n\rightarrow\infty}\kappa_n = \kappa.$
+
+  - The optimal solution to the problem $f$ is
+    $$
+    \begin{aligned}
+      w^*=(w_1^*, \cdots , w_n^*), \qquad
+      w_i^* = \biggl( \frac{\sqrt{\kappa}-1}{\sqrt{\kappa}+1} \biggr)^i.
+    \end{aligned}
+    $$
+    
+    - Without the regular term $\frac{2}{\kappa-1}\left\lVert w \right\rVert_2^2,$ the solution is $\mathbf{1}.$
+
+- We observe the behavior of any linear first-order algorithm on $f$, starting from $w^0 = \mathbf{0}.$
+
+---
+
+{{< include js-html/_rosenViz.html >}}
+
+---
+
+- Since
+  $$
+  \begin{aligned}
+    \nabla f(w)_i = -(w_{i-1}-w_i) + (w_i-w_{i+1}) + \frac{4}{\kappa-1} w_i, \quad i>1,
+  \end{aligned}
+  $$
+  by induction, for any linear first order algorithm,
+  $$
+  \begin{aligned}
+    w^0  &= ( && 0, &&0, &&0, &&\cdots, &&0, &&\quad 0,\cdots,0 &&) ,\cr 
+    w^1 &= (  && w_1^1, &&0, &&0, &&\cdots, &&0, &&\quad 0,\cdots,0 &&) , \cr 
+    w^2 &= (  && w_1^2, &&w_2^2, &&0, &&\cdots, &&0, &&\quad 0,\cdots,0 &&) , \cr 
+    && \vdots \cr 
+    w^m &= (  && w_1^m, &&w_2^m, &&w_3^m, &&\cdots, &&w_m^m, &&\quad\underbrace{0,\cdots,0}_{\text{index}>m} &&) .
+  \end{aligned}
+  $$
+
+--- 
+
+- Thus,
+  $$
+  \begin{aligned}
+    \left\lVert w^m-w^* \right\rVert_{\infty} 
+    &\geq \max_{i>m} \lbrace \left\lvert w_i^* \right\rvert \rbrace \cr 
+    &= \biggl( \frac{\sqrt{\kappa}-1}{\sqrt \kappa +1} \biggr)^{m+1} \cr 
+    &= \biggl( \frac{\sqrt{\kappa}-1}{\sqrt \kappa +1} \biggr)^{m} \left\lVert w^0-w^* \right\rVert_{\infty}.
+  \end{aligned}
+  $$
+  This shows that the convergence rate of $\lbrace w^m \rbrace_m$ (under the sup norm) is greater than or equal to $\frac{\sqrt{\kappa}+1}{\sqrt{\kappa}-1}.$
+
+- Recall that $\lim_{n\rightarrow\infty}\kappa_n = \kappa,$
+  where $\kappa_n$ is the condition number of the problem $f.$
+
+- Hence, momentum is already the fastest accelerator.
+
+## Example: The Colorization Problem
+
+:::: {.columns}
+::: {.column width="60%"}
+- The Colorization Problem is of the form
+  $$
+  \begin{aligned}
+    \text{minimize} \quad\frac{1}{2}\sum_{w_i\in D}(w_i-1)^2 + \frac{1}{2} \sum_{w_i\sim w_j}(w_i- w_j)^2,
+  \end{aligned}
+  $$
+  where $D$ are nodes that we want to color with $1.$
+
+- The Convex Rosenbrock function is a special case of the above.
+
+<!-- {{< include js-html/_color_problem.html >}} -->
+:::
+
+::: {.column width="25%"}
+![https://algoritmaonline.com/image-colorization/](images/image-colorization.jpeg)
+:::
+::::
+
+{{< video https://youtu.be/21K7zyC7J-k width="100%" height="85%" >}}
+
+<!-- ## Momentum with SGD -->
+
+
+{{< include js-html/_end.html >}}
+
+
+## Reference

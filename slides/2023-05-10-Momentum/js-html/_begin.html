@@ -1,0 +1,80 @@
+<script src="http://distill.pub/template.v1.js"></script>
+
+
+<!-- Katex -->
+<!--<script src="assets/lib/auto-render.min.js"></script>-->
+<!--<script src="assets/lib/katex.min.js"></script>-->
+<link rel="stylesheet" href="assets/lib/katex.min.css">
+<link rel="stylesheet" type="text/css" href="assets/widgets.css">
+
+<!-- Required -->
+<script src="assets/lib/lib.js"></script>
+<script src="assets/utils.js"></script>
+<script>
+  var renderQueue = [];
+  function renderMath(elem) {
+    // renderMathInElement(
+    //     elem,
+    //     {
+    //         delimiters: [
+    //             {left: "$$", right: "$$", display: true},
+    //             {left: "$", right: "$", display: false},
+    //         ]
+    //     }
+    // );
+  }
+
+  var deleteQueue = [];
+  function renderLoading(figure) {
+    var loadingScreen = figure.append("svg")
+    .style("width", figure.style("width"))
+    .style("height", figure.style("height"))
+    .style("position","absolute")
+    .style("top", "0px")
+    .style("left","0px")
+    .style("background","white")
+    .style("border", "0px dashed #DDD")
+    .style("opacity", 1)
+
+    return function(callback) { loadingScreen.remove() };
+
+  }
+
+</script>
+<div id="math-cache" style="display: none;">
+  <dt-math class="star">\star</dt-math>
+  <dt-math class="plus">+</dt-math>
+  <dt-math class="minus">-</dt-math>
+  <dt-math class="equals">=</dt-math>
+  <dt-math class="alpha">α</dt-math>
+  <dt-math class="lambda">λ</dt-math>
+  <dt-math class="beta">β</dt-math>
+  <dt-math class="r">R</dt-math>
+  <!-- <dt-math class="alpha-equals">α=</dt-math> -->
+  <dt-math class="alpha-equals">α =</dt-math>
+  <!-- <dt-math class="beta-equals">\\beta=</dt-math> -->
+  <dt-math class="beta-equals">β =</dt-math>
+  <dt-math class="beta-equals-zero">β = 0</dt-math>
+  <dt-math class="beta-equals-one">β = 1</dt-math>
+  <dt-math class="alpha-equals-one-over-lambda-i">α = 1/λ<sub>i</sub></dt-math>
+  <dt-math class="model">\\text{model}</dt-math>
+  <dt-math class="p">0 p_1</dt-math>
+  <dt-math class="phat">0 \\bar{p}_1</dt-math>
+  <!-- <dt-math class="two-sqrt-beta">\\sqrt{\\beta}</dt-math> -->
+  <dt-math class="two-sqrt-beta">√β</dt-math>
+  <!-- <dt-math class="lambda-i">λ_i</dt-math> -->
+  <dt-math class="lambda-i">λ<sub>i</sub></dt-math>
+  <!-- <dt-math class="lambda-i-equals-zero">λ_i = 0</dt-math> -->
+  <dt-math class="lambda-i-equals-zero">λ<sub>i</sub> = 0</dt-math>
+  <dt-math class="alpha-gt-one-over-lambda-i">α > 1/λ<sub>i</sub></dt-math>
+  <!-- <dt-math class="max-sigma-one">\\max\\{|\\sigma_1|,|\\sigma_2|\\} > 1</dt-math> -->
+  <dt-math class="max-sigma-one">max{|σ<sub>1</sub>,σ<sub>2</sub>|} > 1</dt-math>
+  <dt-math class="x-i-k">x_i^k - x_i^*</dt-math>
+  <dt-math class="xi-i">\xi_i</dt-math>
+  <dt-math class="beta-equals-one-minus">β =(1-√αλ<sub>i</sub>)<sup>2</sup></dt-math>
+</div>
+<script>
+  function MathCache(id) {
+    return document.querySelector("#math-cache ." + id).innerHTML;
+  }
+</script>

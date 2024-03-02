@@ -1,0 +1,74 @@
+---
+title: t-SNE
+format:
+  revealjs:
+    # width: 1100
+    # height: 760
+    # engine: knitr
+    # auto-stretch: true
+    # disable-layout: true
+    fontsize: 20px
+    css: _custom.scss
+    html-math-method: katex
+    chalkboard: true
+    # html-math-method: mathjax
+    # classoption: fleqn
+    scrollable: true
+    smooth-scroll: true
+    echo: true
+    slide-number: true
+    sc-sb-title: true
+    include-after-body: 
+      - file: include-after-body.html
+---
+
+- <http://www.datakit.cn/blog/2017/02/05/t_sne_full.html>
+- 將 高維數據 映射到 低維數據 且保持相對距離關係(局部).
+- **大致流程:**
+  - 高維數據 $\lbrace x_i\rbrace_{i\in I}$ (原始 data) 用高斯機率密度函數來逼近.
+  - 考慮低維數據 $\lbrace y_i\rbrace_{i\in I}$ (降維後的 data) 為 $t$ 分佈 ($y_i$ 待調整).
+  - 優化上面 $y_i$ 位置, 讓上面兩個分布的 KL-divergence 越接近.
+- **Sketch:** 假設 data 為 $\lbrace x_i\rbrace_{i\in I}.$
+  - Fix $i\in I.$
+    - **IDEA:** 使用 $x_i$ 為中心的 gaussian density 
+      $$
+      \begin{aligned}
+        p_i(x) &= \frac {1}{\sqrt{2\pi \sigma_i^2}} \exp \Bigl( -\frac{\left\lVert x-x_i \right\rVert^2}{2\sigma_i^2} \Bigr)
+      \end{aligned}
+      $$
+      去逼近 $\lbrace x_j\rbrace_{j\neq i,j\in I}$ 的分佈, 其中 $\sigma_i$ 待定.
+    - **實際執行:** 給定 $\lbrace x_j\rbrace_{j\neq i,j\in I}$ 以下 mass function:
+      $$
+      \begin{aligned}
+        p_i(x_j) \propto \frac {1}{\sqrt{2\pi \sigma_i^2}} \exp \Bigl( -\frac{\left\lVert x_j-x_i \right\rVert^2}{2\sigma_i^2} \Bigr), \quad j\neq i, j\in I,
+      \end{aligned}
+      $$
+      其中 $\sigma_i$ 待定.
+      
+      也就是
+      $$
+      \begin{aligned}
+        p_i(x_j) = \frac{\exp \Bigl( -\frac{\left\lVert x_j-x_i \right\rVert^2}{2\sigma_i^2} \Bigr)}{\sum_{k\neq i,k\in I} \exp \Bigl( -\frac{\left\lVert x_k-x_i \right\rVert^2}{2\sigma_i^2} \Bigr)}, \quad j\neq i, j\in I.
+      \end{aligned}
+      $$
+    - 給定任意 $\lbrace y_i\rbrace_{j\neq i,j\in I}.$
+      We give a mass function on $\lbrace y_i\rbrace_{j\neq i,j\in I}$:
+      $$
+      \begin{aligned}
+        q_i(y_j) = 
+      \end{aligned}
+      $$
+      
+    - $p_{i}(x_j)\stackrel{\text{denote}}{:=} p_{ij}.$
+  - 去調整 $\lbrace y_i\rbrace_{j\neq i,j\in I}$ 去 minimize 面的值:
+    $$
+    \begin{aligned}
+      \sum_{i\in I} D_{\mathtt{KL}}(\, p_i\, \Vert \, q_i \, ) =  \sum_{i\in I} \sum_{j\neq i,j\in I} p_{ij} \log \frac{p_{ij}}{q_{ij}}.
+    \end{aligned}
+    $$
+
+## To determine $\sigma_i$ (Fix $i$)
+
+- Given perplexity (困惑度) $\text{Perp}(i)\in (0,\infty).$
+- Find $\sigma_i$ such that $\text{Perp}(i) = 2^{H(p_i)},$
+  where $H(p_i) = -\sum_{j\neq i,j\in I}p_{j\vert i} \log_2 p_{j\vert i}.$

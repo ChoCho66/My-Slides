@@ -1,0 +1,1260 @@
+---
+title: "Diffusion Model"
+# speaker: ChoCho
+date: 2023-10-11
+author:
+  - name: ChoCho
+    # orcid: 0000-0000-0000-0000
+    email: kycho@math.ncu.edu.tw
+    affiliations: NCU Math
+bibliography: [references.bib]
+revealjs-plugins:
+  - my-revealjs
+filters:
+  - pseudocode
+  - webr
+fontsize: 20px
+crossref:
+  eq-prefix: ""
+  eq-labels: arabic
+embed-resources: false
+---
+
+## Generator = Distribution
+### Sample from a data
+- Data: $\mathcal{D}=\lbrace x_1,x_2,\cdots,x_n \rbrace$ ($x_i$ 可能有重複).
+- Sample from $\mathcal{D}$ $\iff$ 從 $\mathcal{D}$ 隨意挑一個出來.
+- Example: $\mathcal{D} = \lbrace 1,2,2,3 \rbrace.$
+
+  從 $\mathcal{D}$ 重複選取 15 個.
+  
+  ```{webr-r}
+  N <- 15
+  sample(
+      1:3,
+      N,
+      replace = TRUE,
+      prob = c(1,2,1)
+  )
+  ```
+
+## Generator = Distribution
+### Sample from a mass
+:::: {.columns}
+::: {.column width="68%"}
+- Let $p=\lbrace p_i \rbrace_{i=1,\cdots,n}$ be a mass function with 
+  - $p_i=a_i/N$ for all $i=1,\cdots, n,$ where 
+  - $a_i\in \mathbb N$ for all $i=1,\cdots,n.$
+- Sample from $p$
+  $\iff$ 從 $\mathcal{D}=\lbrace \underbrace{1,\cdots,1}_{a_i},\cdots, \underbrace{n,\cdots,n}_{a_n} \rbrace$ 隨意挑一個出來.
+- Example: 
+  - 骰子 $X$ $=$ a mass function with
+    $$
+    \begin{aligned}
+      p_i=\mathbf{P}[X=i]=1/6,
+    \end{aligned}
+    $$
+    for $i=1,\cdots, 6.$
+  - 擲 1 次骰子 $X$ 
+    $\iff$ Sample $X$
+    $\iff$ 從 $\mathcal{D}=\lbrace 1,2,3,4,5,6 \rbrace$ 隨意挑一個出來.
+:::
+::: {.column width="32%"}
+- 重複投 15 次骰子:
+```{webr-r}
+N <- 15
+sample(
+  1:6,
+  N,
+  replace = TRUE,
+  prob = c(1,1,1,1,1,1)
+)
+```
+:::
+::::
+
+## Generator = Distribution
+### Sample from a density
+::::: {.columns}
+:::: {.column}
+[Density estimation](https://en.wikipedia.org/wiki/Density_estimation).
+  
+  ![](images/messageImage_1695548775830.jpg){width="30%"}
+  ![](images/ddddddd.png){width="30%"}
+
+**Example**: Sample $\mathcal{N}(0,0.01)$ $666$ times.
+```{webr-r}
+x = rnorm(666,0,0.01)
+plot(x)
+```
+::::
+:::: {.column}
+**Example**: Sample $\mathcal{N}(\mathbf{0},(0.01) \mathbf{I})$ in $\mathbb R^{32\times 32}.$
+```{webr-r}
+# Set the dimensions of the image
+width <- 32
+height <- 32
+# Generate normally distributed random noise
+noise <- matrix(
+  rnorm(width * height,
+    mean = 0, sd = 0.01
+  ),
+  nrow = height, ncol = width
+)
+# Display the noise image
+# Use a gray color scale
+image(noise, col = gray.colors(256))
+```
+::::
+:::::
+
+## Generator = Distribution
+- An image $=$ an element in $\mathbb R^n$.
+  - An image generator is a distribution in $\mathbb R^{n},$ and 
+  - the generated image is a sample from this distribution.
+
+<hr style='height:2px;border-width:0;color:gray;background-color:gray'>
+
+#### Notation 
+
+- Let $X$ be a random vector in $\mathbb R^n.$
+  The $\color{red}{\textbf{density}}$ function of $X$ is defined by
+  $$
+  \begin{aligned}
+    \mathbf{P}\bigl[ X\in A \bigr] = \int_{x\in A} {\color{red}{f_X}}(x) \mathrm{d}x, \quad \forall A\in \mathcal{B}(\mathbb R^n).
+  \end{aligned}
+  $$
+
+- $f_{X\vert Y}(x\vert y) = \dfrac{f_{X,Y}(x,y)}{f_Y(y)}.$
+
+- Since
+  $$
+  \begin{aligned}
+    f_{X,Y}(x,y) = f_{X}(x) \cdot f_{Y\vert X}(y\vert x),
+  \end{aligned}
+  $$
+  we can sample $(x,y)\sim f_{X,Y}(x,y)$ by the follows:
+  - Sample $x\sim f_X(x)$;
+  - Sample $y\sim f_{Y\vert X}(y\vert x).$
+
+- $X_{t:0}:=(X_t,X_{t-1},\cdots,X_1,X_0).$
+  Others are the same. 
+
+- $f_{X_t\vert X_{t-1:0}}(x_t\vert x_{t-1:0}) = q(x_t\vert x_{t-1:0}).$ 
+  Others are the same.
+
+<!-- - Let $X_0,X_1,\cdots,X_T$ be the images in $\mathbb R^{n}$ at time $0,1,\cdots, T$ respectively. -->
+
+## DPM and DDPM
+
+:::: {.columns}
+::: {.column width="40%"}
+- **Diffusion Probabilistic Models (DPM, or Diffusion Models)** were first proposed by @pmlr-v37-sohl-dickstein15.
+  ![](images/2023-09-24 20.27.43.png)
+:::
+::: {.column width="60%"}
+- We will focus on the **Denoising Diffusion Probabilistic Models (DDPM)** (@ho2020denoising).
+  ![](images/2023-09-24 20.29.54.png)
+:::
+::::
+
+# Denoising Diffusion Probabilistic Models (DDPM)
+
+## Diffusion model
+:::: {.columns}
+::: {.column width=55%}
+![https://makeagif.com/gif/diffusion-water-food-dye-diffusion-project-PwX-YQ](images/Dwater.gif)
+
+- The name "diffusion" comes from the diffusion process.
+
+
+- Let $q(x_0)$ be the distribution of our data.
+:::
+::: {.column width=30%}
+![](images/qx00.svg)
+:::
+::::
+
+- The **main purpose** of all **generative models** is to learn a distribution $p_{\theta}(x_0)$ such that
+  $$
+  \begin{aligned}
+    p_{\theta}(x_0)\approx q(x_0).
+  \end{aligned}
+  $$
+
+## Generative models
+
+![<https://lilianweng.github.io/posts/2021-07-11-diffusion-models/>](images/generative-overview.png)
+
+- **Diffusion models** can have more mathematical explanations (stochastic differential process).
+
+## Diffusion model (嘴砲)
+
+:::: {.columns}
+::: {.column}
+![](images/DP_density_reverse_recover0.svg){width="100%"}
+![](images/DP_density_reverse_recover1.svg){.fragment width="100%"}
+:::
+::: {.column}
+> - Fix $T\in \mathbb N$ large.
+- We add **independent normal distributions** (noise) step by step.
+- We call this the forward process.
+- $X_T$ is basically a noise.
+  ![https://blog.sciencenet.cn/blog-548663-860740.html](images/Cov-1.gif){width=40%}
+- We can obtain an approximation of $q(x_0)$ by recovering $q(x_{t-1}\vert x_t).$
+- We will not recover $q(x_0)$ directly from $x_T$ because this is too difficult.
+  ![](images/hard.webp){width="8  0%"}
+- How to define the forward process of the diffusion model?
+:::
+::::
+
+## Define the forward process by adding independent noise
+::::: {.nonincremental}
+:::: {.columns}
+::: {.column}
+![](images/DP_density_reverse_recover0.svg){width="98%"}
+![](images/DP_density_reverse_recover1.svg){width="98%"}
+:::
+::: {.column}
+- Fix the follows:
+  - $T\in \mathbb N$ large;
+  - $\lbrace \alpha_1,\cdots,\alpha_T \rbrace\subset (0.001,0.999)$;
+  - $\beta_t = 1-\alpha_t$ (the intensity of noise added).
+
+> - Let $X_0,\varepsilon_1,\cdots, \varepsilon_T$ be independent random variables with
+  $$
+  \begin{aligned}
+    X_0 \sim q(x_0), \quad \varepsilon_t \sim \mathcal{N}(\mathbf{0},\mathbf{I}).
+  \end{aligned}
+  $$
+- For $t=1,\cdots,T,$
+  let
+  $$
+  \begin{aligned}
+    X_{t}= \sqrt{\alpha_t} X_{t-1} + \sqrt{\beta_t} \varepsilon_t.
+  \end{aligned}
+  $$
+- Note that in this definition,
+  $$
+  \begin{aligned}
+    q(x_{t}\vert x_{t-1:0}) = q(x_t \vert x_{t-1}).
+  \end{aligned}
+  $$
+  Hence, $\lbrace X_0,X_1,\cdots,X_T\rbrace$ is a Markov chain.
+- We often use an equivalent definition to define the forward process.
+:::
+::::
+:::::
+
+## Forward process
+::::: {.nonincremental}
+:::: {.columns}
+::: {.column}
+- We define the **forward process** as a Markov chain $X_0,\cdots,X_T$ with 
+  - the initial density $q(x_0),$ and
+  - the transition density
+    $$
+    \begin{aligned}
+      q(x_t\vert x_{t-1}) = \mathcal{N} (\sqrt{\alpha_t}x_{t-1},\beta_t \mathbf{I}).
+    \end{aligned}
+    $$
+
+> - The joint density of $(X_T, X_{T-1},\cdots, X_1, X_0)$ for the forward process
+    (or ${\color{red}{\text{we say under }q}}$) is
+    $$
+    \begin{aligned}
+      q(x_{T:0}) = q(x_T\vert x_{T-1}) \cdot q(x_{T-1}\vert x_{T-2}) \cdots q(x_{1}\vert x_0) \cdot q(x_0).
+    \end{aligned}
+    $$
+- Let $\varepsilon_t$ such that
+  $$
+  \begin{aligned}
+    X_t = \sqrt{ \alpha_t } X_{t-1} + \sqrt{\beta_t} \varepsilon_t.
+  \end{aligned}
+  $$
+  Then
+  $\underline{\varepsilon_t\sim \mathcal{N}(\mathbf{0},\mathbf{I})}$ and
+  $\underline{X_0,\varepsilon_1,\varepsilon_2,\cdots,\varepsilon_t\text{ are independent under }q.}$
+- Under $q,$ $X_t$ can be written as
+  $$
+  \begin{aligned}
+    X_t = \sqrt{\overline{\alpha}_t }X_0 + \sqrt{1-\overline{\alpha}_t} \overline{\varepsilon}_t
+  \end{aligned}
+  $$
+  with $\underline{\overline{\varepsilon}_t\perp X_0},$ $\underline{\overline{\varepsilon}_t\sim \mathcal{N}(\mathbf{0},\mathbf{I})},$
+  and $\overline{\alpha}_t = \alpha_t\cdots \alpha_1.$
+- Under $q,$ $X_T$ converge to $\mathcal{N}(\mathbf{0},\mathbf{I})$ for $T$ large.
+:::
+::: {.column}
+![](images/DP_density.svg)
+:::
+:::: 
+:::::
+
+## Reverse the forward process
+::::: {.incremental}
+:::: {.columns}
+::: {.column}
+- Recall that our goal is to construct $p_{\theta}(x_0)$ such that
+  $$
+  \begin{aligned}
+    p_{\theta}(x_0)\approx q(x_0).
+  \end{aligned}
+  $$
+
+- The simplest way to construct $p_{\theta}(x_0)$ is as follows:
+  
+  > - Take $p_{\theta}(x_T)\sim\mathcal{N}(\mathbf{0},\mathbf{I}),$ and
+  > - learn $p_{\theta}(x_t\vert x_{t-1})$ such that
+    $$
+    \begin{aligned}
+      p_{\theta}(x_{t-1}\vert x_{t}) \approx q(x_{t-1}\vert x_{t}).
+    \end{aligned}
+    $$
+- Although we don’t know what distribution $q(x_{t-1}\vert x_{t})$ is, **we can approximate it with a normal**.
+  
+  [**Why?**]{.fragment style="font-size:200%"}
+  
+:::
+::: {.column}
+![](images/DP_density_reverse.svg)
+:::
+::::
+:::::
+
+## Why $q(x_{t-1}\vert x_t)\approx$ normal? $\quad$ Method 1
+### Discretization of a diffusion process
+::: {.incremental}
+- We first see a differential equation
+  $$
+  \begin{aligned}
+    x_t=\int_0^t \mu(x_s,s)\mathrm{d}s 
+    \qquad  \text{or}\qquad  
+    \mathrm{d}x_t = \mu(x_t,t) \mathrm{d}t.
+  \end{aligned}
+  $$
+- This means that for any fixed $t$ and for $\Delta t>0$ small,
+  $$
+  \begin{aligned}
+    x_{t+\Delta t} \approx x_t + \mu(x_t,t) \Delta t.
+  \end{aligned}
+  $$
+
+---
+
+- Now consider a diffusion process
+  $$
+  \begin{aligned}
+    X_t = \int_0^t \mu(X_s,s)\mathrm{d}s + \int_0^t \sigma(s) \mathrm{d}B_s 
+    \qquad\text{or}\qquad
+    \mathrm{d} X_t = \mu(X_t,t) \mathrm{d}t + \sigma(t) \mathrm{d}B_t. 
+  \end{aligned}
+  $$ {#eq-DisSDE}
+- Similarly, for any fixed $t$ and for $\Delta t>0$ small,
+  $$
+  \begin{aligned}
+    X_{t+\Delta t} \approx \underbrace{X_t + \mu(X_t,t) \Delta t + \sigma(t) (\underbrace{B_{t+\Delta t}- B_t}_{\mathcal{N}(0,\Delta t)})}_{\mathcal{N}\bigl( X_t + \mu(X_t,t) \Delta t \,\, , \,\,\, \sigma(t)^2 \Delta t \bigr)}.
+  \end{aligned}
+  $$
+  Note that $B_{t+\Delta t}-B_t, (X_s)_{s\in [0,t]}$ are independent.
+- Discretization of (@eq-DisSDE) $\implies$ Add an independent normal distribution (noise) step by step.
+:::
+
+## Why $q(x_{t-1}\vert x_t)\approx$ normal? $\quad$ Method 1
+![](images/SDE-rev.svg){width=80%}
+
+::::: {.incremental}
+:::: {.columns}
+::: {.column style="width: 49%; border-right: 1px solid #000"}
+> - The process $X_0,X_1,\cdots,X_T,$ under $q,$ is a discretization of some process $(\widetilde{X}_t)_{t\in [0,1]}$ which satisfies the SDE
+  $$
+  \begin{aligned}
+    \mathrm{d}\widetilde{X}_t = \mu(\widetilde{X}_t,t) \mathrm{d}t + \sigma(t) \mathrm{d}B_t.
+  \end{aligned}
+  $$
+
+- Consider the reverse-time process of $(\overline{X}_t)_{t\in [0,1]}$:
+  $$
+  \begin{aligned}
+    \overline{X}_t := \widetilde{X}_{1-t}, \quad t \in [0,1].
+  \end{aligned}
+  $$
+:::
+::: {.column}
+- By @ANDERSON1982313, $(\overline{X}_t)_{t\in [0,1]}$ satisfies the SDE, for some $\overline{\mu},$
+  $$
+  \begin{aligned}
+    d\overline{X}_t = \overline{\mu}(\overline{X}_t,t) \mathrm{d}t + \overline{\sigma}(t) \mathrm{d}\overline{B}_t,
+  \end{aligned}
+  $$ {#eq-ReverseSDE}
+  where $\overline{\sigma}(t)=\sigma(1-t).$
+- The process $X_T,X_{T-1},\cdots,X_1,X_0,$ under $q,$ is a discretization of $(\overline{X}_t)_{t\in [0,1]}.$
+- By (@eq-ReverseSDE), $q(x_{t-1} \vert x_t)$ can be approximated by Gaussian distribution.
+:::
+::::
+:::::
+
+## Why $q(x_{t-1}\vert x_t)\approx$ normal? $\quad$ Method 2
+[By Bayes' theorem and Taylor's theorem,
+$$
+\begin{aligned}
+  q(x_{t-1}\vert x_t) 
+  &= \frac{q(x_t\vert x_{t-1})q(x_{t-1})}{q(x_{t})} \cr
+  &= \mathcal{N}(x_t; \sqrt{\alpha_t}x_{t-1},\beta_t \mathbf{I}) \cdot \exp\bigl( \log q(x_{t-1}) - \log q(x_t) \bigr) \cr 
+  &\approx c \cdot \exp\Biggl\lbrace 
+  \underbrace{-\frac{\alpha_t}{2\beta_t} \Bigl( x_{t-1} - \frac{1}{\sqrt{\alpha_t}} x_t \Bigr)^2 + (x_{t-1}-x_t) \nabla_{x_t}\log q(x_t) }_{\text{A quadratic polynomial of }x_{t-1}\text{ with negative leading coefficient}}
+  \Biggr\rbrace.
+\end{aligned}
+$$]{style="font-size:150%"}
+
+<hr style='height:2px;border-width:0;color:gray;background-color:gray'>
+<br><br><br>  
+
+[Hence, $q(x_{t-1} \vert x_t)$ can be approximated by Gaussian distribution.]{.fragment style="font-size:200%"}
+  
+## Backward Process
+:::: {.columns}
+::: {.column width=60%}
+- We define the **backward process** as a Markov chain $X_T, X_{T-1},\cdots, X_0$
+  with 
+  - the initial distribution $p_{\theta}(x_T) = \mathcal{N}(\mathbf{0},\mathbf{I})$ and 
+  - the transition density
+  $$
+  \begin{aligned}
+    p_{\theta}(x_{t-1}\vert x_t) = {\color{red}{\mathcal{N}\bigl(x_{t-1}; \mu_{\theta}(x_t,t),\Sigma_{\theta}(x_t,t)\bigr)}},
+  \end{aligned}
+  $$
+  $\color{blue}{\text{where }\mu_{\theta},\Sigma_{\theta} \text{ is what we need to give.}}$
+
+> - The joint density of $(X_0,X_1,\cdots,X_{T-1},X_T),$ for the backward process (or ${\color{red}{\text{we say under }p_{\theta}}}$), is
+  $$
+  \begin{aligned}
+    p_{\theta}(x_{0:T}) = p_{\theta}(x_0 \vert x_1) \cdot p_{\theta}(x_1 \vert x_2) \cdots p_{\theta}(x_{T-1}\vert x_T) \cdot p_{\theta}(x_T).
+  \end{aligned}
+  $$
+- The simple idea is to learn $p_{\theta}(x_{t-1}\vert x_t)\approx q(x_{t-1}\vert x_t).$
+- In DDPM, we are actually going to learn 
+  $$
+  \begin{aligned}
+    \color{red}{p_{\theta}(x_{t-1}\vert x_t)\approx q(x_{t-1}\vert x_t,x_0).}
+  \end{aligned}
+  $$
+  $q(x_{t-1}\vert x_t,x_0)$ is normal since
+    $$
+    \begin{aligned}
+      q(x_{t-1}\vert x_t,x_0) = 
+      \frac{\overbrace{q(x_{t-1}\vert x_0) q(x_t\vert x_{t-1})}^{\exp\text{ of a quadratic polynomial of } x_{t-1} \text{ with negative leading coefficient}}}{\underbrace{q(x_t\vert x_0)}_{\text{constant}}}.
+    \end{aligned}
+    $$
+:::
+::: {.column width=40%}
+![](images/DP_density_reverse.svg)
+:::
+::::
+
+# To determine μ~θ~,Σ~θ~
+
+::: {.remark style="font-size:150%"}
+$$
+\begin{aligned}
+  p_{\theta}(x_{t-1}\vert x_t) = {\color{red}{\mathcal{N}\bigl(x_{t-1}; \mu_{\theta}(x_t,t),\Sigma_{\theta}(x_t,t)\bigr)}}.
+\end{aligned}
+$$
+:::
+
+## Goal
+::::: {.columns}
+:::: {.column width=55%}
+- The **main purpose** of the diffusion model is to learn a distribution $p_{\theta}(x_0)$ such that $p_{\theta}(x_0)\approx q(x_0).$
+
+> - One way is to minimize $D_{\mathtt{KL}}(q(x_0) \,\Vert\, p_{\theta}(x_0)).$
+- Our goal becomes to find
+  $$
+  \begin{aligned}
+  \mu_{\theta}^*, \Sigma_{\theta}^* 
+  &= \arg \min_{\mu_{\theta},\Sigma_{\theta}} D_{\mathtt{KL}} \bigl( q(x_0) \big\Vert p_{\theta}(x_0) \bigr) \cr 
+  &= \arg \min_{\mu_\theta,\Sigma_\theta} \biggl( -\int q(x_0) \log \Bigl( \frac{p_{\theta}(x_0)}{q(x_0)} \Bigr) \mathrm{d}x_0 \biggr) \cr
+  &= \arg \min_{\mu_{\theta},\Sigma_{\theta}} \biggl( \underbrace{-\int q(x_0) \log p_{\theta}(x_0) \mathrm{d}x_0}_{\color{blue}{\mathbb E_{X_0\sim q(x_0)}[-\log p_{\theta}(X_0)]}} \biggr).
+  \end{aligned}
+  $$
+- By the [evidence lower bound(ELBO)](https://en.wikipedia.org/wiki/Evidence_lower_bound),
+  $$
+  \begin{aligned}
+    -\log p_{\theta}(x_0)
+    \leq \mathbb E_{X_{1:T}\sim q(x_{1:T} \vert x_0)} \Bigl[ -\log \frac{p_{\theta}(x_0,X_{1:T})}{q(X_{1:T}\vert x_0)} \Bigr].
+  \end{aligned}
+  $$
+  Hence,
+  $$
+  \begin{aligned}
+    {\color{blue}{\mathbb E_{X_0\sim q(x_0)}[-\log p_{\theta}(X_0)]}} \leq 
+    \mathbb E_{X_{0:T}\sim q(x_{0:T})} \Bigl[ -\log \frac{p_{\theta}(X_{0:T})}{q(X_{1:T}\vert X_0)} \Bigr]:= L.
+  \end{aligned}
+  $$
+- Our goal becomes to minimize $L.$
+::::
+:::: {.column width=45%}
+![](images/DP_density_reverse1.svg){width="80%"}
+::::
+:::::
+
+---
+
+::::: {.incremental}
+:::: {.columns}
+::: {.column width=60%}
+> - Note that
+  $$
+  \begin{aligned}
+    L 
+    &= \mathbb E_{X_0\sim q(x_0)} \biggl[ D_{\mathtt{KL}} \Bigl( \underline{q(x_T \vert x_0)} \big\Vert \underline{p(x_T)} \Bigr) \Big\vert_{x_0=X_0} \biggr] \cr 
+    & \qquad + \sum_{t=2}^T 
+    \underbrace{\mathbb E_{X_0,X_t\sim q(x_0,x_{t})} \biggl[ 
+      D_{\mathtt{KL}} \Bigl( 
+              {\underline{\color{red}{q(x_{t-1} \vert x_t,x_0)}}}
+              \big\Vert 
+              \underline{\color{blue}{p_{\theta}(x_{t-1}\vert x_t)} }
+              \Bigr)\Big \vert_{x_0,x_t=X_0,X_t} 
+     \biggr]}_{L_{t-1}}  \cr 
+      & \qquad \qquad + \underbrace{\mathbb E_{X_0,X_1\sim q(x_0,x_1)} \biggl[ 
+        -\log {\color{blue}{p_{\theta}(x_0 \vert x_1)}} \Big\vert_{x_0,x_1=X_0,X_1}
+        \biggr]}_{L_0}.
+  \end{aligned}
+  $$
+
+- To minimize $L$ $\iff$ **To minimize** $L_{t-1},t=1,\cdots,T.$
+- We focus on $t\geq 2.$
+- By Bayes' rule and after a long calculation,
+  $$
+  \begin{aligned}
+    q(x_{t-1} \vert x_t,x_0) = \mathcal{N}\bigl( x_{t-1}; \mu_{t}(x_t,x_0),\Sigma_t \bigr),
+    \quad t = 2,\cdots,T,
+  \end{aligned}
+  $$
+  where
+  $$
+  \begin{aligned}
+    \mu_{t}(x_t,x_0)  = \frac{\sqrt{\overline{\alpha}_{t-1}}\beta_t}{1-\overline{\alpha}_t}x_0 + \frac{\sqrt{\alpha_t}(1-\overline{\alpha}_t)}{1-\overline{\alpha}_t}x_t ,
+    \quad
+    \Sigma_t = \frac{1-\overline{\alpha}_{t-1}}{1-\overline{\alpha}_t}\beta_t.
+  \end{aligned}
+  $$
+:::
+::: {.column width=40%}
+![](images/DP_density_reverse1.svg){width="90%"}
+:::
+::::
+:::::
+
+## To minimize $L_{t-1}$
+[Recall that $L_{t-1}=\mathbb E_{X_0,X_t\sim q(x_0,x_{t})} \biggl[ D_{\mathtt{KL}} \Bigl( {\underline{\color{red}{q(x_{t-1} \vert x_t,x_0)}}}\big\Vert \underline{\color{blue}{p_{\theta}(x_{t-1}\vert x_t)} }\Bigr)\Big \vert_{x_0,x_t=X_0,X_t} \biggr].$]{.fragment}
+
+::::: {.fragment}
+:::: {.columns}
+::: {.column width="45%"}
+For each $t=2,\cdots, T,$
+our goal is to minimize
+$$
+\begin{aligned}
+  D_{\mathtt{KL}} \Bigl( 
+      {\underline{\color{red}{q(x_{t-1} \vert x_t,x_0)}}}
+      \big\Vert 
+      \underline{\color{blue}{p_{\theta}(x_{t-1}\vert x_t)} }
+      \Bigr),
+\end{aligned}
+$$
+where
+$$
+\begin{aligned}
+  {\color{red}{q(x_{t-1} \vert x_t,x_0)}} &=  \mathcal{N}\bigl( x_{t-1}; \mu_{t}(x_t,x_0),\Sigma_t \bigr) ,\cr 
+  {\color{blue}{p_{\theta}(x_{t-1}\vert x_t)}} &=  \mathcal{N}(x_{t-1};{\color{green}{\mu_{\theta}(x_t,t),\Sigma_{\theta}(x_t,t)}})
+\end{aligned}
+$$
+:::
+
+::: {.column width="55%"}
+with
+$$
+\begin{aligned}
+  \mu_{t}(x_t,x_0) &= \frac{\sqrt{\overline{\alpha}_{t-1}}\beta_t}{1-\overline{\alpha}_t}x_0 + \frac{\sqrt{\alpha_t}(1-\overline{\alpha}_{t-1})}{1-\overline{\alpha}_t}x_t , \cr
+  \Sigma_t &= \frac{1-\overline{\alpha}_{t-1}}{1-\overline{\alpha}_t}\beta_t \mathbf{I}.
+\end{aligned}
+$$
+:::
+::::
+:::::
+
+<hr style='height:1px;border-width:0;color:gray;background-color:gray'>
+
+> - Recall that if $q\sim \mathcal{N}(\mu_1,\Sigma_1), p\sim \mathcal{N}(\mu_2,\Sigma_2)$ in $\mathbb R^n,$
+    then
+    $$
+    \begin{aligned}
+      D_{\mathtt{KL}}(q\Vert p) = \frac{1}{2} \Bigl( \log\frac{\left\lvert \Sigma_2 \right\rvert}{\left\lvert \Sigma_1 \right\rvert} - n + \operatorname{tr}(\Sigma_2^{-1}\Sigma_1) + (\mu_2-\mu_1)^T \Sigma_2^{-1} (\mu_2-\mu_1) \Bigr).
+    \end{aligned}
+    $$
+- $\color{red}{\textbf{We choose}}$
+  $$
+  \begin{aligned}
+    {\color{green}{\Sigma_{\theta}(x,t)}} =
+    \Sigma_t &= \frac{1-\overline{\alpha}_{t-1}}{1-\overline{\alpha}_t}\beta_t \mathbf{I}
+    := \sigma_t^2 \mathbf{I}.
+  \end{aligned}
+  $$
+  Then
+  $$
+  \begin{aligned}
+    D_{\mathtt{KL}} \Bigl( 
+        {\underline{\color{red}{q(x_{t-1} \vert x_t,x_0)}}}
+        \big\Vert 
+        \underline{\color{blue}{p_{\theta}(x_{t-1}\vert x_t)} }
+        \Bigr)  
+    = \frac{1}{2\sigma_t^2} \left\lVert \mu_t(x_t,x_0) - \mu_{\theta}(x_t,t) \right\rVert^2 .
+  \end{aligned}
+  $$
+
+## To determine $\mu_{\theta}(x_t,t)$
+::::: {.incremental}
+:::: {.columns}
+::: {.column style="width: 39%; border-right: 1px solid #000"}
+> - Want: $\mu_{\theta}(x_t,t)\approx \mu_t(x_t,x_0).$
+
+- Try to set $\mu_{\theta}(x_t,t)=\mu_t(x_t,\widehat{x}_0),$ where
+  $$
+  \begin{aligned}
+    \widehat{x}_0=\widehat{x}_0(x_t,t).
+  \end{aligned}
+  $$
+  
+- Write
+  $$
+  \begin{aligned}
+    X_t = \sqrt{\overline{\alpha}_t} X_0 + \sqrt{1-\overline{\alpha}_t} \overline{\varepsilon}_t.
+  \end{aligned}
+  $$ {#eq-x0xtrelation}
+  Then under $q,$
+  $\overline{\varepsilon}_t\perp X_0,$ $\overline{\varepsilon}_t\sim N(\mathbf{0},\mathbf{I}).$
+- For each $t,$ we let $\color{blue}{\widehat{x}_0=\widehat{x}_0(x_t,t)}$ s.t.
+  $$
+  \begin{aligned}
+    x_t = \sqrt{\overline{\alpha}_t} {\color{blue}{\widehat{x}_0}} + \sqrt{1-\overline{\alpha}_t} {\color{red}{\varepsilon_{\theta}(x_t,t)}},
+  \end{aligned}
+  $$
+  where **${\color{red}{\varepsilon_{\theta}}}$ is our model to predict the ${\color{red}{\textbf{real noise }\overline{\varepsilon}_t}}$ by giving $x_t,t.$**
+- We replace $x_0$ by (@eq-x0xtrelation) and we get
+  $$
+  \begin{aligned}
+    \mu_t(x_t,x_0) 
+    &= \mu_t \Bigl( x_t, \frac{1}{\sqrt{\overline{\alpha}_t}}\bigl( x_t-\sqrt{1-\overline{\alpha}_t} \overline{\varepsilon}_t \bigr) \Bigr) \cr
+    &=\frac{1}{\sqrt{\alpha_t}} \Bigl( 
+      x_t - \frac{\beta_t}{\sqrt{1-\overline{\alpha}_t}} {\color{red}{\overline{\varepsilon}_t}} 
+    \Bigr).
+  \end{aligned}
+  $$
+:::
+::: {.column width="60%"}
+- $\color{red}{\textbf{We reparametrise}}$ $\mu_{\theta}$ by
+  $$
+  \begin{aligned}
+    {\color{green}{\mu_{\theta} (x,t)}} 
+    = \mu_t(x,\widehat{x}_0(x,t)) 
+    = \frac{1}{\sqrt{\alpha_t}} \Bigl( 
+      x - \frac{\beta_t}{\sqrt{1-\overline{\alpha}_t}} {\color{red}{\varepsilon_{\theta} (x,t) }}
+      \Bigr).
+  \end{aligned}
+  $$
+  
+  > - Given $t,x_t,$
+    $$
+    \begin{aligned}
+      \text{predict }\overline{\varepsilon}_t \iff {\color{blue}{\text{predict } X_0}}.
+    \end{aligned}
+    $$
+    
+    ![](images/real_denoise.jpg)
+- Hence,
+  $$
+  \begin{aligned}
+    D_{\mathtt{KL}} \Bigl( 
+        {\underline{\color{red}{q(x_{t-1} \vert x_t,x_0)}}}
+        \big\Vert 
+        \underline{\color{blue}{p_{\theta}(x_{t-1}\vert x_t)} }
+        \Bigr) 
+        = \frac{\beta_t^2}{2\sigma_t^2 \alpha_t (1-\overline{\alpha}_t)} \left\lVert \overline{\varepsilon}_t - \varepsilon_{\theta}(x_t,t) \right\rVert^2.
+  \end{aligned}
+  $$   
+:::
+::::
+:::::
+
+# Training and Sampling
+
+:::::: {.columns}
+::::: {.column}
+:::: {.fragment}
+::: {.remark}
+We will minimize $\mathbb E_{X\sim q(x)}[f_{\theta}(X)]$ by
+
+- **repeat** **until** converge:
+  
+  >- sampling $x\sim q(x)$ and then
+  >- minimizing $f_{\theta}(x)$ by taking gradient descent on $\theta.$
+:::
+::::
+:::::
+::::: {.column}
+:::: {.fragment}
+::: {.remark}
+We may sample $(x,y)\sim q(x,y)$ by
+
+> - sampling $x\sim q(x)$ and then
+> - sampling $y\sim q(y\vert x).$
+:::
+::::
+:::::
+::::::
+
+## Training
+
+Minimize each $L_{t-1}=\mathbb E_{X_0,X_t\sim q(x_0,x_{t})} \biggl[ D_{\mathtt{KL}} \Bigl( {\underline{\color{red}{q(x_{t-1} \vert x_t,x_0)}}} \big\Vert \underline{\color{blue}{p_{\theta}(x_{t-1}\vert x_t)} } \Bigr)\Big \vert_{x_0,x_t=X_0,X_t} \biggr]$ by the follows:
+
+- Sample $x_0\sim q(x_0);$
+- Sample $x_t\sim q(x_t\vert x_0)$ by $x_t = \sqrt{\overline{\alpha}_t} x_0 + \sqrt{1-\overline{\alpha}_t} \overline{\varepsilon}_t,$ 
+  where $\overline{\varepsilon}_t\sim \mathcal{N}(\mathbf{0},\mathbf{I});$
+- Minimize $D_{\mathtt{KL}} \Bigl( {\underline{\color{red}{q(x_{t-1} \vert x_t,x_0)}}}\big\Vert \underline{\color{blue}{p_{\theta}(x_{t-1}\vert x_t)} } \Bigr)$ by minimizing $\left\lVert \overline{\varepsilon}_t - \varepsilon_{\theta}(x_t,t) \right\rVert^2.$
+
+```pseudocode
+#| label: alg-test-text-style
+#| html-indent-size: "1.2em"
+#| html-comment-delimiter: "▷"
+#| html-line-number: true
+#| html-line-number-punc: ":"
+#| html-no-end: false
+#| pdf-placement: "htb!"
+#| pdf-line-number: true
+
+\begin{algorithm}
+\caption{Training}
+\begin{algorithmic}
+\Repeat
+  \State $t\sim \text{Uniform}(\lbrace 1,\cdots,T \rbrace)$ 
+    \Comment{Sample random step}
+  \State $x_0\sim q(x_0)$
+    \Comment{Sample random initial data}
+  \State $\varepsilon\sim \mathcal{N}(\mathbf{0},\mathbf{I})$
+    \Comment{Sample random noise}
+  \State $x_t = \sqrt{\overline{\alpha}_t}x_0 + \sqrt{1-\overline{\alpha}_t}\varepsilon$
+    \Comment{Rand. step of rand. trajectory}
+  \State Take gradient descent step on
+  $\left\lVert \varepsilon - \varepsilon_{\theta}(x_t,t) \right\rVert^2$
+    \Comment{Optimization}
+\Until{converged}
+\end{algorithmic}
+\end{algorithm}
+```
+
+## Sampling
+
+:::: {.columns}
+::: {.column}
+- Recall that $p_{\theta}(x_{t-1}\vert x_t)\sim \mathcal{N}(\mu_{\theta}(x_t,t),\sigma_t \mathbf{I}),$
+  where
+  $$
+  \begin{aligned}
+    \mu_{\theta} (x,t) = \frac{1}{\sqrt{\alpha_t}} \Bigl( 
+      x - \frac{\beta_t}{\sqrt{1-\overline{\alpha}_t}} {\color{red}{\varepsilon_{\theta} (x,t) }}
+      \Bigr).
+  \end{aligned}
+  $$
+:::
+
+::: {.column}
+- We sample $x_{t-1}$ from $p_{\theta}$ by the follows:
+  - Given $x_t;$
+  - Sample $z \sim \mathcal{N}\bigl( \mathbf{0}, \mathbf{I} \bigr);$
+  - Sample $x_{t-1}$ by
+    $$
+    \begin{aligned}
+      x_{t-1} = \mu_{\theta} (x_t, t) + \sigma_t z. 
+    \end{aligned}
+    $$
+:::
+::::
+
+```pseudocode
+#| label: alg-diffusion-model-sampling
+#| html-indent-size: "1.2em"
+#| html-comment-delimiter: "▷"
+#| html-line-number: true
+#| html-line-number-punc: ":"
+#| html-no-end: false
+#| pdf-placement: "htb!"
+#| pdf-line-number: true
+
+\begin{algorithm}
+\caption{Sampling}
+\begin{algorithmic}
+\State $x_T\sim \mathcal{N}(\mathbf{0},\mathbf{I})$ 
+  \Comment{Initial isotropic gaussian noise sampling}
+\For{$t=T,\cdots,1$}
+  \State $z\sim \mathcal{N}(\mathbf{0},\mathbf{I})$ if $t>1,$ else $z=\mathbf{0}$
+    \Comment{Sample random noise (if not last step)}
+  \State $\widehat{\varepsilon} = \varepsilon_{\theta}(x_t,t)$
+    \Comment{Estimated noise in current noisy data}
+  \State $\widehat{\mu} = \frac{1}{\sqrt{\alpha_t}} \Big(x_t-\frac{\beta_t}{\sqrt{1-\overline{\alpha}_t}}\widehat{\varepsilon}\Big)$
+    \Comment{Mean for previous step sampling}
+  \State $x_{t-1}=\widehat{\mu}+\sigma_t z$
+    \Comment{Previous step sampling}
+\EndFor
+\Return $x_0$
+\end{algorithmic}
+\end{algorithm}
+```
+
+## Sampling 
+
+We can write @alg-diffusion-model-sampling shorter as @alg-diffusion-model-sampling-shortly.
+
+```pseudocode
+#| label: alg-diffusion-model-sampling-shortly
+#| html-indent-size: "1.2em"
+#| html-comment-delimiter: "//"
+#| html-line-number: true
+#| html-line-number-punc: ":"
+#| html-no-end: false
+#| pdf-placement: "htb!"
+#| pdf-line-number: true
+
+\begin{algorithm}
+\caption{Sampling}
+\begin{algorithmic}
+\State $x_T\sim \mathcal{N}(\mathbf{0},\mathbf{I})$ 
+\For{$t=T,\cdots,1$}
+  \State $z\sim \mathcal{N}(\mathbf{0},\mathbf{I})$ if $t>1,$ else $z=\mathbf{0}$
+  \State $x_{t-1}=\frac{1}{\sqrt{\alpha_t}}\Big(x_t-\frac{1-\alpha_t}{\sqrt{1-\overline{\alpha}_t}}\varepsilon_{\theta}(x_t,t)\Big)+\sigma_t z$
+\EndFor
+\Return $x_0$
+\end{algorithmic}
+\end{algorithm}
+```
+
+## Sampling
+
+![<https://towardsdatascience.com/understanding-diffusion-probabilistic-models-dpms-1940329d6048>](images/final-goal.webp)
+
+## Sampling [`mnist`](<https://huggingface.co>)
+
+- `mnist`
+
+  ![](images/sampling/diffusion-mnist-number6.gif){width="30%"}
+  ![](images/sampling/diffusion-minst-number8.gif){width="30%"}
+
+- `fashion_mnist`
+
+  ![](images/sampling/diffusion-mnist-cloth.gif){width="30%"}
+
+## Sampling anime face 1
+::::: {.columns}
+:::: {.column width=40%}
+#### Data (from [Anime Face Dataset](https://www.kaggle.com/datasets/splcher/animefacedataset))
+![](images/sampling/face1.jpg)
+::::
+:::: {.column width=10%}
+::::
+:::: {.column width=40%}
+#### Sample, reverse process and estimate $x_0$
+::: {layout-ncol=3}
+![](images/sampling/diffusion-sample-24.png){width="80%"}
+
+![](images/sampling/diffusion-24.gif)
+
+![](images/sampling/Estimate_x0-4.gif)
+
+![](images/sampling/diffusion-sample-25.png){width="80%"}
+
+![](images/sampling/diffusion-25.gif)
+
+![](images/sampling/Estimate_x0-5.gif)
+
+![](images/sampling/diffusion-sample-26.png){width="80%"}
+
+![](images/sampling/diffusion-26.gif)
+
+![](images/sampling/Estimate_x0-6.gif)
+:::
+::::
+:::::
+
+::: {layout-ncol=7}
+![](images/sampling/diffusion-6.gif)
+
+![](images/sampling/diffusion-7.gif)
+
+![](images/sampling/diffusion-9.gif)
+
+![](images/sampling/diffusion-10.gif)
+
+![](images/sampling/diffusion-11.gif)
+
+![](images/sampling/diffusion-12.gif)
+
+![](images/sampling/diffusion-13.gif)
+::: 
+
+## Sampling anime face 2 
+::::: {.columns}
+:::: {.column width=35%}
+#### Data
+::: {layout-ncol=3}
+![](images/sampling/ka-face/001980_01.png)
+
+![](images/sampling/ka-face/002520_01.png)
+
+![](images/sampling/ka-face/003450_01.png)
+
+![](images/sampling/ka-face/007290_01.png)
+
+![](images/sampling/ka-face/011100_01.png)
+
+![](images/sampling/ka-face/014010_01.png)
+
+![](images/sampling/ka-face/015810_01.png)
+
+![](images/sampling/ka-face/035460_01.png)
+
+![](images/sampling/ka-face/031170_01.png)
+:::
+::::
+:::: {.column width=20%}
+::::
+:::: {.column width=45%}
+#### Sample, reverse process and estimate $x_0$
+::: {layout-ncol=3}
+![](images/sampling/ka-1/suc/x0.png){width="80%"}
+
+![](images/sampling/ka-1/suc/diffusion-20.gif)
+
+![](images/sampling/ka-1/suc/Estimate_x0.gif)
+
+![](images/sampling/ka-1/suc2/x0.png){width="80%"}
+
+![](images/sampling/ka-1/suc2/diffusion-20.gif)
+
+![](images/sampling/ka-1/suc2/Estimate_x0.gif)
+
+![](images/sampling/ka-1/fail/x0.png){width="80%"}
+
+![](images/sampling/ka-1/fail/diffusion-20.gif)
+
+![](images/sampling/ka-1/fail/Estimate_x0.gif)
+:::
+::::
+:::::
+
+::: {layout-ncol=5}
+![](images/sampling/ka-1/diffusion-14.gif){width="80%"}
+
+![](images/sampling/ka-1/diffusion-15.gif){width="80%"}
+
+![](images/sampling/ka-1/diffusion-16.gif){width="80%"}
+
+![](images/sampling/ka-1/diffusion-17.gif){width="80%"}
+
+![](images/sampling/ka-1/diffusion-18.gif){width="80%"}
+::: 
+
+## Estimate $x_0$
+::: {layout-ncol=5}
+```{r, echo=FALSE,message=FALSE,results="asis"}
+for (i in 1:10) {
+  image_name <- sprintf("![](images/sampling/Estimated_x0/%0*d.png)",3,i)
+  cat(image_name)
+  cat("\n")
+  cat("\n")
+}
+```
+:::
+
+---
+
+:::: {.columns}
+::: {.column width="25%"}
+#### face 1 
+![](images/sampling/face1.jpg)
+
+#### face 2
+
+::: {layout-ncol=3}
+![](images/sampling/ka-face/001980_01.png)
+
+![](images/sampling/ka-face/002520_01.png)
+
+![](images/sampling/ka-face/003450_01.png)
+
+![](images/sampling/ka-face/007290_01.png)
+
+![](images/sampling/ka-face/011100_01.png)
+
+![](images/sampling/ka-face/014010_01.png)
+
+![](images/sampling/ka-face/015810_01.png)
+
+![](images/sampling/ka-face/035460_01.png)
+
+![](images/sampling/ka-face/031170_01.png)
+:::
+:::
+::: {.column width="10%"}
+:::
+::: {.column width="55%"}
+::: {.fragment}
+#### Only train [one epoch]{style="color:blue;"} on face 2
+![](images/sampling/just_one_train.png){width="60%"}
+:::
+
+::: {.fragment}
+#### Use the model trained on face 1 and train it [one epoch]{style="color:blue;"} on face 2
+![](images/sampling/use_kaggle_pretrain.png){width="60%"}
+:::
+:::
+::::
+
+## Review
+::: {.incremental}
+> - The **main purpose** of all **generative models** is to learn a distribution $p_{\theta}(x_0)$ such that
+  $$
+  \begin{aligned}
+    p_{\theta}(x_0)\approx q(x_0).
+  \end{aligned}
+  $$
+
+- Our goal: Find
+  $$
+  \begin{aligned}
+  \mu_{\theta}^*, \Sigma_{\theta}^* 
+  = \arg \min_{\mu_{\theta},\Sigma_{\theta}} D_{\mathtt{KL}} \bigl( q(x_0) \big\Vert p_{\theta}(x_0) \bigr)
+  = \arg \min_{\mu_{\theta},\Sigma_{\theta}} \underbrace{\color{blue}{\mathbb E_{X_0\sim q(x_0)}[-\log p_{\theta}(X_0)]}}_{:=L}.
+  \end{aligned}
+  $$
+
+- By some calculation,
+  $$
+  \begin{aligned}
+    L 
+    &= \mathbb E_{X_0\sim q(x_0)} \biggl[ D_{\mathtt{KL}} \Bigl( \underline{q(x_T \vert x_0)} \big\Vert \underline{p(x_T)} \Bigr) \Big\vert_{x_0=X_0} \biggr] 
+    + \sum_{t=2}^T 
+    \underbrace{\mathbb E_{X_0,X_t\sim q(x_0,x_{t})} \biggl[ 
+      D_{\mathtt{KL}} \Bigl( 
+              {\underline{\color{red}{q(x_{t-1} \vert x_t,x_0)}}}
+              \big\Vert 
+              \underline{\color{blue}{p_{\theta}(x_{t-1}\vert x_t)} }
+              \Bigr)\Big \vert_{x_0,x_t=X_0,X_t} 
+     \biggr]}_{L_{t-1}}  \cr 
+      & \qquad \qquad + \underbrace{\mathbb E_{X_0,X_1\sim q(x_0,x_1)} \bigl[ 
+        -\log {\color{blue}{p_{\theta}(X_0 \vert X_1)}}
+        \bigr]}_{L_0}.
+  \end{aligned}
+  $$
+- In DDPM, we choose the special $\mu_{\theta},\Sigma_{\theta}$ so that
+  $$
+  \begin{aligned}
+    D_{\mathtt{KL}} \Bigl( 
+        {\underline{\color{red}{q(x_{t-1} \vert x_t,x_0)}}}
+        \big\Vert 
+        \underline{\color{blue}{p_{\theta}(x_{t-1}\vert x_t)} }
+        \Bigr) 
+        = \frac{\beta_t^2}{2\sigma_t^2 \alpha_t (1-\overline{\alpha}_t)} \left\lVert \overline{\varepsilon}_t - \varepsilon_{\theta}(x_t,t) \right\rVert^2,
+  \end{aligned}
+  $$
+  where **${\color{red}{\varepsilon_{\theta}}}$ is our model to predict the real noise $\overline{\varepsilon}_t$ by giving $t,x_t.$**
+  - Given $t,x_t,$
+    $$
+    \begin{aligned}
+      \text{predict }\overline{\varepsilon}_t \iff {\color{blue}{\text{predict } X_0}}.
+    \end{aligned}
+    $$
+:::
+
+## Conclusions
+
+- DDPM: 不慢慢從 $X_t$ 去得到 $X_{t-1},$ 而是預測 $X_t$ 的噪聲 $\overline{\varepsilon}_t$ (ResNet).
+  - 等價於預測當下 $X_0.$
+- DDPM 優點: 
+  - 多樣性高, 具有豐富數學理論.
+- DDPM 缺點:
+  - 生成很慢
+    - Denoising Diffusion Implicit Models (DDIM).
+  - Inception score 輸給 GAN.
+
+## DDPM 後續發展
+### Improved DDPM
+
+- Recall that $p_{\theta}(x_{t-1}\vert x_t) = \mathcal{N}(x_{t-1};\mu_{\theta}(x_t,t),\Sigma_{\theta}(x_t,t)).$
+  - DDPM 直接取 $\Sigma_{\theta}(x_t,t)=\sigma_t^2 \mathbf{I}.$
+  - Improved DDPM 將 $\Sigma_{\theta}(x_t,t)$ 令成可學習的參數.
+- $\beta$ schedule
+  - ![](images/2023-09-24 21.32.20.png){width=80%}
+- 衍生出 [Diffusion Models Beat GANs on Image Synthesis]{style="text-decoration: underline;"}, [GLIDE]{style="text-decoration: underline;"}, [DALL·E]{style="text-decoration: underline;"}.
+
+### Diffusion Models Beat GANs on Image Synthesis
+- Adapted group normalization
+- classifier guidance
+  - 加速採樣
+  - 衍生出 classifier-free guidance
+    - used in [GLIDE]{style="text-decoration: underline;"}, [DALL·E]{style="text-decoration: underline;"}.
+
+## GLIDE
+
+![](images/DM/2023-10-11-17-58-53.png)
+
+## DALL·E
+**"An expressive oil painting of a basketball player dunking, depicted as an explosion of a nebula."**
+
+:::: {.columns}
+::: {.column}
+![DALL·E 2](images/basketball2.png)
+:::
+::: {.column}
+![DALL·E 3](images/basketball3.png)
+:::
+::::
+
+# Appendix
+
+## Multivariate normal distribution
+
+Let $X=[X_1,\cdots,X_n]^T\sim \mathcal{N}(\mu,\Sigma)$ in $\mathbb R^n,$ where $\mu \in \mathbb R^n$ and $\Sigma \in \mathbb R^{n\times n}$ is a positive semi-definite matrix.
+
+- For $n=1,$ we rewrite
+  $X\sim \mathcal{N}(\mu,\sigma^2)$ in $\mathbb R,$
+  where $\mu,\sigma\in \mathbb R.$
+  Then
+  $$
+  \begin{aligned}
+    f_X(x) = \frac{1}{\sqrt{2\pi \sigma^2}} \exp \Big\lbrace-\frac{1}{2}\cdot \frac{(x-\mu)^2}{\sigma^2} \Big\rbrace, \quad x \in \mathbb R.
+  \end{aligned}
+  $$
+  Or, equivalently,
+  there exists $Z\sim \mathcal{N}(0,1)$ in $\mathbb R$ such that
+  $$
+  \begin{aligned}
+    X = \sigma Z + \mu.
+  \end{aligned}
+  $$
+- For general $n\in \mathbb N.$
+  $$
+  \begin{aligned}
+    f_{X}(x) 
+    = \frac{1}{\sqrt{(2\pi)^{n}\det(\Sigma)}}\exp\Bigl\lbrace -\frac{1}{2}(x-\mu)^T \Sigma^{-1}(x-\mu) \Bigr\rbrace,
+    \quad x \in \mathbb R^n.
+  \end{aligned}
+  $$
+  
+  - If $\Sigma = A A^T$ for some $A\in \mathbb R^{n\times\ell},$
+    then there exist $Z_i\sim \mathcal{N}(0,1),i=1\sim \ell$ i.i.d. in $\mathbb R$ such that
+    $$
+    \begin{aligned}
+      X = AZ + \mu,
+    \end{aligned}
+    $$
+    where $Z=[Z_1,\cdots,Z_\ell]^T.$
+
+## Forward process is a discretization of an SDE {#sec-Forward-SDE-dis}
+
+- See Appendix B of @song2021scorebased.
+- By Taylor's theorem,
+  $$
+  \begin{aligned}
+    X_{t+1} &= \sqrt{1-\beta_{t+1}} X_t + \sqrt{\beta_{t+1}} \varepsilon_{t+1}, \cr 
+    &\approx X_t - \frac{1}{2}\beta_{t+1}X_t + \sqrt{\beta_{t+1}} \varepsilon_{t+1},
+    \quad t=0,1,\cdots, T-1.
+  \end{aligned}
+  $$
+- We scale $t\in \lbrace 0,1,\cdots, T-1 \rbrace$ to $[0,1]$ by
+  $$
+  \begin{aligned}
+    \widetilde{X}_{t} = X_{t\cdot T}, \quad t = 0,\frac{1}{T},\cdots, \frac{T-1}{T}.
+  \end{aligned}
+  $$
+  $\widetilde{\beta}_t, \widetilde{\varepsilon}_t$ are the same.
+- Let $\Delta t = 1/T.$
+  If $\beta_{t+1}\approx \beta_{t},$
+  then
+  $$
+  \begin{aligned}
+    \widetilde{X}_{t+\Delta t} 
+    \approx \widetilde{X}_t - \frac{1}{2}
+    \cdot {\color{red}{\underbrace{\frac{\widetilde{\beta}_{t}}{\Delta t}}_{:=\beta(t)}}}
+    \cdot \widetilde{X}_t \cdot \Delta t + 
+    \sqrt{\color{red}{\underbrace{\frac{\widetilde{\beta}_{t}}{\Delta t}}_{:=\beta(t)}}} \cdot
+    {\color{blue}{\underbrace{\sqrt{\Delta t} \cdot \widetilde{\varepsilon}_{t+\frac{1}{T}}}_{\mathcal{N}(0,\Delta t)}}}, \quad t = 0,\frac{1}{T},\cdots , \frac{T-1}{T}.
+  \end{aligned}
+  $$
+  Hence, $\lbrace X_t\rbrace_{t=0}^T$ is a discretization of a continuous time process $(\widetilde{X}_t)_{t\in [0,1]},$ satisfying the SDE
+  $$
+  \begin{aligned}
+    \mathrm{d} \widetilde{X}_t = -\frac{1}{2} \beta(t) \widetilde{X}_t  \mathrm {d} t + \sqrt{ \beta(t) } \mathrm{d}B_t.
+  \end{aligned}
+  $$
+
+## KL-divergence {#KL-divergence}
+
+- 假設一個 random element $X$ on $\mathcal{X}$ 上有兩個 density $q,p,$
+  其中 
+  
+  - $q$ 是我們真正有的 density, 
+  
+  - $p=p_{\theta}$ 是我們 model 要逼近 $q$ 的 density.
+  
+  有個衡量 $q,p$ 差異性的是 $\mathtt{KL}$-divergence:
+  $$
+  \begin{aligned}
+    D_{\mathtt{KL}}(q \Vert p) = \mathbb E_{X\sim q}\Bigl[ \log\frac{q(X)}{p(X)} \Bigr]
+    = \int_{x\in \mathcal{X}} q(x) \log \frac{q(x)}{p(x)} \mathrm{d}x.
+  \end{aligned}
+  $$
+
+- Minimize KL divergence $\iff$ Maximize likelihood.
+
+- For any $p,q,$ $D_{\mathtt{KL}}(q\Vert p) \geq 0.$
+  
+  - $D_{\mathtt{KL}}(q\Vert p) = 0  \iff q=p.$
+
+- KL-divergence 在 $q,p$ 都是 normal 時有解析式.
+  
+  - If $q\sim \mathcal{N}(\mu_1,\Sigma_1), p\sim \mathcal{N}(\mu_2,\Sigma_2)$ in $\mathbb R^n,$
+    then
+    $$
+    \begin{aligned}
+      D_{\mathtt{KL}}(q\Vert p) = \frac{1}{2} \Bigl( \log\frac{\left\lvert \Sigma_2 \right\rvert}{\left\lvert \Sigma_1 \right\rvert} - n + \operatorname{tr}(\Sigma_2^{-1}\Sigma_1) + (\mu_2-\mu_1)^T \Sigma_2^{-1} (\mu_2-\mu_1) \Bigr).
+    \end{aligned}
+    $$
+
+--- 
+### Minimize KL divergence $\iff$ Maximize likelihood.
+
+Let $\lbrace x^{(1)},\cdots, x^{(n)} \rbrace$ be samples from $q.$ Then
+$$
+\begin{aligned}
+  \theta^{\star} 
+  &= \arg \max_{\theta} \log \prod_{i=1}^n p_{\theta}(x^{(i)})
+  = \arg \max_{\theta} \sum_{i=1}^n \log p_{\theta}(x^{(i)}) \cr 
+  &= \arg \max_{\theta} \frac{1}{n}\sum_{i=1}^n \log p_{\theta}(x^{(i)})  \stackrel{\text{SLLN}}{\approx} 
+  \arg \max_{\theta} \mathbb E_{X\sim q}\bigl[ \log p_{\theta}(X) \bigr] \cr 
+  &= \arg \max_{\theta} \int_{x} q(x) \log p_{\theta}(x) \mathrm{d}x - \int_{x} q(x) \log q(x) \mathrm{d}x \cr 
+  &= \arg \max_{\theta} \int_{x} q(x) \log\frac{p_{\theta}(x)}{q(x)} \mathrm{d}x = \arg\min_{\theta} D_{\mathtt{KL}} (q \Vert p_{\theta}).
+\end{aligned}
+$$
+
+## Images from
+
+- <https://yang-song.net/blog/2021/score/>
+- <https://lilianweng.github.io/posts/2021-07-11-diffusion-models/>
+- <https://towardsdatascience.com/understanding-diffusion-probabilistic-models-dpms-1940329d6048>
+- <https://cvpr2022-tutorial-diffusion-models.github.io>
+- <https://speech.ee.ntu.edu.tw/~hylee/ml/2023-spring.php>
+- <https://blog.sciencenet.cn/blog-548663-860740.html>
+- <https://huggingface.co>
+- <https://zh.wikipedia.org/zh-tw/吹響吧！上低音號>
+
+## Reference

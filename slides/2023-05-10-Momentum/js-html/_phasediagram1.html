@@ -1,0 +1,10 @@
+<figure id = "phasediagram1" style="position:relative; width:648px; height:490px; margin-left: auto; margin-right: auto"></figure>
+<script src="assets/phasediagram.js"></script>
+<script>
+  deleteQueue.push(renderLoading(d3.select("#phasediagram1")))
+  renderQueue.push(function(callback) {
+    phaseDiagram(d3.select("#phasediagram1"));
+    renderMath(document.getElementById("phasediagram1"))
+    callback(null);
+  });
+</script>

@@ -1,0 +1,37 @@
+---
+title: "Test"
+revealjs-plugins:
+  - my-revealjs
+---
+
+# 111111
+
+asdasdasd
+
+## Getting up
+
+- Turn off alarm
+- Get out of bed
+
+asdadas
+
+## Breakfast
+
+> - Eat eggs
+- Drink coffee
+
+::: {.callout-note}
+asdasdsd
+:::
+
+# 222222
+
+## Dinner
+
+- Eat spaghetti
+- Drink wine
+
+## Going to sleep
+
+- Get in bed
+- Count sheep

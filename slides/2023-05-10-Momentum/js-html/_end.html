@@ -1,0 +1,36 @@
+
+<script>
+
+// for (var i = 0; i < renderQueue.length; i++) {
+//   renderQueue[i](function() {})
+//   deleteQueue[i](function() {})
+// }
+  setTimeout(function() {
+    var q = d3.queue(1);
+
+    d3.zip(deleteQueue,renderQueue).forEach(function(fn) {
+      q.defer(function(callback) {
+        fn[1](callback);
+        fn[0](callback);
+        renderMath(document.body);
+      });
+      q.defer(function(callback) {
+        setTimeout(function() {
+          callback(null);
+        }, 50);
+      });
+    });
+    q.await(function(error) {
+      if (error) {
+        console.error("Render error.", error)
+      } else {
+        console.log("Render done.")
+      }
+    });
+  }, 50);
+
+// DEBUG
+// renderQueue.forEach( function (fn) { fn( function() {}) } )
+
+
+</script>

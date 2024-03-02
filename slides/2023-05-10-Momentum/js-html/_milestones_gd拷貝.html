@@ -1,0 +1,111 @@
+
+<figure style="position:relative; width:920px; height:360px" id = "milestones_gd">
+<figcaption style="position:absolute; text-align:left; left:135px; width:350px; height:80px">Optimization can be seen as combination of several component problems, shown here as <svg style="position:relative; top:2px; width:3px; height:14px; background:#fde0dd"></svg> 1 <svg style="position:relative; top:2px; width:3px; height:14px; background:#fa9fb5"></svg> 2 <svg style="position:relative; top:2px; width:3px; height:14px; background:#c51b8a"></svg> 3 with eigenvalues <svg style="position:relative; top:2px; width:3px; height:14px; background:#fde0dd"></svg> <dt-math>\\lambda_1=0.01</dt-math>, <svg style="position:relative; top:2px; width:3px; height:14px; background:#fa9fb5"></svg> <dt-math>\\lambda_2=0.1</dt-math>, and <svg style="position:relative; top:2px; width:3px; height:14px; background:#c51b8a"></svg> <dt-math>\\lambda_3=1</dt-math> respectively. </figcaption>
+
+<!-- ["#fde0dd", "#fa9fb5", "#c51b8a"]
+-->
+<div id = "sliderStep" style="position:absolute; left:550px; width:250px; height:100px">
+
+<div id="stepSizeMilestones"
+      class="figtext"
+      style="position:absolute; left:15px; top:15px">
+      Step-size
+</div>
+
+<div class="figtext2" id="milestones_gd_optstep"
+  style="position:absolute; font-size:11px; left:152px; top:18px; z-index:10; cursor: pointer">
+  Optimal Step-size
+</div>
+
+<svg style="position:absolute; font-size:10px; left:224px; top:34px">
+<line marker-end="url(#arrowhead)" style="stroke: black; stroke-width: 1.5; visibility: visible;" x2="5" y2="10" x1="5" y1="0"></line>
+</svg>
+
+</div>
+<div id = "obj"></div>
+</figure>
+<script src="assets/milestones.js"></script>
+<script>
+deleteQueue.push(renderLoading(d3.select("#milestones_gd")))
+renderQueue.push(function(callback) {
+  var graphDiv = d3.select("#obj")
+                  .style("width",  920 + "px")
+                  .style("height", 300 + "px")
+                  .style("top", "90px")
+                  .style("position", "relative")
+                  .style("margin-left", "auto")
+                  .style("margin-right", "auto")
+                  .attr("width", 920)
+                  .attr("height", 500)
+
+  var svg = graphDiv.append("svg")
+                    .attr("width", 920)
+                    .attr("height", 300)
+                    .style("position","absolute")
+                    .style("left", "15px")
+
+  var updateSliderGD = renderMilestones(svg, function() {});
+
+  var alphaHTML = MathCache("alpha-equals");
+
+  var slidera = sliderGen([250, 80])
+              .ticks([0,1,200/(101),2])
+              .change( function (i) {
+                var html = alphaHTML + '<span style="font-weight: normal;">' + i.toPrecision(4) + "</span>";
+                d3.select("#stepSizeMilestones")
+                  .html("Stepsize " + html )
+                updateSliderGD(i,0.000)
+              } )
+              .ticktitles(function(d,i) { return [0,1,"",2][i] })
+              .startxval(200/(101))
+              .cRadius(7)
+              .shifty(-12)
+              .shifty(10)
+              .margins(20,20)(d3.select("#sliderStep"))
+
+
+  // renderDraggable(svg, [133.5, 23], [114.5, 90], 2, " ").attr("opacity", 0.1)
+  // renderDraggable(svg, [133.5, 88], [115.5, 95], 2, " ").attr("opacity", 0.1)
+  // renderDraggable(svg, [132.5, 154], [114.5, 100], 2, " ").attr("opacity", 0.1)
+
+  d3.select("#milestones_gd_optstep").on("click", slidera.init)
+
+  svg.append("text")
+    .attr("class", "katex morsd mathit")
+    .style("font-size", "19px")
+    .style("font-family","KaTeX_Math")
+    .attr("x", 105)
+    .attr("y", 50)
+    .attr("text-anchor", "end")
+    .attr("fill", "gray")
+    .html("f(w<tspan baseline-shift = \"super\" font-size = \"15\">k</tspan>) - f(w<tspan baseline-shift = \"super\" font-size = \"15\">*</tspan>)")
+
+
+
+  svg.append("text")
+    .style("font-size", "13px")
+    .attr("x", 0)
+    .attr("y", 80)
+    .attr("dy", 0)
+    .attr("transform", "translate(110,0)")
+    .attr("class", "caption")
+    .attr("text-anchor", "end")
+    .attr("fill", "gray")
+    .text("At the initial point, the error in each component is equal.")
+
+  svg.selectAll(".caption").call(wrap, 100)
+
+
+  svg.append("text")
+    .style("font-size", "13px")
+    .attr("x", 420)
+    .attr("y", 270)
+    .attr("dy", 0)
+    .attr("dx", -295)
+    .attr("text-anchor", "start")
+    .attr("fill", "gray")
+    .text("At the optimum, the rates of convergence of the largest and smallest eigenvalues equalize.")
+
+  callback(null);
+});
+</script>

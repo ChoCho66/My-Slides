@@ -1,0 +1,55 @@
+
+<figure id="milestonesMomentumFig" style="position:relative; width:920px; height:460px">
+<figcaption style="position:absolute; text-align:left; top:30px; left:135px; width:280px; height:120px">We can do the same decomposition here with momentum, with eigenvalues
+  <span style="display: inline-block; padding-left: 4px; border-left: 3px solid #fde0dd">λ<sub>1</sub>=0.01</span>,
+  <span style="display: inline-block; padding-left: 4px; border-left: 3px solid #fa9fb5">λ<sub>2</sub>=0.1</span>, and
+  <span style="display: inline-block; padding-left: 4px; border-left: 3px solid #c51b8a">λ<sub>3</sub>=1</span>. Though the decrease is no longer monotonic, but significantly faster. </figcaption>
+<figcaption style="position:absolute; text-align:left; top:210px; left:15px; width:280px; height:120px; font-size:15px">f(w<sup>k</sup>)-f(w<sup>*</sup>)</figcaption>
+<figcaption style="position:absolute; text-align:left; top:430px; left:140px; width:780px; height:120px"> Note that the optimal parameters do not necessarily imply the fastest convergence, though, only the fastest asymptotic convergence rate. </figcaption>
+
+<div class="figtext" style="position:absolute; left:705px; top:11px">Step-size α = </div>
+<div class="figtext" style="position:absolute; left:464px; top:30px">Momentum β = </div>
+
+<div id = "sliderStep2D" style="position:absolute; left:550px; width:250px; height:100px; top:10px"></div>
+<div id = "milestonesMomentum" style="position:relative; left:15px"></div>
+</figure>
+<script>
+  deleteQueue.push(renderLoading(d3.select("#milestonesMomentumFig")))
+  renderQueue.push(function(callback) {
+    var graphDiv = d3.select("#milestonesMomentum")
+                  .style("width",  920 + "px")
+                  .style("height", 300 + "px")
+                  .style("top", "170px")
+                  .style("position", "relative")
+                  .style("margin-left", "auto")
+                  .style("margin-right", "auto")
+                  .attr("width", 920)
+                  .attr("height", 500)
+
+  var svg = graphDiv.append("svg").attr("width", 940).attr("height", 500)
+
+  var update = renderMilestones(svg, function() {})
+  var reset = slider2D(d3.select("#sliderStep2D"),
+                          function(x,y) { update(x,y) },
+                          1,
+                          100)
+
+  // // Swoopy Annotator
+  annotations = [
+    {
+      "x": 0,
+      "y": 0,
+      "path": "M 798,98 A 27.97 27.97 0 0 0 760.9999389648438,70.9999771118164",
+      "text": "Optimal parameters",
+      "textOffset": [
+        740,
+        109
+      ]
+    }
+  ]
+  var sel = drawAnnotations(d3.select("#milestonesMomentumFig"), annotations)
+  sel.selectAll("text").style("cursor", "pointer").style("pointer-events","all").on("click", reset)
+  callback(null);
+});
+
+</script>

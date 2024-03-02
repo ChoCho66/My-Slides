@@ -1,0 +1,42 @@
+
+<figure id = "flow" style="position: relative;display: block;margin-left: auto;margin-right: auto;width: 920px;height: 705px;">
+
+<figcaption style="left:790px; top:430px; position:absolute; width:130px">
+    The eigenvectors of the colorization problem form a generalized Fourier basis for <dt-math>R^n</dt-math>. The smallest eigenvalues have low frequencies, hence gradient descent corrects high frequency errors well but not low frequency ones.
+</figcaption>
+
+</figure>
+<script src="assets/flow.js"></script>
+<script>
+  deleteQueue.push(renderLoading(d3.select("#flow")))
+  renderQueue.push(function(callback) {
+    d3.queue()
+      .defer(d3.json, "assets/data/Sigma.json")
+      .defer(d3.json, "assets/data/matrix.json")
+      .defer(d3.json, "assets/data/Uval.json")
+      .await(function(error, FlowSigma, M, FlowU) {
+        if (error) {
+          console.error("Error loading data files");
+        }
+        else {
+          var reset = renderFlowWidget(d3.select("#flow"), FlowSigma, M, FlowU)
+          // Swoopy Annotator
+          var annotations = [
+            {
+              "x": 0,
+              "y": 0,
+              "path": "M 389,55 A 28.57 28.57 0 0 0 352,30",
+              "text": "Optimal parameters",
+              "textOffset": [
+                341,
+                65
+              ]
+            }
+          ]
+          var sel = drawAnnotations(d3.select("#flow"), annotations)
+          sel.selectAll("text").style("cursor", "pointer").style("pointer-events","all").on("click", reset)
+        }
+      });
+    callback(null);
+  });
+</script>

@@ -1,0 +1,56 @@
+ <figure style = "width:750px; height:340px; display:block; margin-left:auto; margin-right:auto; position:relative" id = "change_of_variables">
+  <div id = "mom1" style="width:400px; position:absolute; left:0px; top:0px"></div>
+  <div id = "mom2" style="width:400px; position:absolute; left:400px; top:0px"></div>
+  </svg>
+</figure>
+  
+<script>
+deleteQueue.push(renderLoading(d3.select("#change_of_variables")))
+renderQueue.push(function(callback) {
+  var U = givens(Math.PI/4)
+  var Ut = numeric.transpose(U)
+  // Render Foreground
+  var left = d3.select("#mom1").style("border", "1px solid rgba(0, 0, 0, 0.2)")
+
+  var c1 = genIterDiagram(quadf,  [0,0], [[-3,3],[-3,3]])
+            .width(340)
+            .height(340)
+            .iters(300)
+            .alpha(0.018)
+            .showSolution(false)
+            .pathWidth(1)
+            .circleRadius(1.5)
+            .pointerScale(0.8)
+            .showStartingPoint(false)
+            .drag(function() {
+              c2.control(c1.alpha(),
+                        c1.beta(),
+                        numeric.dot(U,c1.w0())) })
+            (left)
+
+  var right = d3.select("#mom2").style("border", "1px solid rgba(0, 0, 0, 0.2)")
+  var c2 = genIterDiagram(eyef,  [0,0], [[-3,3],[-3,3]])
+            .width(340)
+            .height(340)
+            .iters(300)
+            .alpha(0.018)
+            .showSolution(false)
+            .pathWidth(1)
+            .circleRadius(1.5)
+            .pointerScale(0.8)
+            .showStartingPoint(false)
+            .drag(function() {
+              c1.control(c2.alpha(),
+                        c2.beta(),
+                        numeric.dot(Ut,c2.w0())) })
+            (right)
+
+// Initialize
+c2.control(0.018,0,[-2.5,1])
+c1.control(0.018,0,numeric.dot(Ut,[-2.5,1]));
+callback(null);
+});
+
+</script>
+
+

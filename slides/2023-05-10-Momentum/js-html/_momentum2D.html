@@ -1,0 +1,82 @@
+<figure id = "momentum2D" style="width:984px; height:540px">
+<div class = "l-body" style="display:block">
+  <div id = "momentumCanvas" style="position:absolute; left:45px"></div>
+  <div id = "momentumAnnotation" style="position:absolute; width: 204px; height: 80px; left: 630px; top: 20px;"></div>
+  <div style="position:absolute; width: 204px; height: 80px; left: 643px; top: 10px;" class ="figtext" >
+    Convergence Rate
+
+  </div>
+
+  <figcaption style="position:absolute; width: 204px; height: 80px; left: 645px; top: 86px;">
+  <p><small>A plot of max{|σ<sub>1</sub>,σ<sub>2</sub>|} reveals distinct regions, each with its own style of convergence.
+  </small></p>
+  </figcaption>
+
+</div>
+<div id = "taxonomy"></div>
+<svg id="momentumOverlay" style="position:absolute; width:984px; height:540px; z-index:4; pointer-events:none"></svg>
+</figure>
+<script src="assets/momentum.js"></script>
+<script>
+deleteQueue.push(renderLoading(d3.select("#momentum2D")))
+renderQueue.push(function(callback) {
+var defaults = [[0.0015, 0.9],
+              [0.0015, 0.125],
+              [0.01, 0.00001],
+              [0.02, 0.05   ],
+              [0.025, 0.235 ]]
+
+coor = render2DSliderGen(
+function(a,b,bold) {
+  var xy = coor(a,b)
+  updatePaths[0](xy[0], xy[1],bold)
+  updateStemGraphs[0](a,b)
+},
+function(a,b,bold) {
+  var xy = coor(a,b)
+  updatePaths[1](xy[0], xy[1],bold)
+  updateStemGraphs[1](a,b)
+},
+function(a,b,bold) {
+  var xy = coor(a,b)
+  updatePaths[2](xy[0], xy[1],bold)
+  updateStemGraphs[2](a,b)
+},
+function(a,b,bold) {
+  var xy = coor(a,b)
+  updatePaths[3](xy[0], xy[1],bold)
+  updateStemGraphs[3](a,b)
+},
+function(a,b,bold) {
+  var xy = coor(a,b)
+  updatePaths[4](xy[0], xy[1],bold)
+  updateStemGraphs[4](a,b)
+}, defaults)(d3.select("#momentumCanvas"))
+
+var tax = renderTaxonomy(d3.select("#momentum2D"))
+
+var updatePaths = renderOverlay(d3.select("#momentumOverlay"), tax.div)
+var updateStemGraphs = tax.update
+
+colorMap(
+d3.select("#momentumAnnotation"),
+180,
+d3.scaleLinear().domain([0,0.3,0.5,0.7,1,1.01]).range(colorbrewer.YlGnBu[5].concat(["black"])),
+d3.scaleLinear().domain([0,1.2001]).range([0, 180])
+)
+
+var up = function (i, alpha, beta) {
+        var xy = coor(alpha, beta)
+        updatePaths[i](xy[0], xy[1], true)
+        updateStemGraphs[i](alpha,beta)
+      }
+
+for (var i = 0; i<5; i++) {
+up(i,defaults[i][0], defaults[i][1])
+}
+
+renderMath(document.getElementById("momentum2D"))
+
+callback(null);
+});
+</script>

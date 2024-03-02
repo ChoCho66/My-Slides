@@ -1,0 +1,39 @@
+# author: ChoCho
+date-format: iso
+# institute: NCU
+format:
+  revealjs:
+    ###### for mathjax
+    # include-in-header:
+      # - other/mathjax-preamble.html
+      # - text: $$\DeclareMathOperator*{\argmin}{arg\,min}$$
+    embed-resources: true
+    html-math-method: katex
+    # incremental: true
+    transition: fade
+    transition-speed: fast
+    fontsize: 24px
+    scrollable: true
+    smooth-scroll: true
+    echo: true
+    # footer: "foot"
+    # logo: cover.jpg
+    slide-number: true
+    sc-sb-title: true
+    # show-notes: separate-page
+    # show-notes: true
+    # pdf-separate-fragments: true
+    pdf-max-pages-per-slide: 2
+    # bibliography: other/references.bib
+    link-citations: true
+# revealjs-plugins:
+  # - pointer
+filters:
+  - reveal-header
+  - reveal-auto-agenda
+auto-agenda:
+  heading: "Table of Contents"
+slide-number: c/t
+crossref:
+  eq-prefix: ""
+  eq-labels: arabic
