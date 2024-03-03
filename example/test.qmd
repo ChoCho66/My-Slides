@@ -2,11 +2,48 @@
 title: "Test"
 revealjs-plugins:
   - my-revealjs
----
+---     
 
 # 111111
 
 asdasdasd
+
+
+## vline
+- Let $\varepsilon > 0.$
+  
+  :::: {.vline}
+  [$\varepsilon$ is fixed]{.vtext}
+  We have 
+  $$
+  \begin{aligned}
+    X_t = \sqrt{\alpha_t}X_{t-1} + \sqrt{1-\alpha_t} \varepsilon_{t}.
+  \end{aligned}
+  $$
+  lower 1 asd wd awdawd dafejepi definition
+  To have the concepts of **independence** and **noise**, 
+  we need to have probability measures.
+  In the following text, we use lowercase $q(x)$ to denote the density of the probability measure $\mathbf{Q}$ corresponding to the random variable $X.$
+  Others (e.g., $q(x_t),p_{\theta}(x_t)$) are the same. 
+  ($p_{\theta}$ corresponds to $\mathbf{P}_{\theta}$).
+  We also use $q(x_{0:t})$ to denote the density of $(X_0,X_1,\cdots,X_t):=X_{0:t}$ for the probability measure $\mathbf{Q}.$
+  Others are the same.
+
+  Suppose $q_{\text{want}}(x_0)$ is the density of $X_0$ we want to pursue.
+  We do not know what $q_{\text{want}}(x_0)$ is.
+  We only have some eligible images (discrete data) with mass function ${\color{blue}{q(x_0)}}.$
+  When this discrete data large, $q(x_0)\approx q_{\text{want}}(x_0)$ in some sense of distribution.
+  **Our goal** is to find a density $p(x_0)$ of $X_0$ such that $p(x_0)\approx q_{\text{want}}(x_0)$ in some sense of distribution.
+
+  ::: {.vline}
+  [asdaisdj adj paisdj aps djap]{.vtext}
+  Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim
+  labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi
+  animcupidatat excepteur officia. Reprehendt cupidatat ullamco ut ea consectetur et est culpa et
+  culpa duis.
+  :::
+
+  ::::
 
 ## Getting up
 
