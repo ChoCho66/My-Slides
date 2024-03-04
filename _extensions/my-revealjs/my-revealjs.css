@@ -130,14 +130,14 @@ canvas {
 } */
 
 .vline {
-  padding: 0rem 1rem;
-  border-left: .15rem solid #D3D3D3;
-  color: var(--bs-body-color);
-  position: relative;
   margin-top: var(--r-main-font-size);
   margin-bottom: var(--r-main-font-size);
   margin-left: 0;
   margin-right: 0;
+  padding: 0rem 1rem;
+  border-left: .15rem solid #D3D3D3;
+  color: var(--bs-body-color);
+  position: relative;
 }
 
 .vline .vtext {

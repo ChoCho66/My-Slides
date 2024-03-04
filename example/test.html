@@ -1318,14 +1318,14 @@ margin-left: var(--r-main-font-size);
 }
 
 .vline {
-padding: 0rem 1rem;
-border-left: .15rem solid #D3D3D3;
-color: var(--bs-body-color);
-position: relative;
 margin-top: var(--r-main-font-size);
 margin-bottom: var(--r-main-font-size);
 margin-left: 0;
 margin-right: 0;
+padding: 0rem 1rem;
+border-left: .15rem solid #D3D3D3;
+color: var(--bs-body-color);
+position: relative;
 }
 .vline .vtext {
 font-size: calc(var(--r-main-font-size) * 2/3);
@@ -1717,10 +1717,32 @@ margin-right: 0; }
 </div></li>
 </ul>
 </div>
-<p>asdasdasd</p>
+<p><span class="math display">
+\begin{aligned}
+  A &amp;\coloneqq B \cr
+  C &amp;:= D. \qquad  
+\end{aligned}
+</span></p>
 </section>
 <section id="vline" class="slide level2">
 <h2>vline</h2>
+<ul>
+<li><p><span class="fragment">Let <span class="math inline">\varepsilon &gt; 0.</span></span></p>
+<div class="vline fragment">
+<p><span class="vtext"><span class="math inline">\varepsilon</span> is fixed</span> We have <span class="math display">
+\begin{aligned}
+  X_t = \sqrt{\alpha_t}X_{t-1} + \sqrt{1-\alpha_t} \varepsilon_{t}.
+\end{aligned}
+</span> lower 1 asd wd awdawd dafejepi definition To have the concepts of <strong>independence</strong> and <strong>noise</strong>, we need to have probability measures. In the following text, we use lowercase <span class="math inline">q(x)</span> to denote the density of the probability measure <span class="math inline">\mathbf{Q}</span> corresponding to the random variable <span class="math inline">X.</span> Others (e.g., <span class="math inline">q(x_t),p_{\theta}(x_t)</span>) are the same. (<span class="math inline">p_{\theta}</span> corresponds to <span class="math inline">\mathbf{P}_{\theta}</span>). We also use <span class="math inline">q(x_{0:t})</span> to denote the density of <span class="math inline">(X_0,X_1,\cdots,X_t):=X_{0:t}</span> for the probability measure <span class="math inline">\mathbf{Q}.</span> Others are the same.</p>
+<p>Suppose <span class="math inline">q_{\text{want}}(x_0)</span> is the density of <span class="math inline">X_0</span> we want to pursue. We do not know what <span class="math inline">q_{\text{want}}(x_0)</span> is. We only have some eligible images (discrete data) with mass function <span class="math inline">{\color{blue}{q(x_0)}}.</span> When this discrete data large, <span class="math inline">q(x_0)\approx q_{\text{want}}(x_0)</span> in some sense of distribution. <strong>Our goal</strong> is to find a density <span class="math inline">p(x_0)</span> of <span class="math inline">X_0</span> such that <span class="math inline">p(x_0)\approx q_{\text{want}}(x_0)</span> in some sense of distribution.</p>
+<div class="vline fragment">
+<p><span class="vtext">asdaisdj adj paisdj aps djap</span> Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi animcupidatat excepteur officia. Reprehendt cupidatat ullamco ut ea consectetur et est culpa et culpa duis.</p>
+</div>
+</div></li>
+</ul>
+</section>
+<section id="vline2" class="slide level2">
+<h2>vline2</h2>
 <ul>
 <li><p>Let <span class="math inline">\varepsilon &gt; 0.</span></p>
 <div class="vline">
@@ -2721,7 +2743,7 @@ window.QuartoSupport = function () {
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': false,
-'pdfSeparateFragments': false,
+'pdfSeparateFragments': true,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
