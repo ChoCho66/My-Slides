@@ -1,0 +1,209 @@
+---
+title: "My-revealjs Example"
+author:
+  - name: Your Name
+    orcid: 0000-0000-0000-0000
+    email: alias@email.com
+    affiliations: Your Institution
+  - name: Your Name
+    orcid: 0000-0000-0000-0000
+    email: alias@email.com
+    affiliations: Your Institution
+revealjs-plugins:
+  - my-revealjs
+embed-resources: false
+---
+
+## 0 
+
+```{ojs}
+//| echo: false
+FileAttachment("Kongming.png").image()
+```
+
+## 1
+
+```{ojs}
+//| echo: false
+{
+  let target = DOM.element('div')
+  let options = {
+    target,
+    grid: true,
+    yAxis: {domain: [-1.5, 1.5]},
+    xAxis: {domain: [-3.5, 3.5]},
+    data: [    
+      { fn: 'sqrt(1 - x * x)', color: '#000080' },
+      { fn: '-sqrt(1 - x * x)', color: '#000080' },
+      {
+        points: [
+          [0, 0],
+          [Math.cos(unitCircleA * Math.PI / 180), Math.sin(unitCircleA * Math.PI / 180)]
+        ],
+        fnType: 'points',
+        graphType: 'polyline',
+        color: 'red'
+      },
+      {
+        points: [
+          [Math.cos(unitCircleA * Math.PI / 180), 0],
+          [Math.cos(unitCircleA * Math.PI / 180), Math.sin(unitCircleA * Math.PI / 180)]
+        ],
+        fnType: 'points',
+        graphType: 'polyline',
+        color: 'red'
+      }
+    ]
+  }
+  functionPlot(options)
+
+  return target
+}
+viewof unitCircleA = slider({
+  min: -10, 
+  max: 360, 
+  step: 1, 
+  value: 45, 
+  title: "angle", 
+  description: `the angle in the circle`
+})
+```
+
+## 2
+
+```{ojs}
+//| echo: false
+{
+  let target = DOM.element('div')
+  let options = {
+    target,
+    grid: true,
+    data: [
+      { 
+        fn: 'a * x^2 + c',
+        scope: { a: integralsA, c: integralsC }
+      },
+      { 
+        fn: 'a * x^3 / 3',
+        scope: { a: integralsA, c: integralsC }
+      }
+    ]
+  }
+  functionPlot(options)
+
+  return target
+}
+viewof integralsA = slider({
+  min: -10, 
+  max: 10, 
+  step: 0.01, 
+  value: 10, 
+  title: "a", 
+  description: `the value of a in the equation a * x^2 + c`
+})
+viewof integralsC = slider({
+  min: -10, 
+  max: 10, 
+  step: 0.01, 
+  value: 1, 
+  title: "c", 
+  description: `the value of a in the equation a * x^2 + c`
+})
+```
+
+## other
+
+```{ojs}
+//| echo: false
+{
+  let target = DOM.element('div')
+  functionPlot({
+    target: '#butterfly-curve',
+    yAxis: {domain: [-4.428571429, 4.428571429]},
+    xAxis: {domain: [-7, 7]},
+    data: [{
+      x: 'sin(t) * (exp(cos(t)) - 2 cos(4t) - sin(t/12)^5)',
+      y: 'cos(t) * (exp(cos(t)) - 2 cos(4t) - sin(t/12)^5)',
+      range: [-10 * Math.PI, 10 * Math.PI],
+      fnType: 'parametric',
+      graphType: 'polyline'
+    }],
+    target
+  });
+  return target
+}
+```
+
+
+
+```{ojs}
+//| echo: false
+targetA = {
+  let target = DOM.element('div')
+  return target
+}
+targetB = {
+  let target = DOM.element('div')
+  return target
+}
+joinTargets = {
+  let a = functionPlot({
+    target: targetA,
+    xAxis: { domain: [-6, 6] },
+    yAxis: { domain: [-6, 6] },
+    annotations: [
+      {
+        y: 1,
+        text: 'max'
+      },
+      {
+        y: -1,
+        text: 'min'
+      }
+    ],
+    data: [
+      {
+        fn: '(x^3) / 3 - 2 * x * x + 3 * x + 2',
+        // fn: 'sin(x)',
+        graphType: 'polyline',
+        derivative: {
+          fn: 'x * x - 4 * x + 3',
+          // fn: 'cos(x)',
+          updateOnMouseMove: true
+        }
+      }
+    ]
+  })
+  let b = functionPlot({
+    target: targetB,
+    xAxis: { domain: [-4, 8] },
+    yAxis: { domain: [-4, 8] },
+    annotations: [
+      {
+        x: 1,
+        text: 'intercept'
+      },
+      {
+        x: 3,
+        text: 'intercept'
+      }
+    ],
+    data: [
+      {
+        fn: 'x * x - 4 * x + 3',
+        graphType: 'polyline'
+      }
+    ]
+  })
+  a.addLink(b)
+  b.addLink(a)
+  return "targets joined!"
+}
+```
+
+
+```{ojs}
+//| echo: false
+functionPlot = require("function-plot@1.22.2/dist/function-plot")
+import {slider} from "@jashkenas/inputs"
+```

@@ -7,6 +7,20 @@ pdf-separate-fragments: true
 # 111111
 
 
+## math
+
+$$
+\begin{aligned}
+  \begin{bmatrix}
+    \begin{bmatrix}
+    \boxed{cc} & \boxed{dd} \cr 
+    \boxed{cc} & \boxed{dd} \cr 
+  \end{bmatrix} \cr 
+    \boxed{cc} & \boxed{dd}
+  \end{bmatrix}
+\end{aligned}
+$$
+
 $$
 \begin{aligned}
   A &\coloneqq B \cr

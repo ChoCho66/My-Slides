@@ -52,7 +52,7 @@ revealjs-plugins:
 
 ## ASD
 
-{{< embed fig.ipynb#Diffusion-model >}}
+{{< embed fig.ipynb#Plotttttty >}}
 
 ## CCC
 

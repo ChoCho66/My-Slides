@@ -199,8 +199,6 @@ html-math-method: mathjax
 
 ---
 
-- 按 f 可進入全螢幕模式, 互動式網頁才不會跑版 (後面的也一樣).
-
 {{< include js-html/_banana.html >}}
 
 ::: {.notes}
@@ -447,7 +445,7 @@ html-math-method: mathjax
   \end{aligned}
   $$
   the iterations break apart again.
-  @eq-Momentumeq1 becomes
+  Hence, (@eq-Momentumeq1) becomes
   $$
   \begin{aligned}
     y_i^{k+1} &= \beta y_i^k + \lambda_i x_i^k, \cr 
@@ -456,7 +454,7 @@ html-math-method: mathjax
   $$ {#eq-MomentumQ}
   in each $i$-th component.
 
-- For each $i,$ we rewrite @eq-MomentumQ as
+- For each $i,$ we rewrite (@eq-MomentumQ) as
   $$
   \begin{aligned}
     \begin{bmatrix} y_i^k \\ x_i^k \\\end{bmatrix} = R_i^k \begin{bmatrix} y_i^0 \\ x_i^0 \\\end{bmatrix}, \quad R_i = \begin{bmatrix} \beta & -\alpha \beta \\ \lambda_i & 1-\alpha \lambda_i \\\end{bmatrix}.

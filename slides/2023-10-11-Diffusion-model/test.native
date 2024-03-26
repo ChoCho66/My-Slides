@@ -1,0 +1,36 @@
+Pandoc
+  Meta
+    { unMeta =
+        fromList
+          [ ( "auto-agenda"
+            , MetaMap
+                (fromList
+                   [ ( "heading"
+                     , MetaInlines
+                         [ Str "Table"
+                         , Space
+                         , Str "of"
+                         , Space
+                         , Str "Contents"
+                         ]
+                     )
+                   ])
+            )
+          , ( "crossref"
+            , MetaMap
+                (fromList
+                   [ ( "eq-labels" , MetaInlines [ Str "arabic" ] )
+                   , ( "eq-prefix" , MetaInlines [] )
+                   ])
+            )
+          , ( "date-format" , MetaInlines [ Str "iso" ] )
+          , ( "revealjs-plugins"
+            , MetaList [ MetaInlines [ Str "my-revealjs" ] ]
+            )
+          , ( "slide-number" , MetaInlines [ Str "c/t" ] )
+          ]
+    }
+  [ CodeBlock
+      ( "" , [ "pseudocode" ] , [] )
+      "#| label: alg-test-text-style\n#| html-indent-size: \"10em\"\n#| html-comment-delimiter: \"\9655\"\n#| html-line-number: true\n#| html-line-number-punc: \":\"\n#| html-no-end: false\n#| pdf-placement: \"htb!\"\n#| pdf-line-number: true\n\n\\begin{algorithm}\n\\caption{Training}\n\\begin{algorithmic}\n\\Repeat\n  \\State $t\\sim \\text{Uniform}(\\lbrace 1,\\cdots,T \\rbrace)$ \n    \\Comment{Sample random step}\n  \\State $x_0\\sim q(x_0)$\n    \\Comment{Sample random initial data}\n  \\State $\\varepsilon\\sim \\mathcal{N}(\\mathbf{0},\\mathbf{I})$\n    \\Comment{Sample random noise}\n  \\State $x_t = \\sqrt{\\overline{\\alpha}_t}x_0 + \\sqrt{1-\\overline{\\alpha}_t}\\varepsilon$\n    \\Comment{Rand. step of rand. trajectory}\n  \\State\n    $$\n    \\begin{aligned}\n      f(x) = y.\n    \\end{aligned}\n    $$\n    \n  \\State Take gradient descent step on\n  $\\left\\lVert \\varepsilon - \\varepsilon_{\\theta}(x_t,t) \\right\\rVert^2$\n    \\Comment{Optimization}\n\\Until{converged}\n\\end{algorithmic}\n\\end{algorithm}"
+  ]

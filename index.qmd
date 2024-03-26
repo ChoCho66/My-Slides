@@ -1,0 +1,57 @@
+---
+title: My Slides
+author: ""
+format: html
+# format: native
+# filters:
+#   - generate_table.lua
+# https://quarto.org/docs/websites/website-listings-custom.html
+# listing:
+#   contents: 
+#     - slides
+#   sort: "date desc"
+#   type: default
+---
+
+```{r}
+#| echo: false
+#| output: asis
+
+# 設定資料夾路徑
+folder_path <- "slides"
+
+# 找出所有的 index.qmd 檔案
+qmd_files <- list.files(path = folder_path, pattern = "index\\.qmd$", recursive = TRUE, full.names = TRUE)
+
+# 篩選出同資料夾內有 index.html 的 index.qmd 檔案
+qmd_files_with_html <- qmd_files[sapply(qmd_files, function(file) {
+  html_file <- gsub("index\\.qmd$", "index.html", file)
+  file.exists(html_file)
+})]
+
+df <- data.frame("Date"=numeric(0),"Title"=numeric(0))
+for (i in qmd_files_with_html) {
+  file_content <- rmarkdown:::read_utf8(i)
+  yaml_content <- rmarkdown:::parse_yaml_front_matter(file_content)
+  new_row <- data.frame(
+    "Date" = yaml_content$date,
+    "Title" = paste0("[",yaml_content$title,"](",dirname(i),")")
+  )
+  df <- rbind(df, new_row)
+}
+# 將 'date' column 的型態轉換為日期
+df$Date <- as.Date(df$Date)
+# 根據 'date' 進行升序排序
+sorted_df <- df[order(df$Date), ]
+
+# 顯示排序後的 dataframe
+
+cat("Date | Title\n")
+cat("------- | -------\n")
+for (i in 1:nrow(sorted_df)) {
+  cat(as.character(sorted_df[i,1]))
+  cat(" | ")
+  cat(as.character(sorted_df[i,2]))
+  cat("\n")
+}
+```
