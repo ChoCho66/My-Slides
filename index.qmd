@@ -48,10 +48,25 @@ sorted_df <- df[order(df$Date), ]
 
 cat("Date | Title\n")
 cat("------- | -------\n")
+result <- ""
 for (i in 1:nrow(sorted_df)) {
-  cat(as.character(sorted_df[i,1]))
-  cat(" | ")
-  cat(as.character(sorted_df[i,2]))
-  cat("\n")
+  result <- paste0(
+    result,
+    as.character(sorted_df[i,1]),
+    " | ",
+    as.character(sorted_df[i,2]),
+    "\n"
+  )
 }
+cat(result)
+```
+
+```{r}
+#| echo: false
+content <- paste0("
+# My slides
+
+Date | Title
+------- | -------\n", result)
+writeLines(content, "README.md")
 ```
