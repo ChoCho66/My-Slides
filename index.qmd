@@ -63,8 +63,8 @@ cat(result)
 
 ```{r}
 #| echo: false
-content <- paste0("
-# My slides
+content <- paste0(
+"# My slides
 
 Date | Title
 ------- | -------\n", result)

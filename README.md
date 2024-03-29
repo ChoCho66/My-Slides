@@ -1,4 +1,3 @@
-
 # My slides
 
 Date | Title
