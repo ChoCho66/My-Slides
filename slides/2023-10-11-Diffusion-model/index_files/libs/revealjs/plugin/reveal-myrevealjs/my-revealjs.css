@@ -122,9 +122,28 @@ canvas {
   margin-left: var(--r-main-font-size);
 }
 
-.vline {
+/* .vline {
   margin: 0 0 1rem;
   padding: 0rem 1rem;
   border-left: .15rem solid #D3D3D3;
   color: var(--bs-body-color);
+} */
+
+.vline {
+  margin-top: var(--r-main-font-size);
+  margin-bottom: var(--r-main-font-size);
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0rem 1rem;
+  border-left: .15rem solid #D3D3D3;
+  color: var(--bs-body-color);
+  position: relative;
+}
+
+.vline .vtext {
+  font-size: calc(var(--r-main-font-size) * 2/3);
+  position: absolute;
+  top: calc(var(--r-main-font-size) * -1);
+  left: calc(var(--r-main-font-size) * -1);
+  white-space: nowrap;
 }

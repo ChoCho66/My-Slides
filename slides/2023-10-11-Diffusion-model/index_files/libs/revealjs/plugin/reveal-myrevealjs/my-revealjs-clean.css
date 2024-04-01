@@ -10,6 +10,10 @@
   font-family: 'Menlo', sans-serif;
 }
 
+/* p {
+  font-family: 'Times New Roman', serif;
+} */
+
 .reveal ul li::marker {
   color: var(--main-color);
 }

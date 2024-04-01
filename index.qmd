@@ -1,5 +1,5 @@
 ---
-title: My Slides
+# title: My Slides
 author: ""
 format: html
 # format: native
@@ -12,6 +12,8 @@ format: html
 #   sort: "date desc"
 #   type: default
 ---
+
+## My Slides
 
 ```{r}
 #| echo: false
@@ -29,13 +31,21 @@ qmd_files_with_html <- qmd_files[sapply(qmd_files, function(file) {
   file.exists(html_file)
 })]
 
-df <- data.frame("Date"=numeric(0),"Title"=numeric(0))
+is_null <- function(d) {
+  if (is.null(d)) {
+    return("3000-01-01")
+  } else {
+    return(d)
+  }
+}
+
+df <- data.frame("Date" = numeric(0), "Title" = numeric(0))
 for (i in qmd_files_with_html) {
   file_content <- rmarkdown:::read_utf8(i)
   yaml_content <- rmarkdown:::parse_yaml_front_matter(file_content)
   new_row <- data.frame(
-    "Date" = yaml_content$date,
-    "Title" = paste0("[",yaml_content$title,"](",dirname(i),")")
+    "Date" = is_null(yaml_content$date),
+    "Title" = paste0("[", yaml_content$title, "](", dirname(i), ")")
   )
   df <- rbind(df, new_row)
 }
@@ -52,9 +62,9 @@ result <- ""
 for (i in 1:nrow(sorted_df)) {
   result <- paste0(
     result,
-    as.character(sorted_df[i,1]),
+    as.character(sorted_df[i, 1]),
     " | ",
-    as.character(sorted_df[i,2]),
+    as.character(sorted_df[i, 2]),
     "\n"
   )
 }
@@ -64,9 +74,10 @@ cat(result)
 ```{r}
 #| echo: false
 content <- paste0(
-"# My slides
+  "# My slides
 
 Date | Title
-------- | -------\n", result)
+------- | -------\n", result
+)
 writeLines(content, "README.md")
 ```

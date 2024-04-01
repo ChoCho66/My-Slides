@@ -1,7 +1,7 @@
 ---
-title: "Stochastic Gradient Descent"
-date: 2023-03-01
-# institute: NCU
+title: "Normalization"
+# speaker: ChoCho
+# date: 2024-06-06
 author:
   - name: ChoCho
     # orcid: 0000-0000-0000-0000
@@ -10,4 +10,12 @@ author:
 bibliography: [references.bib]
 revealjs-plugins:
   - my-revealjs
+# filters:
+  # - pseudocode
+  # - webr
+fontsize: 20px
+crossref:
+  eq-prefix: ""
+  eq-labels: arabic
+embed-resources: false
 ---
