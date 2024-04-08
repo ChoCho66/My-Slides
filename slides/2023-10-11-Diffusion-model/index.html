@@ -15,7 +15,7 @@
 <link href="index_files/libs/quarto-contrib/reveal-auto-agenda-0.0.3/reveal-auto-agenda.css" rel="stylesheet">
 <script src="index_files/libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="index_files/libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.5.25">
+  <meta name="generator" content="quarto-1.5.27">
 
   <meta name="author" content="ChoCho">
   <meta name="dcterms.date" content="2023-10-11">
@@ -535,7 +535,7 @@
   };
 
   // Store cell data
-  globalThis.qwebrCellDetails = [{"code":"N <- 15\nsample(\n    1:3,\n    N,\n    replace = TRUE,\n    prob = c(1,2,1)\n)","id":1,"options":{"warning":"true","fig-height":5,"read-only":"false","comment":"","fig-cap":"","classes":"","fig-width":7,"context":"interactive","out-height":"","message":"true","results":"markup","label":"unnamed-chunk-1","output":"true","autorun":"false","dpi":72,"out-width":"700px"}},{"code":"N <- 15\nsample(\n  1:6,\n  N,\n  replace = TRUE,\n  prob = c(1,1,1,1,1,1)\n)","id":2,"options":{"warning":"true","fig-height":5,"read-only":"false","comment":"","fig-cap":"","classes":"","fig-width":7,"context":"interactive","out-height":"","message":"true","results":"markup","label":"unnamed-chunk-2","output":"true","autorun":"false","dpi":72,"out-width":"700px"}},{"code":"x = rnorm(666,0,0.01)\nplot(x)","id":3,"options":{"warning":"true","fig-height":5,"read-only":"false","comment":"","fig-cap":"","classes":"","fig-width":7,"context":"interactive","out-height":"","message":"true","results":"markup","label":"unnamed-chunk-3","output":"true","autorun":"false","dpi":72,"out-width":"700px"}},{"code":"# Set the dimensions of the image\nwidth <- 32\nheight <- 32\n# Generate normally distributed random noise\nnoise <- matrix(\n  rnorm(width * height,\n    mean = 0, sd = 0.01\n  ),\n  nrow = height, ncol = width\n)\n# Display the noise image\n# Use a gray color scale\nimage(noise, col = gray.colors(256))","id":4,"options":{"warning":"true","fig-height":5,"read-only":"false","comment":"","fig-cap":"","classes":"","fig-width":7,"context":"interactive","out-height":"","message":"true","results":"markup","label":"unnamed-chunk-4","output":"true","autorun":"false","dpi":72,"out-width":"700px"}}];
+  globalThis.qwebrCellDetails = [{"code":"N <- 15\nsample(\n    1:3,\n    N,\n    replace = TRUE,\n    prob = c(1,2,1)\n)","options":{"context":"interactive","out-height":"","results":"markup","fig-cap":"","message":"true","classes":"","comment":"","fig-width":7,"out-width":"700px","fig-height":5,"label":"unnamed-chunk-1","autorun":"false","warning":"true","output":"true","read-only":"false","dpi":72},"id":1},{"code":"N <- 15\nsample(\n  1:6,\n  N,\n  replace = TRUE,\n  prob = c(1,1,1,1,1,1)\n)","options":{"context":"interactive","out-height":"","results":"markup","fig-cap":"","message":"true","classes":"","comment":"","fig-width":7,"out-width":"700px","fig-height":5,"label":"unnamed-chunk-2","autorun":"false","warning":"true","output":"true","read-only":"false","dpi":72},"id":2},{"code":"x = rnorm(666,0,0.01)\nplot(x)","options":{"context":"interactive","out-height":"","results":"markup","fig-cap":"","message":"true","classes":"","comment":"","fig-width":7,"out-width":"700px","fig-height":5,"label":"unnamed-chunk-3","autorun":"false","warning":"true","output":"true","read-only":"false","dpi":72},"id":3},{"code":"width <- 32\nheight <- 32\nnoise <- matrix(\n  rnorm(width * height, mean = 0, sd = 0.01),\n  nrow = height, ncol = width\n)\nimage(noise, col = gray.colors(256))","options":{"context":"interactive","out-height":"","results":"markup","fig-cap":"","message":"true","classes":"","comment":"","fig-width":7,"out-width":"700px","fig-height":5,"label":"unnamed-chunk-4","autorun":"false","warning":"true","output":"true","read-only":"false","dpi":72},"id":4}];
 
   </script>
   <script type="module">
@@ -1727,7 +1727,7 @@ p_{\theta}(x_{t-1}\vert x_{t}) \approx q(x_{t-1}\vert x_{t}).
 </span></li>
 </ul></li>
 <li class="fragment"><p>Although we don’t know what distribution <span class="math inline">q(x_{t-1}\vert x_{t})</span> is, <strong>we can approximate it with a normal</strong>.</p>
-<p><span class="fragment" style="font-size:200%"><strong>Why?</strong></span></p></li>
+<p><span class="fragment unvisible" style="font-size:200%"><strong>Why?</strong></span></p></li>
 </ul>
 </div><div class="column">
 <p><img data-src="images/DP_density_reverse.svg"></p>
@@ -2151,7 +2151,7 @@ D_{\mathtt{KL}} \Bigl(
 <li>Sample <span class="math inline">x_t\sim q(x_t\vert x_0)</span> by <span class="math inline">x_t = \sqrt{\overline{\alpha}_t} x_0 + \sqrt{1-\overline{\alpha}_t} \overline{\varepsilon}_t,</span> where <span class="math inline">\overline{\varepsilon}_t\sim \mathcal{N}(\mathbf{0},\mathbf{I});</span></li>
 <li>Minimize <span class="math inline">D_{\mathtt{KL}} \Bigl( {\underline{\color{red}{q(x_{t-1} \vert x_t,x_0)}}}\big\Vert \underline{\color{blue}{p_{\theta}(x_{t-1}\vert x_t)} } \Bigr)</span> by minimizing <span class="math inline">\left\lVert \overline{\varepsilon}_t - \varepsilon_{\theta}(x_t,t) \right\rVert^2.</span></li>
 </ul>
-<div id="alg-test-text-style" class="pseudocode-container" data-no-end="false" data-indent-size="1.2em" data-pseudocode-index="1" data-alg-title="Algorithm" data-comment-delimiter="▷" data-line-number="true" data-line-number-punc=":">
+<div id="alg-test-text-style" class="pseudocode-container" data-comment-delimiter="▷" data-pseudocode-index="1" data-line-number-punc=":" data-no-end="false" data-alg-title="Algorithm" data-indent-size="1.2em" data-line-number="true">
 <div class="pseudocode">
 \begin{algorithm} \caption{Training} \begin{algorithmic} \Repeat \State $t\sim \text{Uniform}(\lbrace 1,\cdots,T \rbrace)$ \Comment{Sample random step} \State $x_0\sim q(x_0)$ \Comment{Sample random initial data} \State $\varepsilon\sim \mathcal{N}(\mathbf{0},\mathbf{I})$ \Comment{Sample random noise} \State $x_t = \sqrt{\overline{\alpha}_t}x_0 + \sqrt{1-\overline{\alpha}_t}\varepsilon$ \Comment{Rand. step of rand. trajectory} \State Take gradient descent step on $\left\lVert \varepsilon - \varepsilon_{\theta}(x_t,t) \right\rVert^2$ \Comment{Optimization} \Until{converged} \end{algorithmic} \end{algorithm}
 </div>
@@ -2185,7 +2185,7 @@ D_{\mathtt{KL}} \Bigl(
 </ul>
 </div>
 </div>
-<div id="alg-diffusion-model-sampling" class="pseudocode-container" data-no-end="false" data-indent-size="1.2em" data-pseudocode-index="2" data-alg-title="Algorithm" data-comment-delimiter="▷" data-line-number="true" data-line-number-punc=":">
+<div id="alg-diffusion-model-sampling" class="pseudocode-container" data-comment-delimiter="▷" data-pseudocode-index="2" data-line-number-punc=":" data-no-end="false" data-alg-title="Algorithm" data-indent-size="1.2em" data-line-number="true">
 <div class="pseudocode">
 \begin{algorithm} \caption{Sampling} \begin{algorithmic} \State $x_T\sim \mathcal{N}(\mathbf{0},\mathbf{I})$ \Comment{Initial isotropic gaussian noise sampling} \For{$t=T,\cdots,1$} \State $z\sim \mathcal{N}(\mathbf{0},\mathbf{I})$ if $t&gt;1,$ else $z=\mathbf{0}$ \Comment{Sample random noise (if not last step)} \State $\widehat{\varepsilon} = \varepsilon_{\theta}(x_t,t)$ \Comment{Estimated noise in current noisy data} \State $\widehat{\mu} = \frac{1}{\sqrt{\alpha_t}} \Big(x_t-\frac{\beta_t}{\sqrt{1-\overline{\alpha}_t}}\widehat{\varepsilon}\Big)$ \Comment{Mean for previous step sampling} \State $x_{t-1}=\widehat{\mu}+\sigma_t z$ \Comment{Previous step sampling} \EndFor \Return $x_0$ \end{algorithmic} \end{algorithm}
 </div>
@@ -2194,7 +2194,7 @@ D_{\mathtt{KL}} \Bigl(
 <section id="sampling-1" class="slide level2">
 <h2>Sampling</h2>
 <p>We can write <a href="#/sampling">Algorithm 2</a> shorter as <a href="#/sampling-1">Algorithm 3</a>.</p>
-<div id="alg-diffusion-model-sampling-shortly" class="pseudocode-container" data-no-end="false" data-indent-size="1.2em" data-pseudocode-index="3" data-alg-title="Algorithm" data-comment-delimiter="//" data-line-number="true" data-line-number-punc=":">
+<div id="alg-diffusion-model-sampling-shortly" class="pseudocode-container" data-comment-delimiter="//" data-pseudocode-index="3" data-line-number-punc=":" data-no-end="false" data-alg-title="Algorithm" data-indent-size="1.2em" data-line-number="true">
 <div class="pseudocode">
 \begin{algorithm} \caption{Sampling} \begin{algorithmic} \State $x_T\sim \mathcal{N}(\mathbf{0},\mathbf{I})$ \For{$t=T,\cdots,1$} \State $z\sim \mathcal{N}(\mathbf{0},\mathbf{I})$ if $t&gt;1,$ else $z=\mathbf{0}$ \State $x_{t-1}=\frac{1}{\sqrt{\alpha_t}}\Big(x_t-\frac{1-\alpha_t}{\sqrt{1-\overline{\alpha}_t}}\varepsilon_{\theta}(x_t,t)\Big)+\sigma_t z$ \EndFor \Return $x_0$ \end{algorithmic} \end{algorithm}
 </div>

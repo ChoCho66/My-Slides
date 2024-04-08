@@ -1,4 +1,4 @@
-# My slides
+# My Slides
 
 Date | Title
 ------- | -------

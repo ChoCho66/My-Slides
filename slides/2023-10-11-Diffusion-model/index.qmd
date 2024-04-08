@@ -91,18 +91,12 @@ plot(x)
 :::: {.column}
 **Example**: Sample $\mathcal{N}(\mathbf{0},(0.01) \mathbf{I})$ in $\mathbb R^{32\times 32}.$
 ```{webr-r}
-# Set the dimensions of the image
 width <- 32
 height <- 32
-# Generate normally distributed random noise
 noise <- matrix(
-  rnorm(width * height,
-    mean = 0, sd = 0.01
-  ),
+  rnorm(width * height, mean = 0, sd = 0.01),
   nrow = height, ncol = width
 )
-# Display the noise image
-# Use a gray color scale
 image(noise, col = gray.colors(256))
 ```
 ::::
@@ -313,7 +307,7 @@ image(noise, col = gray.colors(256))
     $$
 - Although we don’t know what distribution $q(x_{t-1}\vert x_{t})$ is, **we can approximate it with a normal**.
   
-  [**Why?**]{.fragment style="font-size:200%"}
+  [**Why?**]{.fragment .unvisible style="font-size:200%"}
   
 :::
 ::: {.column}
