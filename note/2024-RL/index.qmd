@@ -1,0 +1,145 @@
+---
+title: "Test"
+revealjs-plugins:
+  - my-revealjs
+incremental: true
+embed-resources: true
+---
+
+## How we play a game
+- Begin with an initial (random) state $S_0.$
+  - Note that this randomness is by the computer.
+- We decide a (random) action $A_0.$
+  - Note that this randomness is by the player.
+- Under this action $A_0,$ we get a reward $R_1.$
+  - Note that $R_1 = R_1(S_0,A_0).$
+- After this action $A_0,$ the game becomes (random) a new state $S_1.$
+  - Note that this randomness is by the computer.
+- Similarly, we may get $S_1,A_1,R_2,\cdots$ until game passed or game over.
+
+
+## How we play a game
+- Begin with an initial state $S_0.$
+  - Note that this randomness is by the computer.
+- For $t=0,1,2,\cdots$ until game passed or game over.
+  - The state now is $S_t.$
+  
+  ::: {.vline}
+  [$S_t$ is given]{.vtext .fragment}
+
+  - We decide a (random) action $A_t.$
+    - Note that this randomness is by the player.
+  - Under this action $A_t,$ we get a reward $R_t.$
+    - Note that $R_t = R_t(S_t,A_t).$
+  - After this action $A_t,$ the game becomes (random) a new state $S_{t+1}.$
+    - Note that this randomness is by the computer.
+  :::
+  
+  
+
+## Player $\implies$ Machine ($\mathbf{M}$)
+- Begin with an initial state $S_0.$
+- For $t=0,1,2,\cdots$ until game passed or game over.
+  - The state now is $S_t.$
+  - $\mathbf{M}$ decide a (random) action $A_t.$
+    - Note that this randomness is by $\mathbf{M}$.
+    - Let $\pi_{\theta}(a_t \vert s_t)$ be the mass of the action $A_t$ given the state $S_t = s_t.$
+    - $A_t = A_t(\theta).$
+      
+  - Under this action $A_t,$ $\mathbf{M}$ get a reward $R_t.$
+    - $R_t = R_t(S_t,A_t).$
+  - After this action $A_t,$ the game becomes (random) a new state $S_{t+1}.$
+    - $S_{t+1} = S_{t+1}(\theta)$
+    - Note that this randomness is by the computer.
+    - Let $p(s'\vert s,a)$ be the mass that our game becomes the new state $s'$ by action $a$ under the state $s.$
+      - That is,
+        $$
+        \begin{aligned}
+          p(s'\vert s,a) = \mathbf{P} \bigl[ S_{t+1}= s' \vert S_t = s, A_t = a \bigr].
+        \end{aligned}
+        $$
+
+## To determine good or bad of $A_t$
+
+- Let $\tau = (S_0,A_0,S_1,A_1,\cdots).$ We call $\tau$ a trajectory of this game.
+  - Note that $\tau$ is a random vector determined by $\pi_\theta(a \vert s ), p(s'\vert s,a)$
+ for $a\in \mathcal{A}$ and $s,s'\in \mathcal{S}.$
+  - Let $p(s_0)$ be the mass of initial state $S_0.$
+    The joint mass of $\tau$ is defined by
+    $$
+    \begin{aligned}
+      & p(s_0) \cdot \pi_{\theta}(a_0\vert s_0) \cdot p(s_1\vert s_0, a_0) \cdot \pi_\theta (a_1\vert s_1) \cdot p(s_2\vert s_1,a_1) \cdot \cdots  \cr 
+      &= p(s_0) \cdot \prod_{k=0}^{\infty} \pi_{\theta}(s_k \vert a_k) \cdot p(s_{k+1}\vert s_k,a_k).
+    \end{aligned}
+    $$ 
+
+- For any fix $t.$
+  A measure of good of $A_t$ is $\mathbf{E}\bigl[ G_t \bigr],$ where
+  $$
+  \begin{aligned}
+    G_t &= R_t + \gamma R_{t+1} +  \gamma^2 R_{t+2} + \cdots \cr 
+    &= \sum_{k=t}^\infty \gamma^{k-t} R_k\bigl(S_k(\theta),A_k(\theta)\bigr).
+  \end{aligned}
+  $$
+  Our goal is to maximize $\sum_{t} \mathbf{E}\bigl[ G_t \bigr].$
+
+
+
+- If we already play at time $t-1.$
+  That is, we already samples the follows:
+  $$
+  \begin{aligned}
+    s_0 &\sim p(s_0) , & a_0 &\sim \pi_{\theta} (a_0\vert s_0) , \cr 
+    s_1 &\sim p(s_1\vert s_0,a_0) , & a_1 &\sim \pi_\theta(a_1\vert s_1), \cr 
+    &\vdots  & &\vdots \cr
+    s_{t-1} &\sim p(s_{t-1}\vert s_{t-2},a_{t-2}) , & a_{t-1} &\sim \pi_\theta(a_{t-1}\vert s_{t-1}).
+  \end{aligned}
+  $$
+  A measure of good of $A_t$ is
+  $$
+  \begin{aligned}
+    G_t &= R_t + \gamma R_{t+1} +  \gamma^2 R_{t+2} + \cdots \cr 
+    &= \sum_{k=t}^\infty \gamma^{k-t} R_k\bigl(S_k(\theta),A_k(\theta)\bigr).
+  \end{aligned}
+  $$
+  Our goal is to maximize $\mathbf{E}_{\theta} \bigl[ G_t \bigr],$
+  where
+  $$
+  \begin{aligned}
+    \mathbf{E}_{\theta} \bigl[ G_t \bigr] 
+  \end{aligned}
+  $$
+  
+- 
+  
+$$
+\begin{aligned}
+  \mathbf{E} \bigl[ R_t \bigr] 
+  &= \sum_{a\in A} R_t(s_t,a) \cdot \mathbf{P} \bigl[ A_t(\theta) = a \bigr] \cr 
+  &= \sum_{a\in A} R_t(s_t,a) \cdot \pi_\theta(a \vert s_t)
+\end{aligned}
+$$
+
+
+
+- For $k\geq t,$
+  $$
+  \begin{aligned}
+    \mathbf{E}_\theta \bigl[ R_k \bigr] 
+    = 
+  \end{aligned}
+  $$
+  
+
+- 
+  
+
+  $$
+  \begin{aligned}
+    \mathbf{E} \bigl[ R_n \big\vert given  \bigr]
+    =
+    \mathbf{E} \bigl[ R_n \bigl( \underline{S_n(\theta),A_n(\theta)} \bigr) \bigr]
+    = 
+  \end{aligned}
+  $$
+  

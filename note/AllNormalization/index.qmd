@@ -1,0 +1,39 @@
+
+
+
+## Batch Normalization
+
+- 做梯度下降時，我們會希望 error surface (for each batch) 盡量圓弧些。不要扁平。
+  - 在每一層能否做些調整，讓每一層對應的 error surface 變得更加圓弧？
+
+- Error surface 更加圓弧 $\iff$ Each component 的變化率差異較小。
+
+- 左邊是我們可能遇到的，右邊是我們遇到時想變成這樣處理的。
+
+  ![](https://miro.medium.com/v2/resize:fit:1284/format:webp/1*vxp6NhjQNFRPc9-ITenwmA.png)
+
+- Question: 有沒有辦法找到一個 transformation 讓 $\mathcal{B} = \lbrace x_1,x_2, \cdots ,x_m\rbrace$ 從左圖變成右圖的樣子
+  - Ans: $\mathcal{B} =\lbrace x_1,x_2,\cdots,x_m\rbrace$ 變成 $\mathcal{B}'=\lbrace x_i',i=1,\cdots,m\rbrace,$ where
+    $$
+    \begin{aligned}
+      blablabla
+    \end{aligned}
+    $$
+    
+
+## Goal 讓一層的神經網路的 parameter surface 變得更加圓弧
+
+- Given a batch $\lbrace x_1,\cdots, x_m \rbrace.$
+- Suppose that our original neural network is
+  $$
+  \begin{aligned}
+    \mathbf{Y} = a(W \mathbf{X} + b), \quad W = (w_1,\cdots, w_m)\in \mathbb R^m, b\in \mathbb R,
+  \end{aligned}
+  $$
+  and $a$ is a activation function.
+
+- 要反過來看，固定 $\lbrace x_1,\cdots x_m\rbrace.$
+  變成去討論 $$
+  
+
+- parameter surface 圓弧些 等價於 $$

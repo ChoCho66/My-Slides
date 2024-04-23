@@ -1,0 +1,301 @@
+---
+title: Ito Integral and Girsanov's transform
+---
+
+# Why we define Ito integral
+
+許多書都直接從定義布朗運動的積分 (Ito integral) 說起,
+但從沒有先問說: 為什麼要定義布朗運動的積分
+$$
+\begin{aligned}
+  \int_0^t X_s \mathrm{d} B_s.
+\end{aligned}
+$$
+這裡我們介紹一種為何要定義 Ito integral 的想法.
+我們從股票漲跌看起, 分成 3 種情形:
+
+1. 股票只有線性漲跌;
+2. 股票為多段線性漲跌;
+3. 股票任意漲跌.
+
+## Case 1. 股票只有線性漲跌
+
+我們大概可以想像, 某些股票漲跌形式可以想成一維布朗運動加上一些變動.
+看下面這張圖.
+
+```{r, echo=FALSE, warning = FALSE, message = FALSE}
+# https://r-charts.com/evolution/matplot/
+
+# Brownian motion
+set.seed(1)
+
+# Grid
+t <- seq(0, 1, by = 0.001)
+p <- length(t) - 1
+
+# 10 paths
+n <- 2
+I <- matrix(rnorm(n * p, 0, 1 / sqrt(p)), n, p)
+line <- matrix(2*t , 1, p)
+
+# Matrix
+B <- apply(I, 1, cumsum)
+
+# Colors
+cols <- hcl.colors(2, "Temps")
+
+matplot(B, type = "l",
+        col = cols, # Colors
+        lwd = 1.5,    # Line width
+        lty = 1)    # Line type
+```
+
+- 紅色部分: $(B_t)_{t\geq 0}(\omega)$ for some $w\in \Omega$ ($\omega$ 代表我們當下發生的世界),
+其中 $B=(B_t)_{t\geq 0}\in\operatorname{BM}^1(0).$
+
+- 綠色部分: $(B_t+mt)_{t\geq 0}(\omega),$ 
+其中 $m\in \mathbb{R}$ 是某個固定常數 ($m$ 代表漲跌趨勢). 
+
+- 布朗運動我們瞭解比較多, 紅色部分自然會有些估算. 
+  我們想去估算綠色部分, 自然有以下問題:
+
+::: {.question}
+If $\big((B_t)_{t\geq 0},\mathbf{P}\big)\in \operatorname{BM}^1(0)$, 
+what is the process of $\big((B_t-mt)_{t\geq 0},\mathbf{P}\big)$?
+:::
+
+
+看下面圖,
+我們自然會想到: 
+能否乘上一個函數 (weight the origin measure), 
+讓下圖左的 density 變成下圖右的 density
+
+![The left is a sample of the origin process, the right is that we may translate the density such that the green density be the normal with mean $0.$](/images/2022-04-15-Girsanov_trans/2022-04-15-10-32-57.png)
+
+##
+
+It is natural to consider this question for a simple form: 
+
+How to weight $\mathbf{P},$ say $\mathbf{Q},$ such that 
+$$
+\begin{aligned}
+  (X-c,\mathbf{Q})\sim N(0,\sigma^2)?
+\end{aligned}
+$$
+
+::: {.proof}
+Suppose that $\mathrm{d}\mathbf{Q} /\mathrm{d}\mathbf{P}=f(X).$ (可以從下面第三個等式猜出要這樣令).
+Then for all $A\in \mathcal{F},$
+$$
+  \begin{aligned}
+  \mathbf{Q}[X-c\in A]
+  &= \mathbb{E}_{\mathbf{Q}}\big[1_{[X\in A+c]}\big] \cr
+  &= \mathbb{E}_{\mathbf{P}}\big[1_{[X\in A+c]}\cdot f(X)\big]  \cr 
+  &= \int_{x\in A+c} \frac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{1}{2 \sigma^2 } x^2} f(x) \mathrm{d} x \cr 
+  &= \int_{x\in A} \frac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{1}{2\sigma^2}x^2}e^{-\frac{1}{\sigma^2}(xc+c^2/2)} f(x+c) \mathrm{d} x.
+  \end{aligned}
+$$
+Then
+$$
+  \begin{aligned}
+  (X-c,\mathbf{Q})\sim N(0,\sigma^2) \quad 
+ & \iff \quad e^{-\frac{1}{\sigma^2}(xc+c^2/2)} f(x+c) =1, \quad x\in \mathbb{R} \cr
+ & \iff \quad f(x)=\exp \left\lbrace{\frac{1}{\sigma^2}}\left( xc - \frac{1}{2}c^2 \right)  \right\rbrace ,\quad x\in \mathbb{R}.
+  \end{aligned}
+$$
+
+:::
+
+Now back to the initial question. 
+That is, 
+the case $X=B_t$ and $c=mt.$
+Then
+$$
+\begin{aligned}
+  f(B_t) = \exp \left\lbrace mB_t - \frac{1}{2}m^2 t \right\rbrace.
+\end{aligned}
+$$
+Note that this is the case $L_t=cB_t$ in the Girsanov's transform,
+and
+$$
+\begin{aligned}
+  D_t=\frac{ \mathrm{d} \mathbf{Q}_t }{ \mathrm{d} \mathbf{P} } \Big\vert_{\mathcal{F}^B_t} = f(B_t)
+\end{aligned}
+$$
+where $\mathbf{Q}_t$ is a measure on $(\Omega,\mathcal{F}_t^B).$
+
+Therefore, we will ask 
+
+Is there exists $\mathbf{Q},$ a finite measure on $(\Omega,\mathcal{F})$ such that $\mathbf{Q}\big\vert_{\mathcal{F}_t}=\mathbf{Q}_t?$
+
+If such $\mathbf{Q}$ exists, then we've answered the initial question.
+
+Note that if such $\mathbf{Q}$ exists, 
+then $(D_t)_{t\geq 0}$ will be a $\Big(\big(\mathcal{F}^{B}_t\big)_{t\geq 0},\mathbf{P}\Big)$-martingale 
+since, for all $s<t$ 
+and for all $A\in \mathcal{F}_s^B,$
+$$
+\begin{aligned}
+  \mathbb{E}_{\mathbf{P}}[D_t \cdot 1_A] = \mathbb{E}_{\mathbf{Q}}[1_A] = \mathbb{E}_{\mathbf{P}}[D_s\cdot 1_A],
+\end{aligned}
+$$
+where the first equality we use the definition of $D_t$ and $A\in \mathcal{F}_t^B$ and the second equality we use $D_s$ and $A\in \mathcal{F}_s^B.$
+
+可感覺上面的逆推回去也對
+(可能加上一些附加條件),
+也就是 $(D_t)_{t\geq 0}$ is a $\Big(\big(\mathcal{F}^{B}_t\big)_{t\geq 0},\mathbf{P}\Big)$-martingale implies that $\mathbf{Q}$ exists.
+
+**結論如下**
+: Let $\big((B_t)_{t\geq 0},\mathbf{P}\big)\in \operatorname{BM}^1(0)$ and let $X_t=B_t-mt.$
+Then $\big( (X_t)_{t\geq 0},\mathbf{Q}\big)\in \operatorname{BM}^1(0),$
+where $\mathbf{Q}$ is the unique measure such that
+$$
+\begin{aligned}
+  \frac{\mathrm{d}\mathbf{Q}}{\mathrm{d}\mathbf{P}}\Big\vert_{\mathcal{F}_t^{B}} = \exp \left\lbrace mB_t - \frac{1}{2}m^2 t \right\rbrace.
+\end{aligned}
+$$
+
+## Case 2. 股票為多段線性漲跌
+
+接著我們看, 股票在多段時間 $(0=t_0<t_1<\cdots<t_n)$ 
+各呈現線性漲跌的情形.
+用數學式表示即為:
+$$
+\begin{aligned}
+  X_t = B_t-m(t),\quad t\geq 0,
+\end{aligned}
+$$
+其中 $m$ 為連續函數且 $m'(t)=m_i$ for $t\in (t_{i-1},t_i)$ for $i=1\sim n.$
+
+我們寫 $n=2$ 的情形, 
+一般 $n$ 可以很簡單地做推廣.
+
+::: {.proposition}
+
+Let $\big((B_t)_{t\geq 0},\mathbf{P}\big)\in \operatorname{BM}^1(0)$ and let $X_t=B_t-m(t).$
+Then $\big( (X_t)_{t\geq 0},\mathbf{Q}\big)\in \operatorname{BM}^1(0),$
+where $\mathbf{Q}$ is the unique measure such that
+$$
+\begin{aligned}
+  \frac{\mathrm{d}\mathbf{Q}}{\mathrm{d}\mathbf{P}}\Big\vert_{\mathcal{F}_t^{B}} 
+  &= \exp \left\lbrace m_1 B_T + m_2(B_t-B_T) - \frac{1}{2}m_1^2 T - \frac{1}{2}m_2^2(t-T) \right\rbrace , & t\in (t_1,t_2]; \cr 
+  &= \exp \left\lbrace m_1 B_t - \frac{1}{2}m_1^2 t \right\rbrace , & t\in (0,t_1).
+\end{aligned}
+$$
+
+:::
+
+**Note**
+: 上面 proposition 是合理的, 
+可想成在個別線段都是 Case 1 然後用 increment independent. 
+
+::: {.proof}
+
+給定 $t\in (t_1,t_2].$
+方便起見令 $t_1=T.$
+注意 $m(t) = m_2 t + (m_1 - m_2)T.$
+由於布朗運動的 independent increment,
+我們常做以下的分解:
+$$
+\begin{aligned}
+  B_t-m(t) &= B_t-B_T + B_T - m_2 (t-T) - m_1 T  \cr 
+  &= \color{blue}{B_T - m_1 T} + \color{red}{B_t - B_T - m_2 (t-T)} \cr 
+  &\!:= \color{blue}{X} + \color{red}{Y} .
+\end{aligned}
+$$
+如果我們可以 weight $\mathbf{P}$ such that
+
+1. $X\sim N(0,T)$ under $\mathbf{Q};$
+2. $Y\sim N(0,t-T)$ under $\mathbf{Q};$
+3. $X \perp Y$ under $\mathbf{Q},$
+
+則證明完畢. 然而上述 3 點容易去證明的 (藉由 case 1 以及 強馬可夫).
+
+:::
+
+對於一般的 $n\in \mathbb{N},$ 我們有以下性質.
+
+::: {.proposition #GirsanovCase2}
+
+Let $\big((B_t)_{t\geq 0},\mathbf{P}\big)\in \operatorname{BM}^1(0)$ and let $X_t=B_t-m(t).$
+Then $\big( (X_t)_{t\geq 0},\mathbf{Q}\big)\in \operatorname{BM}^1(0),$
+where $\mathbf{Q}$ is the unique measure such that
+$$
+\begin{aligned}
+  \frac{\mathrm{d}\mathbf{Q}}{\mathrm{d}\mathbf{P}}\Big\vert_{\mathcal{F}_t^{B}} 
+= \exp \Bigg\lbrace &\sum_{i=1}^{k-1} m_i(B_{t_i}-B_{t_{i-1}}) + m_k(B_t-B_{t_{k-1}})  \cr 
+& - \frac{1}{2} \sum_{i=1}^{k-1} m_i^2(t_i-t_{i-1}) - m_n^2 (t-t_{k-1}) \Bigg\rbrace
+\end{aligned}
+  (\#eq:GirsanovCase2)
+$$
+for $t\in (t_{k-1},t_k].$
+
+:::
+
+## Case 3. 股票任意漲跌.
+
+這情形我們可以用 Case 2 去逼近.
+固定 $t\in (0,\infty).$
+考慮 partition
+$$
+\begin{aligned}
+  \Pi_n = \big\lbrace0=t_0<t_1<\cdots< t_n=t \big\rbrace ,
+\end{aligned}
+$$
+其中 $\left\Vert \Pi_n \right\Vert \rightarrow 0$ if $n \rightarrow \infty.$
+則 \@ref(eq:GirsanovCase2) 為
+$$
+\begin{aligned}
+  \frac{\mathrm{d}\mathbf{Q}}{\mathrm{d}\mathbf{P}}\Big\vert_{\mathcal{F}_t^{B}} =\exp \left\lbrace  \sum_{i=1}^k m_i(B_{t_i}-B_{t_{i-1}})  - \frac{1}{2} \sum_{i=1}^{k} m_i^2(t_i-t_{i-1}) \right\rbrace.
+\end{aligned}
+$$
+此時我們會注意到一個問題是
+$$
+\begin{aligned}
+  \sum_{i=1}^k m_i(B_{t_i}-B_{t_{i-1}})
+\end{aligned}
+$$
+是否會收斂 if $\left\Vert \Pi_n \right\Vert \rightarrow 0.$
+**這也就是為什麼要考慮 Ito integral**.
+
+---
+
+We state the Girsanov's transform for the version of Brownian motion.  (可能有些條件沒補齊, usual condition 那些).
+
+::: {.theorem name="Girsanov's transform"}
+$\quad$
+
+* Let $\big((B_t)_{t\geq 0},\mathbf{P}\big)\in \operatorname{BM}^1(0).$
+* Let $(L_t)_{t\geq 0}$ be a continuous $\Big(\big(\mathcal{F}^{B}_t\big)_{t\geq 0},\mathbf{P}\Big)$-local martingale,
+and set
+$$
+\begin{aligned}
+  D_t=\exp \left( L_t - \frac{1}{2}\left\langle L \right\rangle_t\right).
+\end{aligned}
+$$
+* Let $\mathbf{Q}$ be the unique probability measure such that
+$$
+\begin{aligned}
+  \frac{ \mathrm{d} \mathbf{Q} }{ \mathrm{d} \mathbf{P} } \Big\vert_{\mathcal{F}^B_t} = D_t.
+\end{aligned}
+$$
+That is,
+$$
+\begin{aligned}
+  \mathbb{E}_{\mathbf{Q}}\left[ 1_A \right] = \mathbb{E}_{\mathbf{P}} \left[ 1_A \cdot D_t \right] , \quad \forall A \in \mathcal{F}_t^{\mathcal{B}}.
+\end{aligned}
+$$
+
+Then
+$$
+\begin{aligned}
+  \Big(\big(B_t-\left\langle B,L \right\rangle_t\big)_{t\geq 0} , \mathbf{Q}\Big) \in \operatorname{BM}^1(0).
+\end{aligned}
+$$
+:::
+
+
+For more details, see @le2016brownian.
+
+---
+
