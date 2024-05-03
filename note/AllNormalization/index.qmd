@@ -1,39 +1,69 @@
 
+- https://gaoxiangluo.github.io/2021/08/01/Group-Norm-Batch-Norm-Instance-Norm-which-is-better/#PyTorch-implementation-of-BN
+  - https://towardsdatascience.com/batch-normalization-in-3-levels-of-understanding-14c2da90a338
 
+
+![](all_normal.png)
 
 ## Batch Normalization
 
 - 做梯度下降時，我們會希望 error surface (for each batch) 盡量圓弧些。不要扁平。
   - 在每一層能否做些調整，讓每一層對應的 error surface 變得更加圓弧？
 
-- Error surface 更加圓弧 $\iff$ Each component 的變化率差異較小。
-
 - 左邊是我們可能遇到的，右邊是我們遇到時想變成這樣處理的。
 
   ![](https://miro.medium.com/v2/resize:fit:1284/format:webp/1*vxp6NhjQNFRPc9-ITenwmA.png)
 
-- Question: 有沒有辦法找到一個 transformation 讓 $\mathcal{B} = \lbrace x_1,x_2, \cdots ,x_m\rbrace$ 從左圖變成右圖的樣子
-  - Ans: $\mathcal{B} =\lbrace x_1,x_2,\cdots,x_m\rbrace$ 變成 $\mathcal{B}'=\lbrace x_i',i=1,\cdots,m\rbrace,$ where
+- 假設我們想處理的層為 $\mathbf{X} = [X_1, \cdots, X_n]^T。$
+
+- Error surface 更加圓弧 $\iff$ $\mathrm{d}X_i \approx \mathrm{d}X_j$ for all $i,j$。
+
+- 這裡沒有 $\mathrm{d}X_i$，對應的是 $\operatorname{Var}(X_i)$。所以我們考慮讓每個 $X_i$ 都做標準化。也就是
+  $$
+  \begin{aligned}
+    X_i \leftarrow (X_i-\mu_{X_i})/\sigma_{X_i}, \quad \forall i.
+  \end{aligned}
+  $$
+  
+  - 但 $\mathbf{X}=[X_i]_i$ 實際會是神經網路的某層，也就是會跟 $\theta$ 有關。每次更新參數 $\theta$ 都得重新計算 $\mu_{X_i},\sigma_{X_i}$ 會很花時間。
+
+- **解決方式**：
+
+  對於任意 component $i$，用每個 batch 的 $\mu_b,\sigma_b$ 去代替 $\mu_{X_i},\sigma_{X_i}$。並利用這些值取個 average 來估計 $\mu_{X_i},\sigma_{X_i}$，做為之後的 testing 用（testing 時可能沒有 batch 這概念）。具體如下：
+
+  - Training 時：
+    
+    For each component $i$ (we omit $i$ for simplicity):
+    
+    - For each batch $b=\lbrace x_1,\cdots, x_m \rbrace$:
+
+      The batch normalization transformation $\mathbf{BN}$ is computed as (in each component $i$)
+      $$
+      \begin{aligned}
+        \mathbf{BN}(x) = \frac{x - \mu_b}{\sigma_b},
+      \end{aligned}
+      $$
+      where
+      $$
+      \begin{aligned}
+        \mu_b = \frac{x_1+\cdots+x_m}{m}, \quad \sigma_b^2 = \frac{1}{m-1}\sum_{i=1}^m(x_i-\mu_b)^2,
+      \end{aligned}
+      $$
+      and we update
+      $$
+      \begin{aligned}
+        \widehat{\mu} &\leftarrow (1-\text{momentum})\cdot \widehat{\mu} + \text{momentum} \cdot \mu_b, \cr 
+        \widehat{\sigma} &\leftarrow (1-\text{momentum})\cdot \widehat{\sigma} + \text{momentum} \cdot \sigma_b.
+      \end{aligned}
+      $$
+        
+        
+  - Testing 時：
+    
+    The batch normalization transformation $\mathbf{BN}$ is computed as (in each component)
     $$
     \begin{aligned}
-      blablabla
+      \mathbf{BN}(x) = \frac{x - \widehat{\mu}}{\widehat{\sigma}}.
     \end{aligned}
     $$
     
-
-## Goal 讓一層的神經網路的 parameter surface 變得更加圓弧
-
-- Given a batch $\lbrace x_1,\cdots, x_m \rbrace.$
-- Suppose that our original neural network is
-  $$
-  \begin{aligned}
-    \mathbf{Y} = a(W \mathbf{X} + b), \quad W = (w_1,\cdots, w_m)\in \mathbb R^m, b\in \mathbb R,
-  \end{aligned}
-  $$
-  and $a$ is a activation function.
-
-- 要反過來看，固定 $\lbrace x_1,\cdots x_m\rbrace.$
-  變成去討論 $$
-  
-
-- parameter surface 圓弧些 等價於 $$
