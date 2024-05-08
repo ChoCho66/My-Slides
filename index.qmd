@@ -131,6 +131,6 @@ content2 <- paste0(
 ", result
 )
 # concat content1 and content2
-# content <- paste0(content1 ,'\n\n', content2)
-writeLines(content2, "README.md")
+content <- paste0(content1 ,'\n\n', content2)
+writeLines(content, "README.md")
 ```
