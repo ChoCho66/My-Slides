@@ -101,41 +101,22 @@ qmd_files_with_html <- qmd_files[sapply(qmd_files, function(file) {
   file.exists(html_file)
 })]
 
-is_null <- function(d) {
-  if (is.null(d)) {
-    # return("3000-01-01")
-    return(character())
-  } else {
-    return(d)
-  }
-}
-
-df <- data.frame("Date" = numeric(0), "Title" = numeric(0))
+df <- data.frame("Title" = numeric(0))
 for (i in qmd_files_with_html) {
   file_content <- rmarkdown:::read_utf8(i)
   yaml_content <- rmarkdown:::parse_yaml_front_matter(file_content)
   new_row <- data.frame(
-    "Date" = is_null(yaml_content$date),
-    "Title" = paste0("[", yaml_content$title, "](", dirname(i), ")")
+    # "Date" = is_null(yaml_content$date),
+    "Title" = paste0("- [", yaml_content$title, "](", dirname(i), ")")
   )
   df <- rbind(df, new_row)
 }
-# 將 'date' column 的型態轉換為日期
-df$Date <- as.Date(df$Date)
-# 根據 'date' 進行升序排序
-sorted_df <- df[order(df$Date), ]
 
-# 顯示排序後的 dataframe
-
-cat("Date | Title\n")
-cat("------- | -------\n")
 result <- ""
-for (i in 1:nrow(sorted_df)) {
+for (i in 1:nrow(df)) {
   result <- paste0(
     result,
-    as.character(sorted_df[i, 1]),
-    " | ",
-    as.character(sorted_df[i, 2]),
+    as.character(df[i, 1]),
     "\n"
   )
 }
@@ -147,10 +128,9 @@ cat(result)
 content2 <- paste0(
   "## Note
 
-Date | Title
-------- | -------\n", result
+", result
 )
 # concat content1 and content2
-content <- paste0(content1 ,'\n\n', content2)
-writeLines(content, "README.md")
+# content <- paste0(content1 ,'\n\n', content2)
+writeLines(content2, "README.md")
 ```

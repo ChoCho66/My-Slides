@@ -1,5 +1,5 @@
 ---
-title: "Test"
+title: "Reinforcement Learning"
 revealjs-plugins:
   - my-revealjs
 incremental: true

@@ -1,0 +1,205 @@
+---
+title: Some Generated Images of DM
+revealjs-plugins:
+  - my-revealjs
+format: 
+   revealjs:
+     width: 1300
+     margin: 0.1
+---
+
+
+# Dataset: CelebFaces Attributes(CelebA)
+
+## Dataset: CelebFaces Attributes(CelebA)
+
+![https://www.kaggle.com/datasets/jessicali9530/celeba-dataset](celebAAA.png)
+
+## CelebA + DDPM(Classifier-Free Guidance)
+- We remove the background of CelebA.
+- 4 classes:
+  - 0: Female without glasses
+  - 1: Female with glasses
+  - 2: Male without glasses
+  - 3: Male with glasses
+
+TO DO: 補圖
+
+
+## CelebA + DDPM(Classifier-Free Guidance)
+:::: {.columns}
+::: {.column width="40%"}
+### Generated image
+![](celebA_DDPM_free.png)
+:::
+::: {.column width="60%"}
+### Class 0
+```{r}
+#| echo: false
+knitr::include_url('celebA_DDPM_0.html', height = "550px")
+```
+:::
+::::
+
+## CelebA + DDPM(Classifier-Free Guidance)
+:::: {.columns}
+::: {.column width="40%"}
+### Generated image
+![](celebA_DDPM_free.png)
+:::
+::: {.column width="60%"}
+### Class 1
+```{r}
+#| echo: false
+knitr::include_url('celebA_DDPM_1.html', height = "550px")
+```
+:::
+::::
+
+## CelebA + DDPM(Classifier-Free Guidance)
+:::: {.columns}
+::: {.column width="40%"}
+### Generated image
+![](celebA_DDPM_free.png)
+:::
+::: {.column width="60%"}
+### Class 2
+```{r}
+#| echo: false
+knitr::include_url('celebA_DDPM_2.html', height = "550px")
+```
+:::
+::::
+
+## CelebA + DDPM(Classifier-Free Guidance)
+:::: {.columns}
+::: {.column width="40%"}
+### Generated image
+![](celebA_DDPM_free.png)
+:::
+::: {.column width="60%"}
+### Class 3
+```{r}
+#| echo: false
+knitr::include_url('celebA_DDPM_3.html', height = "550px")
+```
+:::
+::::
+
+## CelebA + DDIM(Classifier-Free Guidance)
+:::: {.columns}
+::: {.column width="40%"}
+### Generated image
+![](celebA_DDIM_free.png)
+:::
+::: {.column width="60%"}
+### Class 0
+```{r}
+#| echo: false
+knitr::include_url('celebA_DDIM_0.html', height = "550px")
+```
+:::
+::::
+
+## CelebA + DDIM(Classifier-Free Guidance)
+:::: {.columns}
+::: {.column width="40%"}
+### Generated image
+![](celebA_DDIM_free.png)
+:::
+::: {.column width="60%"}
+### Class 3
+```{r}
+#| echo: false
+knitr::include_url('celebA_DDIM_3.html', height = "550px")
+```
+:::
+::::
+
+
+## CelebA + Interpolation
+### Interpolation between two people
+```{r}
+#| echo: false
+knitr::include_url('interpolation_2_p.html', height = "500px")
+```
+
+## CelebA + Interpolation
+### Add beard
+```{r}
+#| echo: false
+knitr::include_url('add_beard_1.html', height = "500px")
+```
+
+## CelebA + Interpolation
+### Add beard by interpolation
+```{r}
+#| echo: false
+knitr::include_url('add_beard_2.html', height = "500px")
+```
+
+## CelebA + Forward and Backward (class 0)
+![](forward_backward_00.png)
+![](forward_backward_01.png)
+```{r, out.width='100%'}
+#| echo: false
+knitr::include_url('forward_backward_0.html', height = "400px")
+```
+
+## CelebA + Forward and Backward (class 1)
+![](forward_backward_10.png)
+![](forward_backward_11.png)
+```{r, out.width='100%'}
+#| echo: false
+knitr::include_url('forward_backward_1.html', height = "400px")
+```
+
+## CelebA + Forward and Backward (class 2) 
+![](forward_backward_20.png)
+![](forward_backward_21.png)
+```{r, out.width='100%'}
+#| echo: false
+knitr::include_url('forward_backward_2.html', height = "400px")
+```
+
+## CelebA + Forward and Backward (class 3) 
+![](forward_backward_30.png)
+![](forward_backward_31.png)
+```{r, out.width='100%'}
+#| echo: false
+knitr::include_url('forward_backward_3.html', height = "400px")
+```
+
+## Coloring
+![](coloring10.png)
+![](coloring11.png)
+```{r, out.width='100%'}
+#| echo: false
+knitr::include_url('coloring_Lai.html', height = "400px")
+```
+
+
+# Other Dataset
+
+## Oxford-Flowers
+:::: {.columns}
+::: {.column width="40%"}
+### Generated image
+![](gen-oxford-flowers1.png)
+:::
+::: {.column width="60%"}
+### Interpolation between two flowers
+```{r}
+#| echo: false
+knitr::include_url('interpolation_flower.html', height = "500px")
+```
+:::
+::::
+
+## Coloring
+![](coloring00.png)
+![](coloring01.png)
+```{r, out.width='100%'}
+#| echo: false
+knitr::include_url('coloring_c.html', height = "400px")
+```
