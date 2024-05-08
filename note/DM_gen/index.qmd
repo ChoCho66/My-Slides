@@ -121,7 +121,7 @@ knitr::include_url('celebA_DDIM_3.html', height = "550px")
 ### Interpolation between two people
 ```{r}
 #| echo: false
-knitr::include_url('interpolation_2_p.html', height = "500px")
+knitr::include_url('Interpolation_2_p.html', height = "500px")
 ```
 
 ## CelebA + Interpolation
