@@ -20,4 +20,5 @@
 
 .reveal .progress {
   color: red;
+  height: 8px;
 }

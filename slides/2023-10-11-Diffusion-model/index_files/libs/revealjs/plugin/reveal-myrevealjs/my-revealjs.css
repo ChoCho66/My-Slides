@@ -4,7 +4,6 @@
   visibility: visible !important;
   filter: brightness(0.01) invert(0.8) !important;
 }
-
 .fragment.visible {
   filter: none !important;
 }

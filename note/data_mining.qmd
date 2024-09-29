@@ -1,0 +1,13 @@
+
+## https://yijutseng.github.io/DataScienceRBook/datamining.html
+
+- 10.2.3 最佳模型篩選
+  - Akaike’s Information Criterion (AIC) ?
+  - Bayesian Information Criterion (BIC) ? 
+
+- 10.4.1 Hierarchical clustering 階層式分群 ?
+
+- 10.4.2 K-means clustering
+  - [Determining the number of clusters in a data set](https://en.wikipedia.org/wiki/Determining_the_number_of_clusters_in_a_data_set)
+
+- 10.5 Association Rules 關聯式規則

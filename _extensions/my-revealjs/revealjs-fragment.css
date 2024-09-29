@@ -1,0 +1,118 @@
+.fragment.visible {
+  color: inherit;
+}
+.fragment:not(.visible) {
+  color: LightGray;
+}
+
+.fragment.visible img {
+  filter: none !important;
+}
+.fragment:not(.visible) img {
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: brightness(0.01)  invert(0.8) !important;
+}
+
+.unvisible {
+  opacity: 0 !important;
+}
+
+.fragment.unvisible {
+  opacity: 0 !important;
+}
+
+.fragment.unvisible.visible {
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* 假設直接祖先有 fragment visible */
+.fragment.visible {
+  /* 針對不同顏色的類別 */
+  .red {
+    color: red !important;
+  }
+
+  .blue {
+    color: blue !important;
+  }
+
+  .green {
+    color: green !important;
+  }
+
+  .brown {
+    color: brown !important;
+  }
+
+  .yellow {
+    color: yellow !important;
+  }
+
+  /* 當直接祖先有 fragment visible 並且 style 中有 color */
+  [style*="color: red"] {
+    color: red !important;
+  }
+
+  [style*="color: blue"] {
+    color: blue !important;
+  }
+
+  [style*="color: green"] {
+    color: green !important;
+  }
+
+  [style*="color: brown"] {
+    color: brown !important;
+  }
+
+  [style*="color: yellow"] {
+    color: yellow !important;
+  }
+}
+
+/* 假設直接祖先沒有 fragment visible */
+.fragment:not(.visible) {
+  /* 針對不同顏色的類別 */
+  .red {
+    color: LightGray !important;
+  }
+
+  .blue {
+    color: LightGray !important;
+  }
+
+  .green {
+    color: LightGray !important;
+  }
+
+  .brown {
+    color: LightGray !important;
+  }
+
+  .yellow {
+    color: LightGray !important;
+  }
+
+  /* 當直接祖先沒有 fragment visible 並且 style 中有 color */
+  [style*="color: red"] {
+    color: LightGray !important;
+  }
+
+  [style*="color: blue"] {
+    color: LightGray !important;
+  }
+
+  [style*="color: green"] {
+    color: LightGray !important;
+  }
+
+  [style*="color: brown"] {
+    color: LightGray !important;
+  }
+
+  [style*="color: yellow"] {
+    color: LightGray !important;
+  }
+}

@@ -1,0 +1,23 @@
+
+# Fréchet inception distance (FID)
+
+- FID score: A measure of the similarity between two distributions.
+- Formal definition:
+
+  Let $\mu,\nu$ be two densities of $\mathbb R^n$ with finite mean and variances. The FID score between $\mu$ and $\nu$ is defined as:
+  $$
+  \begin{aligned}
+    d_F(\mu,\nu) \coloneqq \biggl( \inf_{\gamma\in \Gamma(\mu,\nu)} \int_{\mathbb R^n} \left\lVert x-y \right\rVert^2 \gamma(x,y) \, \mathrm{d}(x,y) \biggr)^{1/2},
+  \end{aligned}
+  $$
+  where $\Gamma(\mu,\nu)$ is the set of all densities $\gamma=\gamma(x,y)$ of $\mathbb R^n\times \mathbb R^n$ such that the marginal densities $\gamma(x) = \mu(x)$ and $\gamma(y) = \nu(y)$.
+  
+- If $\mu,\nu$ are two multidimensional Gaussian distributions
+  $\mathcal{N}(\mu,\Sigma),\mathcal{N}(\mu',\Sigma'),$
+  it is explicitly solvable as
+  $$
+  \begin{aligned}
+    d_F\bigl( \mathcal{N}(\mu,\Sigma),\mathcal{N}(\mu',\Sigma') \bigr)^2 = \left\lVert \mu-\mu' \right\rVert^2 + \operatorname{tr}\Bigl( \Sigma+\Sigma' - 2(\Sigma\Sigma')^{1/2} \Bigr).
+  \end{aligned}
+  $$
+  

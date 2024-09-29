@@ -2,17 +2,19 @@
 date-format: iso
 # institute: NCU
 format:
-  revealjs:
+  # revealjs:
+  live-revealjs:
     ###### for mathjax
     # include-in-header:
       # - other/mathjax-preamble.html
       # - text: $$\DeclareMathOperator*{\argmin}{arg\,min}$$
-    embed-resources: true
+    # embed-resources: true
     html-math-method: katex
     # incremental: true
     transition: fade
     transition-speed: fast
-    fontsize: 24px
+    # fontsize: 24px
+    fontsize: 18px
     scrollable: true
     smooth-scroll: true
     echo: true

@@ -1,0 +1,56 @@
+
+
+## Gaol: Convert each word into a vector and have a certain good relationship
+
+Ex. ![](word_embed.webp)
+
+## How to convert word to vector?
+
+Ans: One hot encodings. 
+
+- Ex.
+  - Bird $\longleftrightarrow$ [1,0,0,0,0] 
+  - Cat $\longleftrightarrow$ [0,1,0,0,0] 
+  - Dog $\longleftrightarrow$ [0,0,1,0,0]
+
+- Disadvantages: 
+  - The dimensionality of the vector is too large.
+  - Unable to reflect semantic relevance. 
+  - The word vector position cannot be changed.
+
+## How to improve?
+
+Ans: Use word embedding.
+
+- Convert words into vectors by training the model.
+- Have semantic relevance.
+
+## To solve: The word vector position cannot be changed
+
+Suppose we now have words A,B,C,D,E.
+Their one-hot vector is：
+
+- A $\longleftrightarrow [1,0,0,0,0]=e_1$
+- B $\longleftrightarrow [0,1,0,0,0]=e_2$
+- C $\longleftrightarrow [0,0,1,0,0]=e_3$
+- D $\longleftrightarrow [0,0,0,1,0]=e_4$
+- E $\longleftrightarrow [0,0,0,0,1]=e_5$
+
+Define a neural network $\mathtt{Net_1}: \mathbb R^5 \longrightarrow \mathbb{R}^3$ with parameters $\Theta_1$ and set
+$$
+\begin{aligned}
+  w_1=\mathtt{Net_1}(e_1), \quad w_2=\mathtt{Net_1}(e_2),\quad \cdots \quad , w_5=\mathtt{Net_1}(e_5).
+\end{aligned}
+$$
+We may changed the position of word vectors $w_1,\cdots,w_5$ by changing the parameters $\Theta_1$ of $\mathtt{Net_1}$.
+
+## To solve: Unable to reflect semantic relevance
+
+Suppose we have the following sentences:
+
+| First Word | Second Word |
+|------------|-------------|
+| A          | B           |
+| B          | C           |
+| C          | D           |
+| D          | E           |

@@ -7,31 +7,31 @@
 
 ## Batch Normalization
 
-- 做梯度下降時，我們會希望 error surface (for each batch) 盡量圓弧些。不要扁平。
-  - 在每一層能否做些調整，讓每一層對應的 error surface 變得更加圓弧？
+- 做梯度下降時，我們會希望 error surface 不要橢圓，盡量圓弧些。
+  - 左邊是我們可能遇到的，右邊是我們遇到時想變成這樣處理的。
 
-- 左邊是我們可能遇到的，右邊是我們遇到時想變成這樣處理的。
+    ![](https://miro.medium.com/v2/resize:fit:1284/format:webp/1*vxp6NhjQNFRPc9-ITenwmA.png)
 
-  ![](https://miro.medium.com/v2/resize:fit:1284/format:webp/1*vxp6NhjQNFRPc9-ITenwmA.png)
+  - 能否在每一層做些調整，讓每一層對應的 error surface 變得更加圓弧？
 
 - 假設我們想處理的層為 $\mathbf{X} = [X_1, \cdots, X_n]^T。$
 
-- Error surface 更加圓弧 $\iff$ $\mathrm{d}X_i \approx \mathrm{d}X_j$ for all $i,j$。
-
-- 這裡沒有 $\mathrm{d}X_i$，對應的是 $\operatorname{Var}(X_i)$。所以我們考慮讓每個 $X_i$ 都做標準化。也就是
+- Error surface 更加圓弧，一種衡量的方式是
+  $\operatorname{Var}(X_i) \approx \operatorname{Var}(X_j)$ for all $i,j$。
+  所以我們考慮讓每個 $X_i$ 都做標準化。也就是
   $$
   \begin{aligned}
     X_i \leftarrow (X_i-\mu_{X_i})/\sigma_{X_i}, \quad \forall i.
   \end{aligned}
   $$
   
-  - 但 $\mathbf{X}=[X_i]_i$ 實際會是神經網路的某層，也就是會跟 $\theta$ 有關。每次更新參數 $\theta$ 都得重新計算 $\mu_{X_i},\sigma_{X_i}$ 會很花時間。
+  - 但 $\mathbf{X}=[X_i]_i$ 實際會是神經網路的某層，也就是會跟 $\theta$ 有關。每次更新參數 $\theta$ 都得重新計算全體的 $\mu_{X_i},\sigma_{X_i}$ 會很花時間。
 
 - **解決方式**：
 
-  對於任意 component $i$，用每個 batch 的 $\mu_b,\sigma_b$ 去代替 $\mu_{X_i},\sigma_{X_i}$。並利用這些值取個 average 來估計 $\mu_{X_i},\sigma_{X_i}$，做為之後的 testing 用（testing 時可能沒有 batch 這概念）。具體如下：
+  **對於任意 component $i$**，用每個 batch 的 $\mu_b,\sigma_b$ 去代替 $\mu_{X_i},\sigma_{X_i}$。並利用這些值取個 average 來估計 $\mu_{X_i},\sigma_{X_i}$，做為之後的 testing 用（testing 時沒有 batch 這概念）。具體如下：
 
-  - Training 時：
+  - **Training 時**：
     
     For each component $i$ (we omit $i$ for simplicity):
     
@@ -56,9 +56,11 @@
         \widehat{\sigma} &\leftarrow (1-\text{momentum})\cdot \widehat{\sigma} + \text{momentum} \cdot \sigma_b.
       \end{aligned}
       $$
+
+      - 最後這裡有點像是對 $\widehat{\mu},\widehat{\sigma}$ 做 learning(with momentum)。
         
         
-  - Testing 時：
+  - **Testing 時**：
     
     The batch normalization transformation $\mathbf{BN}$ is computed as (in each component)
     $$
