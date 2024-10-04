@@ -1,25 +1,12 @@
 /* incremental look like beamer  */
-.fragment {
+/* .fragment {
   opacity: 1 !important;
   visibility: visible !important;
   filter: brightness(0.01) invert(0.8) !important;
 }
 .fragment.visible {
   filter: none !important;
-}
-
-.unvisible {
-  opacity: 0 !important;
-}
-
-.fragment.unvisible {
-  opacity: 0 !important;
-}
-
-.fragment.unvisible.visible {
-  opacity: 1 !important;
-  filter: none !important;
-}
+} */
 
 blockquote {
   margin: 0 0 1rem;
@@ -143,6 +130,13 @@ canvas {
   font-size: calc(var(--r-main-font-size) * 2/3);
   position: absolute;
   top: calc(var(--r-main-font-size) * -1);
-  left: calc(var(--r-main-font-size) * -1);
+  left: calc(var(--r-main-font-size) * -0.2);
   white-space: nowrap;
+}
+
+dl:has(> dt) {
+/* li > dl:has(> dt) { */
+  border: 2px solid #000; /* 为符合条件的 <li> 添加边框 */
+  padding: 10px; /* 给四周留出空间 */
+  padding-right: 30px; /* 右边留出30px的距离 */
 }

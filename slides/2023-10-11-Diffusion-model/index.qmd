@@ -12,12 +12,13 @@ revealjs-plugins:
   - my-revealjs
 filters:
   - pseudocode
-  - webr
+  # - webr
 fontsize: 20px
 crossref:
   eq-prefix: ""
   eq-labels: arabic
 embed-resources: false
+incremental: false
 ---
 
 ## Generator = Distribution
@@ -187,10 +188,10 @@ image(noise, col = gray.colors(256))
 :::: {.columns}
 ::: {.column}
 ![](images/DP_density_reverse_recover0.svg){width="100%"}
-![](images/DP_density_reverse_recover1.svg){.fragment width="100%"}
+![](images/DP_density_reverse_recover1.svg){width="100%"}
 :::
-::: {.column}
-> - Fix $T\in \mathbb N$ large.
+::: {.column .incremental}
+- Fix $T\in \mathbb N$ large.
 - We add **independent normal distributions** (noise) step by step.
 - We call this the forward process.
 - $X_T$ is basically a noise.
@@ -203,19 +204,18 @@ image(noise, col = gray.colors(256))
 ::::
 
 ## Define the forward process by adding independent noise
-::::: {.nonincremental}
 :::: {.columns}
-::: {.column}
+::: {.column .nonincremental}
 ![](images/DP_density_reverse_recover0.svg){width="98%"}
 ![](images/DP_density_reverse_recover1.svg){width="98%"}
 :::
-::: {.column}
+::: {.column .incremental}
 - Fix the follows:
   - $T\in \mathbb N$ large;
   - $\lbrace \alpha_1,\cdots,\alpha_T \rbrace\subset (0.001,0.999)$;
   - $\beta_t = 1-\alpha_t$ (the intensity of noise added).
 
-> - Let $X_0,\varepsilon_1,\cdots, \varepsilon_T$ be independent random variables with
+- Let $X_0,\varepsilon_1,\cdots, \varepsilon_T$ be independent random variables with
   $$
   \begin{aligned}
     X_0 \sim q(x_0), \quad \varepsilon_t \sim \mathcal{N}(\mathbf{0},\mathbf{I}).
@@ -238,12 +238,10 @@ image(noise, col = gray.colors(256))
 - We often use an equivalent definition to define the forward process.
 :::
 ::::
-:::::
 
 ## Forward process
-::::: {.nonincremental}
 :::: {.columns}
-::: {.column}
+::: {.column .incremental}
 - We define the **forward process** as a Markov chain $X_0,\cdots,X_T$ with 
   - the initial density $q(x_0),$ and
   - the transition density
@@ -253,13 +251,13 @@ image(noise, col = gray.colors(256))
     \end{aligned}
     $$
 
-> - The joint density of $(X_T, X_{T-1},\cdots, X_1, X_0)$ for the forward process
-    (or ${\color{red}{\text{we say under }q}}$) is
-    $$
-    \begin{aligned}
-      q(x_{T:0}) = q(x_T\vert x_{T-1}) \cdot q(x_{T-1}\vert x_{T-2}) \cdots q(x_{1}\vert x_0) \cdot q(x_0).
-    \end{aligned}
-    $$
+- The joint density of $(X_T, X_{T-1},\cdots, X_1, X_0)$ for the forward process
+  (or ${\color{red}{\text{we say under }q}}$) is
+  $$
+  \begin{aligned}
+    q(x_{T:0}) = q(x_T\vert x_{T-1}) \cdot q(x_{T-1}\vert x_{T-2}) \cdots q(x_{1}\vert x_0) \cdot q(x_0).
+  \end{aligned}
+  $$
 - Let $\varepsilon_t$ such that
   $$
   \begin{aligned}
@@ -279,16 +277,14 @@ image(noise, col = gray.colors(256))
   and $\overline{\alpha}_t = \alpha_t\cdots \alpha_1.$
 - Under $q,$ $X_T$ converge to $\mathcal{N}(\mathbf{0},\mathbf{I})$ for $T$ large.
 :::
-::: {.column}
+::: {.column .nonincremental}
 ![](images/DP_density.svg)
 :::
 :::: 
-:::::
 
 ## Reverse the forward process
-::::: {.incremental}
 :::: {.columns}
-::: {.column}
+::: {.column .incremental}
 - Recall that our goal is to construct $p_{\theta}(x_0)$ such that
   $$
   \begin{aligned}
@@ -298,8 +294,8 @@ image(noise, col = gray.colors(256))
 
 - The simplest way to construct $p_{\theta}(x_0)$ is as follows:
   
-  > - Take $p_{\theta}(x_T)\sim\mathcal{N}(\mathbf{0},\mathbf{I}),$ and
-  > - learn $p_{\theta}(x_t\vert x_{t-1})$ such that
+  - Take $p_{\theta}(x_T)\sim\mathcal{N}(\mathbf{0},\mathbf{I}),$ and
+  - learn $p_{\theta}(x_t\vert x_{t-1})$ such that
     $$
     \begin{aligned}
       p_{\theta}(x_{t-1}\vert x_{t}) \approx q(x_{t-1}\vert x_{t}).
@@ -314,7 +310,6 @@ image(noise, col = gray.colors(256))
 ![](images/DP_density_reverse.svg)
 :::
 ::::
-:::::
 
 ## Why $q(x_{t-1}\vert x_t)\approx$ normal? $\quad$ Method 1
 ### Discretization of a diffusion process
@@ -360,7 +355,7 @@ image(noise, col = gray.colors(256))
 ::::: {.incremental}
 :::: {.columns}
 ::: {.column style="width: 49%; border-right: 1px solid #000"}
-> - The process $X_0,X_1,\cdots,X_T,$ under $q,$ is a discretization of some process $(\widetilde{X}_t)_{t\in [0,1]}$ which satisfies the SDE
+- The process $X_0,X_1,\cdots,X_T,$ under $q,$ is a discretization of some process $(\widetilde{X}_t)_{t\in [0,1]}$ which satisfies the SDE
   $$
   \begin{aligned}
     \mathrm{d}\widetilde{X}_t = \mu(\widetilde{X}_t,t) \mathrm{d}t + \sigma(t) \mathrm{d}B_t.
@@ -399,7 +394,7 @@ $$
   \underbrace{-\frac{\alpha_t}{2\beta_t} \Bigl( x_{t-1} - \frac{1}{\sqrt{\alpha_t}} x_t \Bigr)^2 + (x_{t-1}-x_t) \nabla_{x_t}\log q(x_t) }_{\text{A quadratic polynomial of }x_{t-1}\text{ with negative leading coefficient}}
   \Biggr\rbrace.
 \end{aligned}
-$$]{style="font-size:150%"}
+$$]{.fragment style="font-size:150%"}
 
 <hr style='height:2px;border-width:0;color:gray;background-color:gray'>
 <br><br><br>  
@@ -408,7 +403,7 @@ $$]{style="font-size:150%"}
   
 ## Backward Process
 :::: {.columns}
-::: {.column width=60%}
+::: {.column .incremental width=60%}
 - We define the **backward process** as a Markov chain $X_T, X_{T-1},\cdots, X_0$
   with 
   - the initial distribution $p_{\theta}(x_T) = \mathcal{N}(\mathbf{0},\mathbf{I})$ and 
@@ -420,7 +415,7 @@ $$]{style="font-size:150%"}
   $$
   $\color{blue}{\text{where }\mu_{\theta},\Sigma_{\theta} \text{ is what we need to give.}}$
 
-> - The joint density of $(X_0,X_1,\cdots,X_{T-1},X_T),$ for the backward process (or ${\color{red}{\text{we say under }p_{\theta}}}$), is
+- The joint density of $(X_0,X_1,\cdots,X_{T-1},X_T),$ for the backward process (or ${\color{red}{\text{we say under }p_{\theta}}}$), is
   $$
   \begin{aligned}
     p_{\theta}(x_{0:T}) = p_{\theta}(x_0 \vert x_1) \cdot p_{\theta}(x_1 \vert x_2) \cdots p_{\theta}(x_{T-1}\vert x_T) \cdot p_{\theta}(x_T).
@@ -458,10 +453,10 @@ $$
 
 ## Goal
 ::::: {.columns}
-:::: {.column width=55%}
+:::: {.column .incremental width=55%}
 - The **main purpose** of the diffusion model is to learn a distribution $p_{\theta}(x_0)$ such that $p_{\theta}(x_0)\approx q(x_0).$
 
-> - One way is to minimize $D_{\mathtt{KL}}(q(x_0) \,\Vert\, p_{\theta}(x_0)).$
+- One way is to minimize $D_{\mathtt{KL}}(q(x_0) \,\Vert\, p_{\theta}(x_0)).$
 - Our goal becomes to find
   $$
   \begin{aligned}
@@ -497,7 +492,7 @@ $$
 ::::: {.incremental}
 :::: {.columns}
 ::: {.column width=60%}
-> - Note that
+- Note that
   $$
   \begin{aligned}
     L 
@@ -580,13 +575,15 @@ $$
 
 <hr style='height:1px;border-width:0;color:gray;background-color:gray'>
 
-> - Recall that if $q\sim \mathcal{N}(\mu_1,\Sigma_1), p\sim \mathcal{N}(\mu_2,\Sigma_2)$ in $\mathbb R^n,$
-    then
-    $$
-    \begin{aligned}
-      D_{\mathtt{KL}}(q\Vert p) = \frac{1}{2} \Bigl( \log\frac{\left\lvert \Sigma_2 \right\rvert}{\left\lvert \Sigma_1 \right\rvert} - n + \operatorname{tr}(\Sigma_2^{-1}\Sigma_1) + (\mu_2-\mu_1)^T \Sigma_2^{-1} (\mu_2-\mu_1) \Bigr).
-    \end{aligned}
-    $$
+::: {.incremental}
+
+- Recall that if $q\sim \mathcal{N}(\mu_1,\Sigma_1), p\sim \mathcal{N}(\mu_2,\Sigma_2)$ in $\mathbb R^n,$
+  then
+  $$
+  \begin{aligned}
+    D_{\mathtt{KL}}(q\Vert p) = \frac{1}{2} \Bigl( \log\frac{\left\lvert \Sigma_2 \right\rvert}{\left\lvert \Sigma_1 \right\rvert} - n + \operatorname{tr}(\Sigma_2^{-1}\Sigma_1) + (\mu_2-\mu_1)^T \Sigma_2^{-1} (\mu_2-\mu_1) \Bigr).
+  \end{aligned}
+  $$
 - $\color{red}{\textbf{We choose}}$
   $$
   \begin{aligned}
@@ -607,11 +604,13 @@ $$
   \end{aligned}
   $$
 
+:::
+
 ## To determine $\mu_{\theta}(x_t,t)$
 ::::: {.incremental}
 :::: {.columns}
 ::: {.column style="width: 39%; border-right: 1px solid #000"}
-> - Want: $\mu_{\theta}(x_t,t)\approx \mu_t(x_t,x_0).$
+- Want: $\mu_{\theta}(x_t,t)\approx \mu_t(x_t,x_0).$
 
 - Try to set $\mu_{\theta}(x_t,t)=\mu_t(x_t,\widehat{x}_0),$ where
   $$
@@ -658,7 +657,7 @@ $$
   \end{aligned}
   $$
   
-  > - Given $t,x_t,$
+  - Given $t,x_t,$
     $$
     \begin{aligned}
       \text{predict }\overline{\varepsilon}_t \iff {\color{blue}{\text{predict } X_0}}.
@@ -684,27 +683,23 @@ $$
 # Training and Sampling
 
 :::::: {.columns}
-::::: {.column}
-:::: {.fragment}
+::::: {.column .incremental}
 ::: {.remark}
 We will minimize $\mathbb E_{X\sim q(x)}[f_{\theta}(X)]$ by
 
 - **repeat** **until** converge:
   
-  >- sampling $x\sim q(x)$ and then
-  >- minimizing $f_{\theta}(x)$ by taking gradient descent on $\theta.$
+  - sampling $x\sim q(x)$ and then
+  - minimizing $f_{\theta}(x)$ by taking gradient descent on $\theta.$
 :::
-::::
 :::::
-::::: {.column}
-:::: {.fragment}
+::::: {.column .incremental}
 ::: {.remark}
 We may sample $(x,y)\sim q(x,y)$ by
 
-> - sampling $x\sim q(x)$ and then
-> - sampling $y\sim q(y\vert x).$
+- sampling $x\sim q(x)$ and then
+- sampling $y\sim q(y\vert x).$
 :::
-::::
 :::::
 ::::::
 
