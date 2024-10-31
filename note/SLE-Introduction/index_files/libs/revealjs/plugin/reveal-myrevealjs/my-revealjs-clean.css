@@ -1,0 +1,24 @@
+:root {
+  --main-color: #107895; /* 定义一个名为--main-color的变量 */
+  --main-color2: #9a2515;
+}
+
+
+.reveal h2 {
+  color: var(--main-color);
+  /* font-style: italic; */
+  font-family: 'Menlo', sans-serif;
+}
+
+/* p {
+  font-family: 'Times New Roman', serif;
+} */
+
+.reveal ul li::marker {
+  color: var(--main-color);
+}
+
+.reveal .progress {
+  color: red;
+  height: 8px;
+}

@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/tabby.min.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-018089954d508eae8a473f0b7f0491f0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="index_files/libs/quarto-contrib/reveal-header-1.0.0/add_header.js" defer="true"></script>
+<link href="index_files/libs/quarto-contrib/reveal-header-1.0.0/add_header.css" rel="stylesheet">
+<script src="index_files/libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="index_files/libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script src="index_files/libs/quarto-contrib/sc-sb-title-1.0.0/sc_sb_title.js" defer="true"></script>
+<link href="index_files/libs/quarto-contrib/grid-no-htext-1.0.0/grid_no_htext.css" rel="stylesheet">
+<link href="index_files/libs/quarto-contrib/reveal-auto-agenda-0.0.3/reveal-auto-agenda.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.20">
+
+  <meta name="author" content="ChoCho">
+  <title>Introduction to SLE</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/theme/quarto-9463cca777bab226ec776e6d0a61706d.css">
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+  <link href="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-myrevealjs/my-revealjs.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-myrevealjs/my-revealjs-clean.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-myrevealjs/katex.min.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-myrevealjs/revealjs-fragment.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style>html{ scroll-behavior: smooth; }</style>
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script type="module" src="index_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+  <link href="index_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Introduction to SLE</h1>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+ChoCho 
+</div>
+<div class="quarto-title-author-email">
+<a href="mailto:kycho@math.ncu.edu.tw">kycho@math.ncu.edu.tw</a>
+</div>
+        <p class="quarto-title-affiliation">
+            NCU Math
+          </p>
+    </div>
+</div>
+
+</section>
+<section id="content" class="slide level2">
+<h2>⭐ Content</h2>
+<ul>
+<li><p>Motivation</p></li>
+<li><p>Schramm-Loewner Evolution (SLE)</p>
+<ul>
+<li>Loewner Differential Equation</li>
+<li>Chordal SLE</li>
+<li>Dipolar SLE</li>
+</ul></li>
+<li><p>Restriction Property</p>
+<ul>
+<li>Self-Avoiding Walk (SAW)</li>
+<li>Brownian Loop</li>
+</ul></li>
+<li><p>Results</p>
+<ul>
+<li>Sketch of the Proof</li>
+</ul></li>
+</ul>
+</section>
+<section id="motivation-ising-model" class="slide level2">
+<h2>⭐ Motivation: Ising Model</h2>
+<div class="columns">
+<div class="column" style="width:70%;">
+<ul>
+<li><p>Ising model: To study ferromagnetism.</p></li>
+<li><p>Let <span class="math inline">V</span> be all boxes of the square and <span class="math inline">w=(w_v)_{v\in V}\in \lbrace \pm1 \rbrace^V.</span></p></li>
+<li><p>We set a probability mass function by <span class="math display">\begin{align*}
+  \mathbf{P}\big(\lbrace \omega\rbrace\big) = C \exp\Big( \frac{1}{T} \sum_{u\sim v}w_u w_v \Big),
+\end{align*}</span> where the summation is over all neighbor pairs in <span class="math inline">V</span> and <span class="math inline">C</span> is a normalization constant.</p>
+<ul>
+<li><span class="math inline">T</span> is the temperature of this model.</li>
+<li><span class="math inline">w_u w_v=1\iff</span> <span class="math inline">u</span> and <span class="math inline">v</span> is an agreeing neighbor pair.</li>
+</ul></li>
+<li><p>This is a good model for describing ferromagnetism.</p>
+<ul>
+<li>When the temperature over some critical value (Curie point), the magnetization of the ferromagnetic material vanishes.</li>
+<li>Critical temperature?</li>
+</ul></li>
+<li><dl>
+<dt>Theorem. <span class="citation" data-cites="kramers1941statistics">Kramers and Wannier (<a href="#/reference" role="doc-biblioref" onclick="">1941</a>)</span></dt>
+<dd>
+The critical inverse temperature <span class="math inline">\dfrac{1}{T_c}=\dfrac{1}{2}\log(1+\sqrt 2).</span>
+</dd>
+</dl></li>
+</ul>
+</div><div class="column" style="width:30%;">
+<p><img data-src="images/2022-02-14-1.png" style="width:90.0%"></p>
+</div></div>
+</section>
+<section id="motivation-ising-model-1" class="slide level2">
+<h2>⭐ Motivation: Ising Model</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<ul>
+<li><p><img data-src="images/2021-10-06-16-27-06.png" style="width:100.0%"></p></li>
+<li><p>The Ising model from the chaotic state to the critical case.</p>
+<ul>
+<li><img data-src="images/Ising_ani.gif"></li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:60%;">
+<ul>
+<li><p>To simplify the question, we always consider the <span class="math inline">+,-</span> boundary conditions and see the <span class="math inline">\color{red}{\text{interface(交界)}}</span>.</p></li>
+<li><p><img data-src="images/Ising_Smirnov_2.svg" style="width:50.0%"> <img data-src="images/Ising_+-bd.svg" style="width:35.0%"></p></li>
+<li><p>This is why we <span class="math inline">\color{red}{\text{always consider the critical case}}</span>.</p></li>
+<li><p>When <span class="math inline">\delta</span> is small, the interface of <span class="math inline">+,-</span> spins for the critical case looks like a random fractal curve.</p></li>
+<li><dl>
+<dt>Theorem. <span class="citation" data-cites="chelkak2012universality">Chelkak and Smirnov (<a href="#/reference" role="doc-biblioref" onclick="">2012</a>)</span>, <span class="citation" data-cites="chelkak2014convergence">Chelkak et al. (<a href="#/reference" role="doc-biblioref" onclick="">2014</a>)</span></dt>
+<dd>
+The critical Ising interface <span class="math inline">\implies</span> <span class="math inline">\operatorname{SLE}_3.</span>
+</dd>
+</dl></li>
+</ul>
+</div></div>
+</section>
+<section id="percolation-滲流理論" class="slide level2">
+<h2>Percolation (滲流理論)</h2>
+<ul>
+<li>Critical percolation: Coloring each hexagons independently by <span class="math inline">\mathbf{P}[\text{black}]=\mathbf{P}[\text{white}]=1/2.</span></li>
+</ul>
+<p><img data-src="images/perco_empty.svg" style="width:36.0%"> <img data-src="images/percoooooooo_1.svg" style="width:36.0%"> <img data-src="images/inter_percolation.png" style="width:20.0%"></p>
+<ul>
+<li><dl>
+<dt>Theorem. <span class="citation" data-cites="schramm2000scaling">Schramm (<a href="#/reference" role="doc-biblioref" onclick="">2000</a>)</span>, <span class="citation" data-cites="Smirnov2001CriticalPI">Smirnov (<a href="#/reference" role="doc-biblioref" onclick="">2001</a>)</span>, <span class="citation" data-cites="camia2007critical">Camia and Newman (<a href="#/reference" role="doc-biblioref" onclick="">2007</a>)</span></dt>
+<dd>
+The interface of the critical percolation on the hexagons <span class="math inline">\implies</span> <span class="math inline">\operatorname{SLE}_6.</span>
+</dd>
+</dl></li>
+</ul>
+<hr style="height:2px;border-width:0;color:gray;background-color:gray">
+<div class="columns">
+<div class="column" style="width:70%;">
+<ul>
+<li><p>Schramm-Loewner Evolution (SLE, with a parameter <span class="math inline">\kappa</span>): To describe the <span class="math inline">\color{red}{\textbf{limit}}</span> of the two-dimensional lattice models in statistical physics in the critical case.</p></li>
+<li><p>Next we see the conformal transformations.</p></li>
+</ul>
+</div><div class="column" style="width:30%;">
+
+</div></div>
+</section>
+<section id="why-conformal-transformations" class="slide level2">
+<h2>Why conformal transformations?</h2>
+<div class="columns">
+<div class="column" style="width:65%;">
+<ul>
+<li><dl>
+<dt>Definition.</dt>
+<dd>
+We say that <span class="math inline">f:D\longrightarrow D'</span> is a <strong>conformal transformation</strong> if <span class="math inline">f</span> is holomorphic, one-to-one, and onto.
+</dd>
+</dl></li>
+<li><p>Conformal transformations = Local rotation + rescaling.</p></li>
+<li><p><img data-src="images/bubble.png"></p></li>
+<li><p>The conformal transforms keep the structures of two-dimensional lattice models and the planar BM.</p></li>
+</ul>
+</div><div class="column" style="width:35%;">
+<p><img data-src="images/Conformal_map.svg" style="width:80.0%"></p>
+</div></div>
+</section>
+<section id="schramm-loewner-evolution-sle" class="slide level2">
+<h2>⭐ Schramm-Loewner Evolution (SLE)</h2>
+<ul>
+<li><p>Schramm-Loewner Evolution = Loewner differential equation + BM (with speed <span class="math inline">\kappa</span>).</p></li>
+<li><p>Loewner differential equation are used to study the slit mappings.</p></li>
+</ul>
+<div class="columns">
+<div class="column" style="width:40%;">
+<ul>
+<li><p>Consider the percolation with side length <span class="math inline">\varepsilon</span> in <span class="math inline">\mathbb{H}</span> for <span class="math inline">\varepsilon</span> small.</p></li>
+<li><p>Given the <span class="math inline">\color{red}{\text{red parts}}</span> in the right figure, say <span class="math inline">\color{red}{\gamma.}</span> Then it becomes the percolation in <span class="math inline">\mathbb{H}\backslash \gamma.</span></p></li>
+</ul>
+</div><div class="column" style="width:55%;">
+<p><img data-src="images/whyLE.svg"></p>
+</div></div>
+<hr style="height:2px;border-width:0;color:gray;background-color:gray">
+<ul>
+<li><p>Through physical observation, by conformal transformation <span class="math inline">f,</span> <span class="math display">\begin{align*}
+  \begin{aligned}
+  \text{given } \color{red}{\gamma} \text{, percolation in }\mathbb{H}\backslash \color{red}{\gamma} \, \iff \, \text{percolation in }\mathbb{H}.
+  \end{aligned}
+\end{align*}</span></p></li>
+<li><p>It is natural to consider the conformal transformation <span class="math inline">f</span> from <span class="math inline">\mathbb{H}\backslash \gamma</span> to <span class="math inline">\mathbb{H}</span> with <span class="math display">\begin{align*}
+\begin{aligned}
+\lim_{z\rightarrow \infty} \big[ f(z)-z \big] = 0,
+\end{aligned}
+\end{align*}</span> where <span class="math inline">\gamma</span> is a simple curve.</p></li>
+</ul>
+</section>
+<section id="loewner-differential-equation-gamma0timplies-u_t" class="slide level2">
+<h2>⭐ Loewner Differential Equation (<span class="math inline">\gamma(0,t]\implies U_t</span>)</h2>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Let <span class="math inline">\gamma(0,T]</span> be a simple curve in <span class="math inline">\mathbb{H}</span> and <span class="math inline">\gamma(0)=0.</span></li>
+<li>Let <span class="math inline">g_t:\mathbb{H}\backslash \gamma(0,t]\longrightarrow \mathbb{H}</span> be the <span class="math inline">\color{blue}{\text{unique}}</span> conformal transformation such that <span class="math display">\begin{align*}
+  \begin{aligned}
+  g_t(z) = \color{blue}{z} + \frac{\color{blue}{2t}}{z} + \cdots , \quad z \rightarrow \infty.
+  \end{aligned}
+\end{align*}</span></li>
+</ul>
+<p><img data-src="images/gtandUt.svg" style="width:95.0%"></p>
+</div><div class="column">
+<ul>
+<li><span class="math inline">(U_t)_{t\in [0,T]}</span> is continuous.</li>
+</ul>
+<dl>
+<dt>Proposition.</dt>
+<dd>
+For <span class="math inline">z\in \mathbb{H}\backslash \gamma(0,T],</span> <span class="math inline">\big(g_t(z)\big)_{t\in [0,T]}</span> is the solution of the initial value problem <span class="math display">\begin{align}
+\begin{aligned}
+\color{blue}{\partial_t z_t=\frac{2}{z_t-U_t},\quad z_0=z.}
+\end{aligned}
+\tag{🌙}
+  \end{align}</span> We call this ordinary differential equation the <strong>(chordal) Loewner equation</strong>.
+</dd>
+</dl>
+</div></div>
+<hr style="height:2px;border-width:0;color:gray;background-color:gray">
+<div class="columns">
+<div class="column">
+<ul>
+<li>For each <span class="math inline">z\in \mathbb{H}.</span>
+<ul>
+<li>Let <span class="math inline">g_s(z)</span> be the Loewner flow from the chordal Loewner equation (🌙).</li>
+<li>Let <span class="math inline">\tau(z)</span> be the supremum of all <span class="math inline">t</span> such that the solution is well defined up to time <span class="math inline">t</span> with <span class="math inline">g_t(z) \in \mathbb{H}.</span></li>
+</ul></li>
+</ul>
+</div><div class="column">
+<ul>
+<li>Then <span class="math inline">\gamma(0,t] = \big\lbrace z\in \mathbb{H}: \tau(z) \leq t \big\rbrace.</span></li>
+<li><span class="math inline">(\gamma_t)_{t\in [0,T]}</span> : Sticking the left and right sides of <span class="math inline">(U_{T-t})_{t\in [0,T]}</span> together.</li>
+</ul>
+</div></div>
+</section>
+<section id="loewner-flow-and-its-inverse." class="slide level2">
+<h2>Loewner flow, and its inverse.</h2>
+<div class="columns">
+<div class="column">
+<p><video data-src="SLE4.mp4" style="width:94.0%" controls=""><a href="SLE4.mp4">Video</a></video></p>
+</div><div class="column">
+<p><video data-src="Reverse%20SLE4.mp4" style="width:94.0%" controls=""><a href="Reverse%20SLE4.mp4">Video</a></video></p>
+<ul>
+<li><p><span class="math inline">(\gamma_t)_{t\in [0,T]}</span>: Sticking the left and right sides of <span class="math inline">(U_{T-t})_{t\in [0,T]}</span> together.</p></li>
+<li><p>Conversely, given a continuous function <span class="math inline">(U_t)_{t\geq 0},</span> we can generate the set <span class="math inline">\big\lbrace z\in \mathbb{H}: \tau(z) \leq t \big\rbrace</span> like <span class="math inline">(\gamma_t)_{t\in [0,T]}.</span></p></li>
+</ul>
+</div></div>
+</section>
+<section id="loewner-differential-equation-u_t-implies-gamma0t-or-k_t" class="slide level2">
+<h2>⭐ Loewner Differential Equation (<span class="math inline">U_t \implies \gamma(0,t)</span> or <span class="math inline">K_t</span>)</h2>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Conversely, given a continuous function <span class="math inline">(U_t)_{t\geq 0}.</span></li>
+<li>For <span class="math inline">z\in \mathbb{H},</span> let <span class="math inline">g_t(z)</span> be the solution of the initial value problem <span class="math display">\begin{align}
+\begin{aligned}
+\partial_t z_t=\frac{2}{z_t-U_t},\quad z_0=z.
+\end{aligned}
+\end{align}</span></li>
+<li>Let <span class="math inline">\tau(z)</span> be the supremum of all <span class="math inline">t</span> such that the solution is well defined up to time <span class="math inline">t</span> with <span class="math inline">g_t(z) \in \mathbb{H}.</span></li>
+<li>Let <span class="math inline">K_t := \bigl\lbrace z\in \mathbb{H}: \tau(z)\leq t \bigr\rbrace.</span></li>
+</ul>
+<dl>
+<dt>Proposition.</dt>
+<dd>
+<ul>
+<li><p><span class="math inline">K_t</span> is an <span class="math inline">\mathbb{H}</span>-hull (may not a curve). That is, <span class="math inline">K_t</span> is a bounded subset of <span class="math inline">\mathbb{H}</span> and <span class="math inline">K_t</span> is relatively closed in <span class="math inline">\mathbb{H},</span> and <span class="math inline">\mathbb{H}\backslash K_t</span> is simply connected.</p></li>
+<li><p>The function <span class="math inline">g_t</span> restricted to <span class="math inline">\mathbb{H}\backslash K_t</span> is the unique conformal transformation from <span class="math inline">(\mathbb{H}\backslash K_t,\infty)</span> to <span class="math inline">(\mathbb{H},\infty)</span> with expansion <span class="math display">\begin{align*}
+  \begin{aligned}
+  g_t(z) = z + \frac{2t}{z} + \cdots, \quad z\rightarrow \infty.
+  \end{aligned}
+\end{align*}</span></p></li>
+</ul>
+</dd>
+</dl>
+<p><img data-src="images/weldingabubble.svg"></p>
+</div><div class="column">
+<ul>
+<li><p><span class="math inline">U_t=t.</span></p>
+<p><img data-src="images/UtandKt/Ut1.svg" style="width:49.0%"> <img data-src="images/UtandKt/Kt1.svg" style="width:49.0%"></p></li>
+<li><p><span class="math inline">U_t=t^{1/2}.</span></p>
+<p><img data-src="images/UtandKt/Ut2.svg" style="width:49.0%"> <img data-src="images/UtandKt/Kt2.svg" style="width:49.0%"></p></li>
+<li><p><span class="math inline">U_t=t\sin(t/100).</span></p>
+<p><img data-src="images/UtandKt/Ut3.svg" style="width:49.0%"> <img data-src="images/UtandKt/Kt3.svg" style="width:49.0%"></p></li>
+<li><p><span class="math inline">U_t=t\sin(t/100)-2t^2.</span></p>
+<p><img data-src="images/UtandKt/Ut4.svg" style="width:49.0%"> <img data-src="images/UtandKt/Kt4.svg" style="width:49.0%"></p></li>
+</ul>
+</div></div>
+</section>
+<section id="the-definition-of-sle" class="slide level2">
+<h2>⭐ The Definition of SLE</h2>
+<div class="columns">
+<div class="column" style="width:65%;">
+<ul>
+<li><dl>
+<dt>Definition.</dt>
+<dd>
+The chordal <span class="math inline">\operatorname{SLE}_\kappa</span> is defined by <span class="math inline">\mathbb{H}</span>-hulls <span class="math inline">(K_t)_{t\geq 0}</span> which generated by <span class="math display">\begin{align*}
+  \begin{aligned}
+  \partial_t g_t(z)=\frac{2}{g_t(z)-U_t},\quad g_0(z) = z,\quad z\in \mathbb{H}
+  \end{aligned}
+  \end{align*}</span> for <span class="math inline">U_t=\sqrt{\kappa}B_t,</span> where <span class="math inline">B_t</span> is a standard Brownian motion. We called the <span class="math inline">\mathbb{H}</span>-hulls <span class="math inline">(K_t)_{t\geq 0}</span> the <span class="math inline">\operatorname{SLE}_{\kappa}</span>-hull.
+</dd>
+</dl></li>
+</ul>
+</div><div class="column" style="width:35%;">
+<p><img data-src="images/animation.gif" style="width:80.0%"></p>
+</div></div>
+<ul>
+<li><span class="math inline">(K_t)_{t\geq 0}</span> has the scaling invariance: <span class="math inline">(K_t)_{t\geq 0}\stackrel{\operatorname{law}}{=}(\lambda^{-1} K_{\lambda^2 t})_{t\geq 0}.</span>
+<ul>
+<li>By the scaling invariance of Brownian motion: <span class="math inline">(B_t)_{t\geq 0}\stackrel{\operatorname{law}}{=}(\lambda^{-1} B_{\lambda^2 t})_{t\geq 0}.</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="properties-of-sle-sle-is-generated-by-a-curve" class="slide level2 scrollable">
+<h2>Properties of SLE (SLE is generated by a curve)</h2>
+<div class="columns">
+<div class="column">
+<ul>
+<li><dl>
+<dt>Theorem. <span class="citation" data-cites="schramm2005basic">Schramm and Rohde (<a href="#/reference" role="doc-biblioref" onclick="">2005</a>)</span></dt>
+<dd>
+The <span class="math inline">\operatorname{SLE}_{\kappa}</span>-hull <span class="math inline">(K_t)_{t\geq 0}</span> is generated by a curve <span class="math inline">(\gamma(t))_{t\geq 0}</span> a.s.
+</dd>
+</dl></li>
+<li><p><img data-src="images/weldingabubble.svg"></p></li>
+<li><dl>
+<dt>Theorem. <span class="citation" data-cites="schramm2005basic">Schramm and Rohde (<a href="#/reference" role="doc-biblioref" onclick="">2005</a>)</span></dt>
+<dd>
+<ol type="1">
+<li>If <span class="math inline">0\leq \kappa\leq 4,</span> then w.p.1, <span class="math inline">\gamma</span> is simple curve in <span class="math inline">\mathbb{H};</span></li>
+<li>If <span class="math inline">4&lt;\kappa&lt;8,</span> then w.p.1, all points of <span class="math inline">\overline{\mathbb{H}}</span> are swallowed by <span class="math inline">\gamma(0,t)</span> and <span class="math inline">(K_t)_{t\geq 0}</span> fills all <span class="math inline">\mathbb{H}.</span></li>
+<li>If <span class="math inline">\kappa\in [8,\infty),</span> then w.p.1, <span class="math inline">\gamma[0,\infty)=\overline{\mathbb{H}}.</span></li>
+</ol>
+</dd>
+</dl></li>
+<li><p><img data-src="images/phaseofSLE.png"></p></li>
+</ul>
+</div><div class="column">
+<ul>
+<li><p>Note that <span class="math inline">\operatorname{SLE}_{\kappa}</span> curve <span class="math inline">(\gamma(t))_{t\geq 0}</span></p>
+<ul>
+<li>non-selfcrossing for all <span class="math inline">\kappa</span>;</li>
+<li>“phase transitions” at <span class="math inline">\kappa=4,8.</span></li>
+</ul></li>
+<li><p><span class="math inline">\kappa = 3,4.</span></p>
+<p><img data-src="images/discrete_model/3.svg" style="width:45.0%" alt="\operatorname{SLE}_3"> <img data-src="images/discrete_model/4.svg" style="width:45.0%" alt="\operatorname{SLE}_4"></p></li>
+<li><p><span class="math inline">\kappa = 6,8.</span></p>
+<p><img data-src="images/discrete_model/6.svg" style="width:45.0%" alt="\operatorname{SLE}_6"> <img data-src="images/discrete_model/8.svg" style="width:45.0%" alt="\operatorname{SLE}_8"></p></li>
+</ul>
+</div></div>
+</section>
+<section id="properties-of-sle-terminal-points-of-sle-curves" class="slide level2">
+<h2>Properties of SLE (Terminal points of SLE curves)</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<ul>
+<li><dl>
+<dt>Proposition. <span class="citation" data-cites="schramm2005basic">Schramm and Rohde (<a href="#/reference" role="doc-biblioref" onclick="">2005</a>)</span></dt>
+<dd>
+For the chordal <span class="math inline">\operatorname{SLE}_{\kappa},</span> <span class="math inline">\lim_{t\rightarrow\infty}\big\lvert \gamma(t) \big \rvert = \infty</span> a.s.
+</dd>
+</dl></li>
+</ul>
+</div><div class="column" style="width:40%;">
+
+</div></div>
+<div class="columns">
+<div class="column" style="width:60%;">
+<ul>
+<li>We always focus on the random set <span class="math inline">\gamma(0,\infty).</span> This is called the <span class="math inline">\operatorname{SLE}_{\kappa}</span> trace.
+<ul>
+<li>We only need to see the interface of the model.</li>
+</ul></li>
+<li>For any simply connected domain <span class="math inline">D</span> with <span class="math inline">a,b\in \partial D,</span> we may define <span class="math inline">(D,a,b)</span>-chordal <span class="math inline">\operatorname{SLE}_\kappa</span> trace by the conformal transformation from <span class="math inline">(\mathbb{H},0,\infty)</span> to <span class="math inline">(D,a,b).</span></li>
+</ul>
+</div><div class="column" style="width:40%;">
+<ul>
+<li><img data-src="images/cSLEinD.png"></li>
+</ul>
+</div></div>
+<hr style="height:2px;border-width:0;color:gray;background-color:gray">
+<div class="columns">
+<div class="column" style="width:80%;">
+<ul>
+<li>Hence, <span class="math inline">\bigl\lbrace(D,a,b)</span>-chordal <span class="math inline">\operatorname{SLE}_{\kappa}</span> trace<span class="math inline">\bigr\rbrace_{(D,a,b)}</span> is a family of <span class="math inline">\color{blue}{\text{non-selfcrossing}}</span> traces satisfying the conformal invariance.
+<ul>
+<li>What is the relationship between plane BM <span class="math inline">B</span> and SLE?</li>
+<li><span class="math inline">\partial B</span>?</li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:20%;">
+
+</div></div>
+</section>
+<section id="properties-of-sle-sle-traces-are-random-fractals" class="slide level2">
+<h2>Properties of SLE (SLE traces are random fractals)</h2>
+<div class="columns">
+<div class="column">
+<ul>
+<li><dl>
+<dt>Conjecture. <span class="citation" data-cites="mandelbrot1982fractal">Mandelbrot (<a href="#/reference" role="doc-biblioref" onclick="">1982</a>)</span></dt>
+<dd>
+Let <span class="math inline">B</span> be a planar BM. Then <span class="math inline">\dim_{\mathbf{H}}(\partial B)=4/3</span> a.s.
+</dd>
+</dl>
+<ul>
+<li>This conjecture was proved by <span class="citation" data-cites="lawler2011valuesII">Lawler, Schramm, and Werner (<a href="#/reference" role="doc-biblioref" onclick="">2001</a>)</span> by using <span class="math inline">\operatorname{SLE}_6.</span></li>
+</ul></li>
+<li><span class="citation" data-cites="ConformalRestrictionAMS">Lawler, Schramm, and Werner (<a href="#/reference" role="doc-biblioref" onclick="">2003</a>)</span> proved that <span class="math display">\partial\operatorname{SLE}_{6}=\partial B,</span> where <span class="math inline">B</span> be a reflected planar BM in <span class="math inline">\mathbb{H}</span> starting at <span class="math inline">0.</span>
+<ul>
+<li>(Reflected at an angle <span class="math inline">\pi/3</span> off <span class="math inline">[0,\infty)</span> and at an angle <span class="math inline">2\pi/3</span> off <span class="math inline">(-\infty,0].</span>)</li>
+</ul></li>
+<li><img data-src="images/BMSLE6.svg"></li>
+</ul>
+</div><div class="column">
+<ul>
+<li><dl>
+<dt>Theorem. <span class="citation" data-cites="beffara2008dimension">Beffara (<a href="#/reference" role="doc-biblioref" onclick="">2008</a>)</span></dt>
+<dd>
+<span class="math inline">\dim_{\mathbf{H}}(\operatorname{SLE}_{\kappa}) = \min\big\lbrace 2,1+\kappa/8\big\rbrace</span> a.s.
+</dd>
+</dl>
+<ul>
+<li>For <span class="math inline">\kappa\geq 8,</span> <span class="math inline">\dim_{\mathbf{H}}(\operatorname{SLE}_{\kappa})=2.</span></li>
+</ul></li>
+<li><dl>
+<dt>Theorem. <span class="citation" data-cites="zhan2008duality">Zhan (<a href="#/reference" role="doc-biblioref" onclick="">2008</a>)</span></dt>
+<dd>
+For <span class="math inline">\kappa\in (4,\infty),</span> <span class="math inline">\partial(\operatorname{SLE}_{\kappa})=\operatorname{SLE}_{16/\kappa}.</span>
+</dd>
+</dl>
+<ul>
+<li><span class="citation" data-cites="Smirnov2001CriticalPI">Smirnov (<a href="#/reference" role="doc-biblioref" onclick="">2001</a>)</span>: <span class="math inline">\dim_{\mathbf{H}}\big(\partial (\operatorname{SLE}_6)\big)=4/3.</span></li>
+<li>For <span class="math inline">\kappa=6,</span> <span class="math inline">\partial(\operatorname{SLE}_{6})=\operatorname{SLE}_{8/3}.</span></li>
+</ul></li>
+</ul>
+</div></div>
+</section>
+<section id="dipolar-sle" class="slide level2">
+<h2>⭐ Dipolar SLE</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<p><img data-src="images/Ising111.svg"></p>
+<ul>
+<li><span class="math inline">\mathbb{S}:=\bigl\lbrace x+iy\in \mathbb{C} : x\in \mathbb{R}, y\in (0,\pi)\bigr\rbrace.</span></li>
+</ul>
+<dl>
+<dt>Definition.</dt>
+<dd>
+The dipolar <span class="math inline">\operatorname{SLE}_\kappa</span> is defined by <span class="math inline">\mathbb{S}</span>-hulls <span class="math inline">(K_t)_{t\geq 0}</span> generated by <span class="math display">\begin{align*}
+\begin{aligned}
+\partial_t g_t(z)=\coth\left(\frac{g_t(z)-U_t}{2}\right),\,\, g_0(z) = z,
+\end{aligned}
+  \end{align*}</span> for <span class="math inline">U_t=\sqrt{\kappa}B_t,</span> where <span class="math inline">B_t</span> is a standard Brownian motion.
+</dd>
+</dl>
+<p><img data-src="images/DLE.png" style="width:90.0%"></p>
+</div><div class="column" style="width:40%;">
+<ul>
+<li>Dipolar <span class="math inline">\operatorname{SLE}_{\kappa}</span> behaves similarly to chordal <span class="math inline">\operatorname{SLE}_{\kappa}.</span>
+<ul>
+<li>Generated by a curve;</li>
+<li><img data-src="images/phaseofDSLE.png"></li>
+<li>With a random terminal point in <span class="math inline">\mathbb{R}+i\pi;</span></li>
+<li>Do not filling all space for <span class="math inline">\kappa&gt;4.</span></li>
+</ul></li>
+<li>Similarly, we may define the Dipolar <span class="math inline">\operatorname{SLE}_{\kappa}</span> in <span class="math inline">D</span> from <span class="math inline">x</span> to <span class="math inline">I</span> by the conformal transformation from <span class="math inline">(\mathbb{S},0,\mathbb{R}+i\pi)</span> to <span class="math inline">(D,x,I).</span></li>
+</ul>
+</div></div>
+</section>
+<section id="restriction-property-self-avoiding-walk-saw" class="slide level2">
+<h2>⭐ Restriction Property: Self-Avoiding Walk (SAW)</h2>
+<div class="columns">
+<div class="column">
+<ul>
+<li><p>A self-avoiding walk (SAW) <span class="math inline">\color{blue}{w}</span> of length <span class="math inline">46</span> in <span class="math inline">\mathbb{Z}^2.</span></p></li>
+<li><p><img data-src="images/SAW.svg"></p></li>
+</ul>
+</div><div class="column">
+<ul>
+<li>SAW is used to describe the Polymer(聚合物) based on a carbon chain <span class="math display">C-C-C-\cdots-C.</span>
+<ul>
+<li>2 carbon atoms (碳原子) cannot exist at the same location.</li>
+<li><img data-src="images/Single_Polymer_Chains_AFM.jpg"></li>
+</ul></li>
+</ul>
+</div></div>
+</section>
+<section id="saw-definition" class="slide level2">
+<h2>SAW: Definition</h2>
+<div class="columns">
+<div class="column">
+<ul>
+<li><p>Let <span class="math inline">\operatorname{SAW}^{\mathbf{0}}(n)</span> be the set of all SAWs <span class="math inline">w</span> with <span class="math inline">w_0=\mathbf{0}, \lvert w\rvert=n</span> and let <span class="math inline">\operatorname{SAW}^{\mathbf{0}}=\bigcup_{n\in \mathbb{N}} \operatorname{SAW}^{\mathbf{0}}(n).</span></p></li>
+<li><p>Let <span class="math inline">C_n=\# \operatorname{SAW}^{\mathbf{0}}(n).</span> Then there exists a <span class="math inline">\beta\in(0,\infty)</span> called the <span class="math inline">\color{blue}{\text{connective}}</span> <span class="math inline">\color{blue}{\text{constant}}</span> such that <span class="math display">C_n \approx \beta^n.</span></p></li>
+<li><p>Let <span class="math inline">\mu^{\operatorname{SAW}}(\mathbf{0})</span> be the measure on <span class="math inline">\operatorname{SAW}^{\mathbf{0}}</span> by <span class="math display">\begin{align*}
+  \begin{aligned}
+  \mu^{\operatorname{SAW}}(\mathbf{0})\bigl\lbrace w \bigr\rbrace=\beta^{-\left\lvert w \right\rvert}.
+  \end{aligned}
+\end{align*}</span></p>
+<ul>
+<li><rmk>If we assign <span class="math inline">\mu^{\operatorname{SAW}}(\mathbf{0})\bigl\lbrace w \bigr\rbrace=e^{-\alpha\left\lvert w \right\rvert},</span> then we have a “phase transition” at <span class="math inline">e^{-\alpha}=\beta^{-1}</span> from a finite measure to an infinite measure. </rmk></li>
+</ul></li>
+</ul>
+</div><div class="column">
+<ul>
+<li>The exact value of <span class="math inline">\beta</span> is unknown and depends on the lattice (non-universal).
+<ul>
+<li><span class="math inline">\beta\in (2.6,2.7).</span></li>
+<li>For SAWs defined on the honeycomb lattice, it has been proved by <span class="citation" data-cites="duminil2012connective">Duminil-Copin and Smirnov (<a href="#/reference" role="doc-biblioref" onclick="">2012</a>)</span> that <span class="math display">\begin{align*}
+  \begin{aligned}
+  \beta = \sqrt{2+\sqrt{2}} = 2\cos(\pi/8).
+  \end{aligned}
+\end{align*}</span></li>
+<li><img data-src="images/SAWonhoneybox.png"></li>
+</ul></li>
+</ul>
+</div></div>
+</section>
+<section id="saw-some-critical-exponents" class="slide level2">
+<h2>SAW: Some Critical Exponents</h2>
+<div class="columns">
+<div class="column">
+<ul>
+<li>(Conjecture) Mean-square displacement exponent <span class="math inline">\nu</span>: <span class="math display">\begin{align*}
+  \begin{aligned}
+  \frac{1}{C_n}\sum_{w\in \operatorname{SAW}^{\mathbf{0}}(n)} \operatorname{diam} (w) \approx n^{\nu}, \cr
+  \end{aligned}
+\end{align*}</span> or, <span class="math display">\begin{align*}
+  \begin{aligned}
+  \frac{1}{C_n} \sum_{w\in \operatorname{SAW}^{\mathbf{0}}(n)} \bigl\lvert w(n) \bigr\rvert^{2} \approx n^{2\nu}.
+  \end{aligned}
+\end{align*}</span>
+<ul>
+<li>This gives that the dimension of the paths of the scaling limit of SAWs (if it exists) should be <span class="math inline">1/\nu.</span></li>
+</ul></li>
+<li>(Conjecture) Number of walks exponent <span class="math inline">\gamma</span>: <span class="math display">\begin{align*}
+  \begin{aligned}
+  \mu^{\operatorname{SAW}}(0)\bigl\lbrace \operatorname{SAW}^{\mathbf{0}}(n) \bigr\rbrace = \beta^{-n} C_n \approx n^{\gamma-1}.
+  \end{aligned}
+\end{align*}</span>
+<ul>
+<li>The probability that two <span class="math inline">\operatorname{SAW}^{\mathbf{0}}(n)</span> do not intersect is <span class="math display">\begin{align*}
+  \begin{aligned}
+  \frac{C_{2n}}{C_nC_n} \approx n^{1-\gamma}.
+  \end{aligned}
+\end{align*}</span></li>
+<li><img data-src="images/twoSAW.png" style="width:100.0%"></li>
+</ul></li>
+</ul>
+</div><div class="column">
+<ul>
+<li><dl>
+<dt>Conjecture.</dt>
+<dd>
+<span class="math inline">\nu,\gamma</span> are universal (do not depend on the lattice).
+</dd>
+</dl></li>
+<li><dl>
+<dt>Conjecture.</dt>
+<dd>
+<span class="math inline">\nu=3/4,\gamma=43/32.</span>
+</dd>
+</dl></li>
+<li><dl>
+<dt>Conjecture.</dt>
+<dd>
+SAW <span class="math inline">\implies</span> <span class="math inline">\operatorname{SLE}_{8/3}.</span>
+</dd>
+</dl></li>
+<li><img data-src="images/SAWand8over3/SAWtoSLE.png" style="width:100.0%"></li>
+</ul>
+</div></div>
+</section>
+<section id="restriction-property" class="slide level2">
+<h2>⭐ Restriction Property</h2>
+<div class="columns">
+<div class="column" style="width:80%;">
+<ul>
+<li><p>We may use a limit argument to define <span class="math inline">\mu^{\operatorname{SAW}}_D(z,w)</span> for <span class="math inline">z,w\in \partial D,</span> which means that the law of SAWs from <span class="math inline">z</span> to <span class="math inline">w</span> in <span class="math inline">D.</span></p></li>
+<li><p><span class="math inline">\bigl\lbrace \mu_D^{\operatorname{SAW}}(z,w) \bigr\rbrace_D</span> satisfies the <strong>restriction property</strong>:</p>
+<blockquote>
+<p>If <span class="math inline">D'\subset D,</span> then <span class="math inline">\mu_{D'}^{\operatorname{SAW}}(z,w)</span> is <span class="math inline">\mu_{D}^{\operatorname{SAW}}(z,w)</span> restricted to walks that stay in <span class="math inline">D'.</span></p>
+</blockquote></li>
+<li><p>If the scaling limit of SAWs exists and is conformally invariant, then it should be an <span class="math inline">\operatorname{SLE}_{\kappa_0}</span> for some <span class="math inline">\kappa_0.</span></p></li>
+<li><p>Let <span class="math inline">\mu^{\operatorname{SLE}_{\kappa_0}}_D(z,w)</span> be the law of a chordal <span class="math inline">\operatorname{SLE}_{\kappa_0}</span> in <span class="math inline">D</span> from <span class="math inline">z</span> to <span class="math inline">w.</span> Then the following statement should holds:</p>
+<blockquote>
+<p>Let <span class="math inline">A</span> be an <span class="math inline">\mathbb{H}</span>-hull with <span class="math inline">0\notin \overline{A}.</span> Then <span class="math display">\begin{align*}
+\begin{aligned}
+\mu_{\mathbb{H}}^{\operatorname{SLE}_{\kappa_0}}(0,\infty) \bigg\vert _{\gamma\cap A=\emptyset} = c_A \cdot \mu_{\mathbb{H}\backslash A}^{\operatorname{SLE}_{\kappa_0}}(0,\infty)
+\end{aligned}
+\end{align*}</span> for some constant <span class="math inline">c_A,</span> which is the ratio of the normalization constants of the scaling limits.</p>
+</blockquote></li>
+<li><p>Taking both measures on <span class="math inline">\bigl\lbrace \gamma: \gamma\cap A = \emptyset\bigr\rbrace,</span> we have <span class="math display">\begin{align}
+  \begin{aligned}
+  \mathbf{P}\bigl\lbrace \operatorname{SLE}_{\kappa_0} \cap A = \emptyset \bigr\rbrace = c_A.
+  \end{aligned}
+  \tag{⚡}
+\end{align}</span></p></li>
+</ul>
+</div><div class="column" style="width:20%;">
+
+</div></div>
+</section>
+<section id="restriction-property-1" class="slide level2">
+<h2>⭐ Restriction Property</h2>
+<div class="columns">
+<div class="column" style="width:80%;">
+<ul>
+<li><p>Hence, <span class="math display">\begin{align*}
+  \begin{aligned}
+  \mu_{\mathbb{H}}^{\operatorname{SLE}_{\kappa_0}}(0,\infty) \bigl[\,  \cdot \, \big\vert \gamma\cap A=\emptyset \bigr] = \mu_{\mathbb{H}\backslash A}^{\operatorname{SLE}_{\kappa_0}}(0,\infty).
+  \end{aligned}
+\end{align*}</span></p></li>
+<li><p>For the value <span class="math inline">c_A,</span> we have the following:</p>
+<dl>
+<dt>(Restriction). <span class="citation" data-cites="ConformalRestrictionAMS">Lawler, Schramm, and Werner (<a href="#/reference" role="doc-biblioref" onclick="">2003</a>)</span></dt>
+<dd>
+Let <span class="math inline">\gamma</span> be a chordal <span class="math inline">\operatorname{SLE}_{8/3}</span> trace and let <span class="math inline">A</span> be an <span class="math inline">\mathbb{H}</span>-hull with <span class="math inline">0\notin \overline{A}.</span> Then <span class="math display">\begin{align}
+  \begin{aligned}
+  \mathbf{P}\bigl[ \,\gamma\cap A=\emptyset \, \bigr] = \Phi_A'(0)^{5/8},
+  \end{aligned}
+  \tag{⚡}
+\end{align}</span> where <span class="math inline">\Phi_A</span> is the unique conformal transformation from <span class="math inline">(\mathbb{H}\backslash A,0,\infty)</span> to <span class="math inline">(\mathbb{H},0,\infty)</span> with <span class="math inline">\Phi_A'(\infty)=1.</span>
+</dd>
+</dl></li>
+<li><p><span class="math inline">8/3</span> is the only <span class="math inline">\kappa_0</span> such that <span class="math inline">(⚡)</span> holds.</p>
+<ul>
+<li>This can explain the conjectures <span class="math inline">\nu=3/4,\gamma=43/32.</span></li>
+<li>For example, <span class="math inline">1/\nu = \dim_{\mathbf{H}}(\operatorname{SLE}_{8/3}) = 4/3.</span></li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:20%;">
+
+</div></div>
+</section>
+<section id="brownian-loop" class="slide level2">
+<h2>Brownian loop</h2>
+<div class="columns">
+<div class="column" style="width:80%;">
+<ul>
+<li><p>Note that Mandelbrot’s conjecture is obtained by simulating the planar simple random walk loops (simple random walks conditioned to begin and end at the same point).</p></li>
+<li><p>It is natural to consider the loops generated by the planar BM.</p></li>
+<li><p>Let <span class="math inline">\mu^{\#}(z,w;t)</span> be the law of Brownian bridge from <span class="math inline">z</span> to <span class="math inline">w</span> in time <span class="math inline">t.</span></p></li>
+<li><p>The unrooted loop measure is defined by <span class="math display">\begin{align*}
+  \begin{aligned}
+  \mu^{\operatorname{loop}} \big\lbrace \ell \in \cdot \big\rbrace = \int_{\mathbb{C}}\int_0^{\infty} \frac{1}{2\pi t^2} \mu^{\#} (z,z;t)\big\lbrace \gamma: \gamma(0,t_{\gamma})\in \cdot \big\rbrace \mathrm{d} t \mathrm{d} A(z)
+  \end{aligned}
+\end{align*}</span> and <span class="math inline">\mu^{\operatorname{loop}}_D</span> is <span class="math inline">\mu^{\operatorname{loop}}</span> restricted to loops staying in <span class="math inline">D.</span></p></li>
+<li><p>The unrooted loop measures <span class="math inline">\big\lbrace \mu_D^{\operatorname{loop}} \big\rbrace_D</span> satisfy the conformal invariance:</p>
+<blockquote>
+<p>If <span class="math inline">f</span> is a conformal transformation from <span class="math inline">D</span> to <span class="math inline">D',</span> then <span class="math display">\begin{align*}
+\begin{aligned}
+\mu_D^{\operatorname{loop}}\bigl\lbrace \ell: \ell\cap A = \emptyset  \bigr\rbrace = \mu_{D'}^{\operatorname{loop}} \bigl\lbrace \ell': \ell'\cap f(A) = \emptyset \bigr\rbrace.
+\end{aligned}
+\end{align*}</span></p>
+</blockquote></li>
+</ul>
+</div><div class="column" style="width:20%;">
+
+</div></div>
+</section>
+<section id="mathbbs-capacity" class="slide level2">
+<h2><span class="math inline">\mathbb{S}</span>-capacity</h2>
+<div class="columns">
+<div class="column" style="width:80%;">
+<ul>
+<li><dl>
+<dt>Definition.</dt>
+<dd>
+Let <span class="math inline">A</span> be an <span class="math inline">\mathbb{S}</span>-hull and let <span class="math inline">g_A</span> be the unique conformal transformation from <span class="math inline">(\mathbb{S}\backslash A,-\infty,\infty)</span> to <span class="math inline">(\mathbb{S},-\infty,\infty)</span> such that there exists a unique value <span class="math inline">s\in [0,\infty)</span> satisfies <span class="math display">\begin{align*}
+  \begin{aligned}
+  \lim_{z\rightarrow\pm\infty}\big(g_A(z)-z\big)=\pm s.
+  \end{aligned}
+\end{align*}</span> We define <span class="math inline">\operatorname{scap}(A)</span> by this unique value <span class="math inline">s.</span>
+</dd>
+</dl></li>
+<li>If <span class="math inline">0\notin \overline{A},</span> then we set <span class="math inline">\Phi_A=g_A-g_A(0).</span></li>
+</ul>
+</div><div class="column" style="width:20%;">
+
+</div></div>
+<ul>
+<li><img data-src="images/gAandPhiASS.svg" style="width:90.0%"></li>
+</ul>
+</section>
+<section id="restriction-property-for-dipolar-sle" class="slide level2">
+<h2>Restriction Property for Dipolar SLE</h2>
+<div class="columns">
+<div class="column" style="width:80%;">
+<ul>
+<li><dl>
+<dt>Theorem. <span class="citation" data-cites="kang2013conformal">Kang and Tak (<a href="#/reference" role="doc-biblioref" onclick="">2013</a>)</span></dt>
+<dd>
+Let <span class="math inline">\gamma</span> be a dipolar <span class="math inline">\operatorname{SLE}_{8/3}.</span> Let <span class="math inline">A</span> be an <span class="math inline">\mathbb{S}</span>-hull with <span class="math inline">0\notin \overline{A}.</span> Then <span class="math display">\begin{align}
+  \begin{aligned}
+  \mathbf{P}\big\lbrace \gamma\cap A=\emptyset \big\rbrace = \Phi_A'(0)^{5/8} \exp\Bigl\lbrace -\frac{5}{48} \operatorname{scap}(A) \Bigr\rbrace.
+  \end{aligned}
+\end{align}</span>
+</dd>
+</dl></li>
+<li><p>Let <span class="math inline">\mu_{D}^{\operatorname{dSLE}_\kappa}(x,I)</span> be the law of a dipolar <span class="math inline">\operatorname{SLE}_{\kappa}</span> in <span class="math inline">D</span> from <span class="math inline">x</span> to <span class="math inline">I.</span> Then the theorem above can be written as <span class="math display">\begin{align*}
+  \begin{aligned}
+  \frac{\mathrm{d}\mu_{\mathbb{S}\backslash A}^{\operatorname{dSLE}_{8/3}}(0,\mathbb{R}+i\pi)}{\mathrm{d}\mu_{\mathbb{S}}^{\operatorname{dSLE}_{8/3}}(0,\mathbb{R}+i\pi)}(\gamma) = 1_{[\gamma\subset \mathbb{S}\backslash A]} \cdot \Phi_A'(0)^{-5/8}\exp\biggl\lbrace \frac{5}{48} \operatorname{scap}(A) \biggr\rbrace.
+  \end{aligned}
+\end{align*}</span></p></li>
+<li><p>We give a generalization of this theorem.</p></li>
+</ul>
+</div><div class="column" style="width:20%;">
+
+</div></div>
+</section>
+<section id="results" class="slide level2">
+<h2>⭐ Results</h2>
+<dl>
+<dt>Theorem.</dt>
+<dd>
+Let <span class="math inline">\kappa\in (0,8/3].</span> Let <span class="math inline">A</span> be an <span class="math inline">\mathbb{S}</span>-hull with <span class="math inline">0\notin \overline{A}.</span> Then <span class="math display">\begin{align*}
+\begin{aligned}
+\frac{\mathrm{d}\mu_{\mathbb{S}\backslash A}^{\operatorname{dSLE}_{\kappa}}(0,\mathbb{R}+i\pi)}{\mathrm{d}\mu_{\mathbb{S}}^{\operatorname{dSLE}_{\kappa}}(0,\mathbb{R}+i\pi)}(\gamma)
+&amp;=
+1_{[\gamma\subset \mathbb{S}\backslash A]}
+\Phi_{A}'(0)^{-\alpha}\exp\bigl(c\operatorname{scap} (A)\bigr)  \cr
+&amp;\qquad \cdot  \exp\biggl\lbrace -\frac{\lambda}{2} \mu_{\mathbb{S}}^{\operatorname{loop}} \Bigl\lbrace \ell : \ell \cap \gamma \neq \emptyset , \ell \cap A \neq \emptyset \Bigr\rbrace \biggr\rbrace,
+\end{aligned}
+  \end{align*}</span> where <span class="math display">\begin{align*}
+\begin{aligned}
+(\alpha,c,\lambda) =\Bigl(\frac{6-\kappa}{2\kappa},\frac{(\kappa-2)(6-\kappa)}{8\kappa}, \frac{(3\kappa-8)(\kappa-6)}{2\kappa} \Bigr).
+\end{aligned}
+  \end{align*}</span>
+</dd>
+</dl>
+<ul>
+<li><p>Note that for <span class="math inline">\kappa = 8/3.</span> This Radon-Nikodym derivative becomes <span class="math display">\begin{align*}
+  \begin{aligned}
+   1_{[\gamma\subset \mathbb{S}\backslash A]} \cdot \Phi_A'(0)^{-5/8}\exp\Bigl\lbrace \frac{5}{48} \operatorname{scap}(A) \Bigr\rbrace.
+  \end{aligned}
+\end{align*}</span></p></li>
+<li><p>By a limit argument, we may define the boundary Poisson kernel <span class="math inline">H_{\mathbb{S}\backslash A}(0,\mathbb{R}+i\pi),H_{\mathbb{S}\backslash A}(-\infty,\infty),\cdots.</span> Then we have <span class="math display">\begin{align*}
+  \begin{aligned}
+  \Phi_{A}'(0) &amp;= \frac{H_{\mathbb{S}\backslash A}(0,\mathbb{R}_{\pi})}{H_{\mathbb{S}}(0,\mathbb{R}_{\pi})}, \cr
+  \exp\bigl(-2\operatorname{scap}(A)\bigr) &amp;= \frac{H_{\mathbb{S}\backslash A}(-\infty,\infty)}{H_{\mathbb{S}}(-\infty,\infty)}.
+  \end{aligned}
+\end{align*}</span></p></li>
+</ul>
+</section>
+<section id="sketch-of-the-proof" class="slide level2">
+<h2>Sketch of the proof</h2>
+<div class="columns">
+<div class="column">
+<p><img data-src="images/FinallemmaSloop.svg" style="width:100.0%"></p>
+</div><div class="column">
+<ul>
+<li><p>Let <span class="math inline">(g_t,\gamma(0,t],U_t)_{t\geq 0}</span> be an <span class="math inline">(\mathbb{S},0,\mathbb{R}+i\pi)</span>-dipolar <span class="math inline">\operatorname{SLE}_{\kappa}.</span></p></li>
+<li><p>Let <span class="math inline">(g_t^*,\gamma^*(0,t],U_t^*)=\Phi_A(g_t,\gamma(0,t],U_t).</span></p></li>
+<li><p>Let <span class="math inline">c_i= c_i(t)=\Phi_t^{(i)}(U_t).</span></p></li>
+<li><p>Then <span class="math display">\begin{align*}
+  \begin{aligned}
+  \mathrm{d} U_t^* = \Big(\frac{\kappa}{2}-3\Big) c_2 \mathrm{d} t + c_1 \sqrt{\kappa} \mathrm{d} B_t.
+  \end{aligned}
+\end{align*}</span></p></li>
+</ul>
+</div></div>
+</section>
+<section id="sketch-of-the-proof-1" class="slide level2">
+<h2>Sketch of the proof</h2>
+<div class="columns">
+<div class="column">
+<p><img data-src="images/FinallemmaSloop.svg" style="width:100.0%"></p>
+</div><div class="column">
+<ul>
+<li><p>To make <span class="math inline">U_t^*</span> be a local martingale: Girsanov’s transformation.</p></li>
+<li><p>Note that <span class="math display">\begin{align*}
+  \begin{aligned}
+  \frac{1}{\sqrt{\kappa}c_1 } \mathrm{d} U_t^* = \mathrm{d} B_t - \bigl\langle \mathrm{d} B_t, K_t\mathrm{d} B_t \bigr\rangle,
+  \end{aligned}
+\end{align*}</span> where <span class="math display">\begin{align*}
+  \begin{aligned}
+  K_t = (-1)\frac{1}{\sqrt{\kappa}}\Bigl( \frac{\kappa}{2}-3\Bigr) \frac{c_2}{c_1}.
+  \end{aligned}
+\end{align*}</span></p></li>
+</ul>
+</div></div>
+</section>
+<section id="sketch-of-the-proof-2" class="slide level2">
+<h2>Sketch of the proof</h2>
+<div class="columns">
+<div class="column">
+<p><img data-src="images/FinallemmaSloop.svg" style="width:100.0%"></p>
+</div><div class="column">
+<ul>
+<li><p>Let <span class="math inline">M_t</span> be the exponential martingale of <span class="math inline">\int_0^t K_s \mathrm{d}B_s.</span></p></li>
+<li><p>Let <span class="math inline">\mathbf{Q}</span> be the probability measure on <span class="math inline">(\Omega,\mathcal{F},\mathcal{F}_t^{B})</span> such that <span class="math inline">\dfrac{\mathrm{d} \mathbf{Q}}{\mathrm{d} \mathbf{P}}\bigg\vert_{\mathcal{F}_t^B}= M_t.</span> Then <span class="math display">\begin{align*}
+  \frac{1}{\sqrt{\kappa}} \int_0^t \frac{1}{\Phi_s'(U_s)} \mathrm{d} U_t^*
+\end{align*}</span> is a standard BM under <span class="math inline">\mathbf{Q}.</span></p></li>
+<li><p>This shows that <span class="math inline">\bigl(g_t^*,\gamma^*(0,t],U_t^*\bigr)_t</span> is a time change of an <span class="math inline">(\mathbb{S},0,\mathbb{R}+i\pi)</span>-dipolar <span class="math inline">\operatorname{SLE}_{\kappa}</span> under <span class="math inline">\mathbf{Q}.</span></p></li>
+</ul>
+</div></div>
+</section>
+<section id="sketch-of-the-proof-3" class="slide level2">
+<h2>Sketch of the proof</h2>
+<ul>
+<li><p>Let <span class="math inline">N_t = \log M_t.</span> Then <span class="math display">\begin{align*}
+\mathrm{d} N_t =  -\frac{1}{\sqrt{\kappa}} \Bigl( \frac{\kappa}{2} -3 \Bigr) \frac{c_2}{c_1} \mathrm{d} B_t  + \Bigl(-\frac{1}{2}\Bigr) \frac{1}{\kappa}  \Bigl( \frac{\kappa}{2} -3 \Bigr)^2 \frac{c_2^2}{c_1^2} \mathrm{d} t.
+\end{align*}</span></p></li>
+<li><p>Let <span class="math inline">\mu(t) = \mu_{\mathbb{S}}^{\operatorname{loop}} \Bigl\lbrace \ell: \ell \cap \gamma[0,t] \neq \emptyset  , \ell\cap A \neq \emptyset \Bigr\rbrace.</span> Then <span class="math display">\begin{align*}
+\begin{aligned}
+\mathrm{d} \log \Phi_t'(U_t)
+&amp;= &amp; \sqrt{\kappa} \frac{c_2}{c_1} \mathrm{d} B_t + \Biggl\lbrace \frac{1}{6} c_1^2 -\frac{1}{6} + \Bigl(\frac{1}{2}-\frac{\kappa}{2}\Bigr) \frac{c_2^2}{c_1^2} + \Bigl(\frac{\kappa}{2}-\frac{4}{3}\Bigr) \frac{c_3}{c_1} \Biggr\rbrace \mathrm{d} t,&amp; \cr
+\mathrm{d} \operatorname{scap}(A_t)
+&amp;= &amp; (-1+c_1^2) \mathrm{d} t,&amp; \cr
+\mathrm{d} \mu(t)
+&amp;= &amp; \Bigl(-\frac{1}{3}\Bigr)\Bigl(\frac{1}{2}-\frac{1}{2}c_1^2 -\frac{3}{2}\frac{c_2^2}{c_1^2} + \frac{c_3}{c_1} \Bigr)\mathrm{d} t.&amp;
+\end{aligned}
+\end{align*}</span></p></li>
+</ul>
+</section>
+<section id="sketch-of-the-proof-4" class="slide level2">
+<h2>Sketch of the proof</h2>
+<ul>
+<li><p>Let <span class="math display">\begin{align*}
+  \mathrm{d} N_t= \mathrm{d}\log M_t =\alpha \mathrm{d} \log \Phi_t'(U_t) -c\mathrm{d} \operatorname{scap}(A_t) - \frac{\lambda}{2}\mathrm{d} \mu(t).
+\end{align*}</span> By comparing the coefficients of <span class="math inline">\mathrm{d} B_t</span> and the coefficients of <span class="math inline">1,c_1^2,c_2^2/c_1^2,c_3/c_1</span> of <span class="math inline">\mathrm{d} t,</span> we have <span class="math display">\begin{align*}
+  \begin{aligned}
+  (\alpha,c,\lambda)
+  &amp;=\left(\frac{6-\kappa}{2\kappa},\frac{(\kappa-2)(6-\kappa)}{8\kappa}, \frac{(3\kappa-8)(\kappa-6)}{2\kappa} \right), \cr
+  M_t
+  &amp;= m_0 \cdot \Phi_t'(U_t)^{\alpha} \exp\bigl( -c \operatorname{scap}(A_t)\big)  \cr
+  &amp; \qquad \cdot \exp \biggl\lbrace \frac{-\lambda}{2} \mu_{\mathbb{S}}^{\operatorname{loop}} \Bigl\lbrace \ell: \ell \cap \gamma[0,t] \neq \emptyset  , \ell\cap A \neq \emptyset \Bigr\rbrace \biggr \rbrace ,
+  \end{aligned}
+\end{align*}</span> where <span class="math inline">m_0 = \Phi_A'(0)^{-\alpha} \exp\bigl( c \operatorname{scap}(A)\bigr).</span></p></li>
+<li><p>Note that <span class="math inline">\kappa\in (0,8/3]</span> implies that <span class="math inline">M_t</span> is bounded.</p></li>
+</ul>
+</section>
+<section id="sketch-of-the-proof-5" class="slide level2">
+<h2>Sketch of the proof</h2>
+<ul>
+<li><p>Note that <span class="math display">\begin{align*}
+  \begin{aligned}
+  \lim_{t\rightarrow \tau_A-} M_t
+  &amp;= m_0 \cdot 1_{[\tau_A = \infty]} \cdot \exp\left\lbrace
+  -\frac{\lambda}{2} \mu_{\mathbb{S}}^{\operatorname{loop}} \Big\lbrace \ell : \ell \cap \gamma \neq \emptyset , \ell \cap A \neq \emptyset \Big\rbrace
+  \right\rbrace \cr
+  &amp;= m_0 \cdot 1_{[\gamma\subset \mathbb{S}\backslash A]} \cdot  \exp\left\lbrace -\frac{\lambda}{2} \mu_{\mathbb{S}}^{\operatorname{loop}} \Big\lbrace \ell : \ell \cap \gamma \neq \emptyset , \ell \cap A \neq \emptyset \Big\rbrace \right\rbrace \cr
+  &amp;\!:= D(\gamma) .
+  \end{aligned}
+\end{align*}</span></p></li>
+<li><p>Let <span class="math inline">A'</span> be any <span class="math inline">\mathbb{S}\backslash A</span>-hull. Then <span class="math display">\begin{align*}
+  \begin{aligned}
+  \mu^{\operatorname{dSLE}_{\kappa}}_{\mathbb{S}\backslash A} (0,\mathbb{R}+i\pi ) \Big\lbrace \gamma:\gamma \cap A' =\emptyset  \Big\rbrace
+  &amp; = \mu^{\operatorname{dSLE}_{\kappa}}_{\mathbb{S}} (0,\mathbb{R}+i\pi )  \Big\lbrace \gamma : \gamma \cap \Phi_A(A')=\emptyset \Big\rbrace \cr
+  &amp; \color{red}{=} \mathbf{Q} \Big\lbrace \omega\in \Omega :  \gamma^*(\omega) \cap \Phi_A(A') = \emptyset  \Big\rbrace \cr  
+  &amp; = \mathbb{E}_{\mathbf{P}} \Big\lbrace 1_{[\gamma^*(\omega) \cap \Phi_A(A')=\emptyset ]} \cdot  \lim_{t\rightarrow \tau-} M_t(\omega) \Big\rbrace \cr
+  &amp;=  \mathbb{E}_{\mathbf{P}} \Big\lbrace 1_{[\gamma(\omega) \cap A'=\emptyset ]} \cdot  \lim_{t\rightarrow \tau-} M_t(\omega) \Big\rbrace \cr
+  &amp;=  \mu^{\operatorname{dSLE}_{\kappa}}_{\mathbb{S}} (0,\mathbb{R}+i\pi ) \Big\lbrace 1_{[\gamma\cap A'=\emptyset]} \cdot D(\gamma) \Big\rbrace.
+  \end{aligned}
+\end{align*}</span> Hence, we get the result.</p></li>
+</ul>
+</section>
+<section id="reference" class="slide level2 smaller scrollable">
+<h2>Reference</h2>
+
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+<div class="reveal-header">
+<div class="header-logo">
+<img data-src="">
+</div>
+<div class="sc-title">
+<p> </p>
+</div>
+<div class="header-text">
+<p> </p>
+</div>
+<div class="sb-title">
+<p> </p>
+</div>
+</div>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-beffara2008dimension" class="csl-entry" role="listitem">
+Beffara, Vincent. 2008. <span>“The Dimension of the <span>SLE</span> Curves.”</span> <em>The Annals of Probability</em> 36 (4): 1421–52.
+</div>
+<div id="ref-camia2007critical" class="csl-entry" role="listitem">
+Camia, Federico, and Charles M Newman. 2007. <span>“Critical Percolation Exploration Path and <span class="math inline">\operatorname{SLE}_6</span> : A Proof of Convergence.”</span> <em>Probability Theory and Related Fields</em> 139 (3-4): 473–519.
+</div>
+<div id="ref-chelkak2014convergence" class="csl-entry" role="listitem">
+Chelkak, Dmitry, Hugo Duminil-Copin, Clément Hongler, Antti Kemppainen, and Stanislav Smirnov. 2014. <span>“<span class="nocase">Convergence of Ising interfaces to Schramm’s SLE curves</span>.”</span> <em>Comptes Rendus Mathematique</em> 352 (2): 157–61.
+</div>
+<div id="ref-chelkak2012universality" class="csl-entry" role="listitem">
+Chelkak, Dmitry, and Stanislav Smirnov. 2012. <span>“Universality in the <span>2D</span> <span>Ising</span> Model and Conformal Invariance of Fermionic Observables.”</span> <em>Inventiones Mathematicae</em> 189 (3): 515–80.
+</div>
+<div id="ref-duminil2012connective" class="csl-entry" role="listitem">
+Duminil-Copin, Hugo, and Stanislav Smirnov. 2012. <span>“<span class="nocase">The connective constant of the honeycomb lattice equals <span class="math inline">\sqrt{2+\sqrt 2}</span></span>.”</span> <em>Annals of Mathematics</em> 175 (3): 1653–65. <a href="http://www.jstor.org/stable/23234646">http://www.jstor.org/stable/23234646</a>.
+</div>
+<div id="ref-kang2013conformal" class="csl-entry" role="listitem">
+Kang, Nam-Gyu, and Hee-Joon Tak. 2013. <span>“Conformal Field Theory of Dipolar <span>SLE</span> with the Dirichlet Boundary Condition.”</span> <em>Analysis and Mathematical Physics</em> 3 (4): 333–73.
+</div>
+<div id="ref-kramers1941statistics" class="csl-entry" role="listitem">
+Kramers, Hendrik A, and Gregory H Wannier. 1941. <span>“<span class="nocase">Statistics of the two-dimensional ferromagnet. Part I</span>.”</span> <em>Physical Review</em> 60 (3): 252.
+</div>
+<div id="ref-lawler2011valuesII" class="csl-entry" role="listitem">
+Lawler, Gregory F, Oded Schramm, and Wendelin Werner. 2001. <span>“<span class="nocase">Values of Brownian intersection exponents, II: Plane exponents</span>.”</span> <em>Acta Mathematica</em> 187 (2): 275–308.
+</div>
+<div id="ref-ConformalRestrictionAMS" class="csl-entry" role="listitem">
+———. 2003. <span>“Conformal Restriction: The Chordal Case.”</span> <em>Journal of the American Mathematical Society</em> 16 (4): 917–55.
+</div>
+<div id="ref-mandelbrot1982fractal" class="csl-entry" role="listitem">
+Mandelbrot, Benoit B. 1982. <em>The Fractal Geometry of Nature</em>. Vol. 1. WH freeman New York.
+</div>
+<div id="ref-schramm2000scaling" class="csl-entry" role="listitem">
+Schramm, Oded. 2000. <span>“Scaling Limits of Loop-Erased Random Walks and Uniform Spanning Trees.”</span> <em>Israel Journal of Mathematics</em> 118 (1): 221–88.
+</div>
+<div id="ref-schramm2005basic" class="csl-entry" role="listitem">
+Schramm, Oded, and Steffen Rohde. 2005. <span>“Basic Properties of <span>SLE</span>.”</span> <em>Annals of Mathematics</em> 161 (2): 883–924.
+</div>
+<div id="ref-Smirnov2001CriticalPI" class="csl-entry" role="listitem">
+Smirnov, Stanislav. 2001. <span>“<span class="nocase">Critical percolation in the plane : I. Conformal invariance and Cardy’s formula. II. Continuum scaling limit</span>.”</span> In.
+</div>
+<div id="ref-zhan2008duality" class="csl-entry" role="listitem">
+Zhan, Dapeng. 2008. <span>“<span class="nocase">Duality of chordal SLE</span>.”</span> <em>Inventiones Mathematicae</em> 174 (2): 309–53.
+</div>
+</div>
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="index_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="index_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="index_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="index_files/libs/revealjs/plugin/reveal-myrevealjs/my-revealjs.js"></script>
+  <script src="index_files/libs/revealjs/plugin/reveal-myrevealjs/katex.min.js"></script>
+  <script src="index_files/libs/revealjs/plugin/reveal-myrevealjs/revealjs-fragment-custom.js"></script>
+  <script src="index_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="index_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="index_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="index_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'pdfMaxPagesPerSlide': 2,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'fast',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealMyrevealjs, QuartoSupport,
+
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script type="ojs-module-contents">
+    eyJjb250ZW50cyI6W119
+    </script>
+    <script type="module">
+    if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+    window._ojs.paths.runtimeToDoc = "../../..";
+    window._ojs.paths.runtimeToRoot = "../../../../..";
+    window._ojs.paths.docToRoot = "../..";
+    window._ojs.selfContained = false;
+    window._ojs.runtime.interpretFromScriptTags();
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+<script src="index_files/libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
